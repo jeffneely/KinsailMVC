@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Kinsail_Sean" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=db1;Initial Catalog=Kinsail_Sean;Persist Security Info=True;User ID=cbastos" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Kinsail_SeanConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Locations" Member="Locations">
+    <Type Name="Location">
+      <Column Name="LocationID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LocationName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="StreetAddress" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="StreetAddress2" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="State" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="ZipCode" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Country" Type="System.String" DbType="NVarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="Directions" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Parking" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Latitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Longitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Audit_ContactID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
