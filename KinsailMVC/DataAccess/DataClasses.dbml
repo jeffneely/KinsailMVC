@@ -18,4 +18,231 @@
       <Column Name="Audit_ContactID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Partners" Member="Partners">
+    <Type Name="Partner">
+      <Column Name="PartnerID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PartnerCode" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PartnerName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TableBorderWidth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TableBorderStyle" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TableBorderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TableBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryColumnHeaderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataGroupColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="PrimaryDataElementColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryColumnHeaderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataGroupColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="SecondaryDataElementColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorBorderWidth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorBorderStyle" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorBorderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ErrorPadding" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightPosition" Type="System.String" DbType="NVarChar(9) NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CopyrightTop" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldBorderWidth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldBorderStyle" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormFieldBorderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="FormLabelColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TitleFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TitleWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="TitleColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="SubsectionColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextAlign" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextVerticalAlign" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextIndent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextFont" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextSize" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextWeight" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="PlainTextColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="LinkColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="LinkStyle" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="LinkDecoration" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="ActiveLinkColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="HoverLinkColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="VisitedLinkColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="HorizontalRuleWidth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HorizontalRuleHeight" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HorizontalRuleBorderStyle" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="HorizontalRuleBorderColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="Header" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Footer" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="PageWidth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PopUpHeader" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="PopUpFooter" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="PartnerTypeID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="HeaderEvaluationMethod" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="FooterEvaluationMethod" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PopUpHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PopUpFooterEvaluationMethod" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MainTableBackgroundColor" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageShowCounter" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageShowNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageNameColumnHeader" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageNameColumnHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ResultsPageLocationColumnHeader" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageLocationColumnHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ResultsPageDateColumnHeader" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageDateColumnHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ResultsPageTypeColumnHeader" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageTypeColumnHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ResultsPageLocationColumnOn" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageDateColumnOn" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageTypeColumnOn" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ResultsPageText" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResultsPageTextEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ShowAccountLoginPopup" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AccountName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AccountNameEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="AuthorizationLockoutText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorizationLockoutTextEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="TermsOfService" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TermsOfServiceEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsToolsName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsToolsNameEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="RegistrationName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="RegistrationNameEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="CancelName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CancelNameEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsSummaryPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsSummaryPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsDetailsPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsDetailsPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsReportsPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsReportsPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsSearchPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsSearchPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsSearchResultsPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsSearchResultsPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsLoginPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsLoginPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsCancelDialogText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsCancelDialogTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsCustomReportsPageText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DirectorsCustomReportsPageTextEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="InvalidBeginLinkText" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="InvalidBeginLinkTextEvaluationMethod" Type="System.String" DbType="NVarChar(7)" CanBeNull="true" />
+      <Column Name="ManagementToolsHeader" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ManagementToolsHeaderEvaluationMethod" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ManagementToolsFooter" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ManagementToolsFooterEvaluationMethod" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ManagementToolsPageWidth" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ResourceNameEvaluationMethod" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="DirectorsTimeoutWarning" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Audit_ContactID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

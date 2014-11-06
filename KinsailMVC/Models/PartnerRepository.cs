@@ -5,24 +5,31 @@ using System.Web;
 
 namespace KinsailMVC.Models
 {
-    public class LocationRepository 
+    public class PartnerRepository
     {
         private List<Location> locations = new List<Location>();
         private int _nextId = 1;
 
-        public LocationRepository()
+        public PartnerRepository()
         {
-            
+
         }
 
-        public IEnumerable<DataAccess.Location> GetAll()
+        public IEnumerable<DataAccess.Partner> GetAll()
         {
             DataAccess.DataClassesDataContext objData = new DataAccess.DataClassesDataContext();
-            System.Data.Linq.Table<DataAccess.Location> objTest = objData.GetTable<DataAccess.Location>();
-            return objTest.AsEnumerable<DataAccess.Location>();    
-    
+            IQueryable<DataAccess.Partner> objTest = objData.GetTable<DataAccess.Partner>().Take<DataAccess.Partner>(10);
+            return objTest.AsEnumerable<DataAccess.Partner>();
+
         }
 
+        public IEnumerable<DataAccess.Partner> GetbyId(int IdPartner)
+        {
+            DataAccess.DataClassesDataContext objData = new DataAccess.DataClassesDataContext();
+            IQueryable<DataAccess.Partner> objTest = objData.GetTable<DataAccess.Partner>().Where<DataAccess.Partner>(t => t.PartnerID == IdPartner);
+            return objTest.AsEnumerable<DataAccess.Partner>();
+
+        }
 
 
         public Location Get(int id)
@@ -62,5 +69,5 @@ namespace KinsailMVC.Models
             return true;
         }
     }
-    
+
 }

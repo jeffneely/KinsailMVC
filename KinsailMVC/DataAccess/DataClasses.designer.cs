@@ -33,6 +33,9 @@ namespace KinsailMVC.DataAccess
     partial void InsertLocation(Location instance);
     partial void UpdateLocation(Location instance);
     partial void DeleteLocation(Location instance);
+    partial void InsertPartner(Partner instance);
+    partial void UpdatePartner(Partner instance);
+    partial void DeletePartner(Partner instance);
     #endregion
 		
 		public DataClassesDataContext() : 
@@ -70,6 +73,14 @@ namespace KinsailMVC.DataAccess
 			get
 			{
 				return this.GetTable<Location>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Partner> Partners
+		{
+			get
+			{
+				return this.GetTable<Partner>();
 			}
 		}
 	}
@@ -403,6 +414,5396 @@ namespace KinsailMVC.DataAccess
 					this._Longitude = value;
 					this.SendPropertyChanged("Longitude");
 					this.OnLongitudeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Audit_ContactID", DbType="BigInt")]
+		public System.Nullable<long> Audit_ContactID
+		{
+			get
+			{
+				return this._Audit_ContactID;
+			}
+			set
+			{
+				if ((this._Audit_ContactID != value))
+				{
+					this.OnAudit_ContactIDChanging(value);
+					this.SendPropertyChanging();
+					this._Audit_ContactID = value;
+					this.SendPropertyChanged("Audit_ContactID");
+					this.OnAudit_ContactIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Partners")]
+	public partial class Partner : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _PartnerID;
+		
+		private string _PartnerCode;
+		
+		private string _PartnerName;
+		
+		private int _TableBorderWidth;
+		
+		private string _TableBorderStyle;
+		
+		private string _TableBorderColor;
+		
+		private string _TableBackgroundColor;
+		
+		private string _PrimaryColumnHeaderBackgroundColor;
+		
+		private string _PrimaryColumnHeaderAlign;
+		
+		private string _PrimaryColumnHeaderVerticalAlign;
+		
+		private int _PrimaryColumnHeaderIndent;
+		
+		private string _PrimaryColumnHeaderFont;
+		
+		private int _PrimaryColumnHeaderSize;
+		
+		private string _PrimaryColumnHeaderWeight;
+		
+		private string _PrimaryColumnHeaderStyle;
+		
+		private string _PrimaryColumnHeaderDecoration;
+		
+		private string _PrimaryColumnHeaderColor;
+		
+		private string _PrimaryDataGroupBackgroundColor;
+		
+		private string _PrimaryDataGroupAlign;
+		
+		private string _PrimaryDataGroupVerticalAlign;
+		
+		private int _PrimaryDataGroupIndent;
+		
+		private string _PrimaryDataGroupFont;
+		
+		private int _PrimaryDataGroupSize;
+		
+		private string _PrimaryDataGroupWeight;
+		
+		private string _PrimaryDataGroupStyle;
+		
+		private string _PrimaryDataGroupDecoration;
+		
+		private string _PrimaryDataGroupColor;
+		
+		private string _PrimaryDataElementBackgroundColor;
+		
+		private string _PrimaryDataElementAlign;
+		
+		private string _PrimaryDataElementVerticalAlign;
+		
+		private int _PrimaryDataElementIndent;
+		
+		private string _PrimaryDataElementFont;
+		
+		private int _PrimaryDataElementSize;
+		
+		private string _PrimaryDataElementWeight;
+		
+		private string _PrimaryDataElementStyle;
+		
+		private string _PrimaryDataElementDecoration;
+		
+		private string _PrimaryDataElementColor;
+		
+		private string _SecondaryColumnHeaderBackgroundColor;
+		
+		private string _SecondaryColumnHeaderAlign;
+		
+		private string _SecondaryColumnHeaderVerticalAlign;
+		
+		private int _SecondaryColumnHeaderIndent;
+		
+		private string _SecondaryColumnHeaderFont;
+		
+		private int _SecondaryColumnHeaderSize;
+		
+		private string _SecondaryColumnHeaderWeight;
+		
+		private string _SecondaryColumnHeaderStyle;
+		
+		private string _SecondaryColumnHeaderDecoration;
+		
+		private string _SecondaryColumnHeaderColor;
+		
+		private string _SecondaryDataGroupBackgroundColor;
+		
+		private string _SecondaryDataGroupAlign;
+		
+		private string _SecondaryDataGroupVerticalAlign;
+		
+		private int _SecondaryDataGroupIndent;
+		
+		private string _SecondaryDataGroupFont;
+		
+		private int _SecondaryDataGroupSize;
+		
+		private string _SecondaryDataGroupWeight;
+		
+		private string _SecondaryDataGroupStyle;
+		
+		private string _SecondaryDataGroupDecoration;
+		
+		private string _SecondaryDataGroupColor;
+		
+		private string _SecondaryDataElementBackgroundColor;
+		
+		private string _SecondaryDataElementAlign;
+		
+		private string _SecondaryDataElementVerticalAlign;
+		
+		private int _SecondaryDataElementIndent;
+		
+		private string _SecondaryDataElementFont;
+		
+		private int _SecondaryDataElementSize;
+		
+		private string _SecondaryDataElementWeight;
+		
+		private string _SecondaryDataElementStyle;
+		
+		private string _SecondaryDataElementDecoration;
+		
+		private string _SecondaryDataElementColor;
+		
+		private string _ErrorBackgroundColor;
+		
+		private string _ErrorAlign;
+		
+		private string _ErrorVerticalAlign;
+		
+		private int _ErrorIndent;
+		
+		private string _ErrorFont;
+		
+		private int _ErrorSize;
+		
+		private string _ErrorWeight;
+		
+		private string _ErrorStyle;
+		
+		private string _ErrorDecoration;
+		
+		private string _ErrorColor;
+		
+		private int _ErrorBorderWidth;
+		
+		private string _ErrorBorderStyle;
+		
+		private string _ErrorBorderColor;
+		
+		private int _ErrorPadding;
+		
+		private string _CopyrightBackgroundColor;
+		
+		private string _CopyrightAlign;
+		
+		private string _CopyrightVerticalAlign;
+		
+		private int _CopyrightIndent;
+		
+		private string _CopyrightFont;
+		
+		private int _CopyrightSize;
+		
+		private string _CopyrightWeight;
+		
+		private string _CopyrightStyle;
+		
+		private string _CopyrightDecoration;
+		
+		private string _CopyrightColor;
+		
+		private string _CopyrightPosition;
+		
+		private int _CopyrightLeft;
+		
+		private int _CopyrightTop;
+		
+		private string _FormFieldBackgroundColor;
+		
+		private string _FormFieldAlign;
+		
+		private string _FormFieldVerticalAlign;
+		
+		private int _FormFieldIndent;
+		
+		private string _FormFieldFont;
+		
+		private int _FormFieldSize;
+		
+		private string _FormFieldWeight;
+		
+		private string _FormFieldStyle;
+		
+		private string _FormFieldDecoration;
+		
+		private string _FormFieldColor;
+		
+		private int _FormFieldBorderWidth;
+		
+		private string _FormFieldBorderStyle;
+		
+		private string _FormFieldBorderColor;
+		
+		private string _FormLabelBackgroundColor;
+		
+		private string _FormLabelAlign;
+		
+		private string _FormLabelVerticalAlign;
+		
+		private int _FormLabelIndent;
+		
+		private string _FormLabelFont;
+		
+		private int _FormLabelSize;
+		
+		private string _FormLabelWeight;
+		
+		private string _FormLabelStyle;
+		
+		private string _FormLabelDecoration;
+		
+		private string _FormLabelColor;
+		
+		private string _TitleBackgroundColor;
+		
+		private string _TitleAlign;
+		
+		private string _TitleVerticalAlign;
+		
+		private int _TitleIndent;
+		
+		private string _TitleFont;
+		
+		private int _TitleSize;
+		
+		private string _TitleWeight;
+		
+		private string _TitleStyle;
+		
+		private string _TitleDecoration;
+		
+		private string _TitleColor;
+		
+		private string _SubsectionBackgroundColor;
+		
+		private string _SubsectionAlign;
+		
+		private string _SubsectionVerticalAlign;
+		
+		private int _SubsectionIndent;
+		
+		private string _SubsectionFont;
+		
+		private int _SubsectionSize;
+		
+		private string _SubsectionWeight;
+		
+		private string _SubsectionStyle;
+		
+		private string _SubsectionDecoration;
+		
+		private string _SubsectionColor;
+		
+		private string _PlainTextBackgroundColor;
+		
+		private string _PlainTextAlign;
+		
+		private string _PlainTextVerticalAlign;
+		
+		private int _PlainTextIndent;
+		
+		private string _PlainTextFont;
+		
+		private int _PlainTextSize;
+		
+		private string _PlainTextWeight;
+		
+		private string _PlainTextStyle;
+		
+		private string _PlainTextDecoration;
+		
+		private string _PlainTextColor;
+		
+		private string _LinkColor;
+		
+		private string _LinkStyle;
+		
+		private string _LinkDecoration;
+		
+		private string _ActiveLinkColor;
+		
+		private string _HoverLinkColor;
+		
+		private string _VisitedLinkColor;
+		
+		private int _HorizontalRuleWidth;
+		
+		private int _HorizontalRuleHeight;
+		
+		private string _HorizontalRuleBorderStyle;
+		
+		private string _HorizontalRuleBorderColor;
+		
+		private string _Header;
+		
+		private string _Footer;
+		
+		private int _PageWidth;
+		
+		private string _PopUpHeader;
+		
+		private string _PopUpFooter;
+		
+		private long _PartnerTypeID;
+		
+		private string _HeaderEvaluationMethod;
+		
+		private string _FooterEvaluationMethod;
+		
+		private string _PopUpHeaderEvaluationMethod;
+		
+		private string _PopUpFooterEvaluationMethod;
+		
+		private string _MainTableBackgroundColor;
+		
+		private bool _ResultsPageShowCounter;
+		
+		private int _ResultsPageShowNumber;
+		
+		private string _ResultsPageNameColumnHeader;
+		
+		private string _ResultsPageNameColumnHeaderEvaluationMethod;
+		
+		private string _ResultsPageLocationColumnHeader;
+		
+		private string _ResultsPageLocationColumnHeaderEvaluationMethod;
+		
+		private string _ResultsPageDateColumnHeader;
+		
+		private string _ResultsPageDateColumnHeaderEvaluationMethod;
+		
+		private string _ResultsPageTypeColumnHeader;
+		
+		private string _ResultsPageTypeColumnHeaderEvaluationMethod;
+		
+		private bool _ResultsPageLocationColumnOn;
+		
+		private bool _ResultsPageDateColumnOn;
+		
+		private bool _ResultsPageTypeColumnOn;
+		
+		private string _ResultsPageText;
+		
+		private string _ResultsPageTextEvaluationMethod;
+		
+		private bool _ShowAccountLoginPopup;
+		
+		private string _AccountName;
+		
+		private string _AccountNameEvaluationMethod;
+		
+		private string _AuthorizationLockoutText;
+		
+		private string _AuthorizationLockoutTextEvaluationMethod;
+		
+		private string _TermsOfService;
+		
+		private string _TermsOfServiceEvaluationMethod;
+		
+		private string _DirectorsToolsName;
+		
+		private string _DirectorsToolsNameEvaluationMethod;
+		
+		private string _RegistrationName;
+		
+		private string _RegistrationNameEvaluationMethod;
+		
+		private string _CancelName;
+		
+		private string _CancelNameEvaluationMethod;
+		
+		private string _DirectorsSummaryPageText;
+		
+		private string _DirectorsSummaryPageTextEvaluationMethod;
+		
+		private string _DirectorsDetailsPageText;
+		
+		private string _DirectorsDetailsPageTextEvaluationMethod;
+		
+		private string _DirectorsReportsPageText;
+		
+		private string _DirectorsReportsPageTextEvaluationMethod;
+		
+		private string _DirectorsSearchPageText;
+		
+		private string _DirectorsSearchPageTextEvaluationMethod;
+		
+		private string _DirectorsSearchResultsPageText;
+		
+		private string _DirectorsSearchResultsPageTextEvaluationMethod;
+		
+		private string _DirectorsLoginPageText;
+		
+		private string _DirectorsLoginPageTextEvaluationMethod;
+		
+		private string _DirectorsCancelDialogText;
+		
+		private string _DirectorsCancelDialogTextEvaluationMethod;
+		
+		private string _DirectorsCustomReportsPageText;
+		
+		private string _DirectorsCustomReportsPageTextEvaluationMethod;
+		
+		private string _InvalidBeginLinkText;
+		
+		private string _InvalidBeginLinkTextEvaluationMethod;
+		
+		private string _ManagementToolsHeader;
+		
+		private string _ManagementToolsHeaderEvaluationMethod;
+		
+		private string _ManagementToolsFooter;
+		
+		private string _ManagementToolsFooterEvaluationMethod;
+		
+		private string _ManagementToolsPageWidth;
+		
+		private string _ResourceName;
+		
+		private string _ResourceNameEvaluationMethod;
+		
+		private System.Nullable<int> _DirectorsTimeoutWarning;
+		
+		private System.Nullable<long> _Audit_ContactID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPartnerIDChanging(long value);
+    partial void OnPartnerIDChanged();
+    partial void OnPartnerCodeChanging(string value);
+    partial void OnPartnerCodeChanged();
+    partial void OnPartnerNameChanging(string value);
+    partial void OnPartnerNameChanged();
+    partial void OnTableBorderWidthChanging(int value);
+    partial void OnTableBorderWidthChanged();
+    partial void OnTableBorderStyleChanging(string value);
+    partial void OnTableBorderStyleChanged();
+    partial void OnTableBorderColorChanging(string value);
+    partial void OnTableBorderColorChanged();
+    partial void OnTableBackgroundColorChanging(string value);
+    partial void OnTableBackgroundColorChanged();
+    partial void OnPrimaryColumnHeaderBackgroundColorChanging(string value);
+    partial void OnPrimaryColumnHeaderBackgroundColorChanged();
+    partial void OnPrimaryColumnHeaderAlignChanging(string value);
+    partial void OnPrimaryColumnHeaderAlignChanged();
+    partial void OnPrimaryColumnHeaderVerticalAlignChanging(string value);
+    partial void OnPrimaryColumnHeaderVerticalAlignChanged();
+    partial void OnPrimaryColumnHeaderIndentChanging(int value);
+    partial void OnPrimaryColumnHeaderIndentChanged();
+    partial void OnPrimaryColumnHeaderFontChanging(string value);
+    partial void OnPrimaryColumnHeaderFontChanged();
+    partial void OnPrimaryColumnHeaderSizeChanging(int value);
+    partial void OnPrimaryColumnHeaderSizeChanged();
+    partial void OnPrimaryColumnHeaderWeightChanging(string value);
+    partial void OnPrimaryColumnHeaderWeightChanged();
+    partial void OnPrimaryColumnHeaderStyleChanging(string value);
+    partial void OnPrimaryColumnHeaderStyleChanged();
+    partial void OnPrimaryColumnHeaderDecorationChanging(string value);
+    partial void OnPrimaryColumnHeaderDecorationChanged();
+    partial void OnPrimaryColumnHeaderColorChanging(string value);
+    partial void OnPrimaryColumnHeaderColorChanged();
+    partial void OnPrimaryDataGroupBackgroundColorChanging(string value);
+    partial void OnPrimaryDataGroupBackgroundColorChanged();
+    partial void OnPrimaryDataGroupAlignChanging(string value);
+    partial void OnPrimaryDataGroupAlignChanged();
+    partial void OnPrimaryDataGroupVerticalAlignChanging(string value);
+    partial void OnPrimaryDataGroupVerticalAlignChanged();
+    partial void OnPrimaryDataGroupIndentChanging(int value);
+    partial void OnPrimaryDataGroupIndentChanged();
+    partial void OnPrimaryDataGroupFontChanging(string value);
+    partial void OnPrimaryDataGroupFontChanged();
+    partial void OnPrimaryDataGroupSizeChanging(int value);
+    partial void OnPrimaryDataGroupSizeChanged();
+    partial void OnPrimaryDataGroupWeightChanging(string value);
+    partial void OnPrimaryDataGroupWeightChanged();
+    partial void OnPrimaryDataGroupStyleChanging(string value);
+    partial void OnPrimaryDataGroupStyleChanged();
+    partial void OnPrimaryDataGroupDecorationChanging(string value);
+    partial void OnPrimaryDataGroupDecorationChanged();
+    partial void OnPrimaryDataGroupColorChanging(string value);
+    partial void OnPrimaryDataGroupColorChanged();
+    partial void OnPrimaryDataElementBackgroundColorChanging(string value);
+    partial void OnPrimaryDataElementBackgroundColorChanged();
+    partial void OnPrimaryDataElementAlignChanging(string value);
+    partial void OnPrimaryDataElementAlignChanged();
+    partial void OnPrimaryDataElementVerticalAlignChanging(string value);
+    partial void OnPrimaryDataElementVerticalAlignChanged();
+    partial void OnPrimaryDataElementIndentChanging(int value);
+    partial void OnPrimaryDataElementIndentChanged();
+    partial void OnPrimaryDataElementFontChanging(string value);
+    partial void OnPrimaryDataElementFontChanged();
+    partial void OnPrimaryDataElementSizeChanging(int value);
+    partial void OnPrimaryDataElementSizeChanged();
+    partial void OnPrimaryDataElementWeightChanging(string value);
+    partial void OnPrimaryDataElementWeightChanged();
+    partial void OnPrimaryDataElementStyleChanging(string value);
+    partial void OnPrimaryDataElementStyleChanged();
+    partial void OnPrimaryDataElementDecorationChanging(string value);
+    partial void OnPrimaryDataElementDecorationChanged();
+    partial void OnPrimaryDataElementColorChanging(string value);
+    partial void OnPrimaryDataElementColorChanged();
+    partial void OnSecondaryColumnHeaderBackgroundColorChanging(string value);
+    partial void OnSecondaryColumnHeaderBackgroundColorChanged();
+    partial void OnSecondaryColumnHeaderAlignChanging(string value);
+    partial void OnSecondaryColumnHeaderAlignChanged();
+    partial void OnSecondaryColumnHeaderVerticalAlignChanging(string value);
+    partial void OnSecondaryColumnHeaderVerticalAlignChanged();
+    partial void OnSecondaryColumnHeaderIndentChanging(int value);
+    partial void OnSecondaryColumnHeaderIndentChanged();
+    partial void OnSecondaryColumnHeaderFontChanging(string value);
+    partial void OnSecondaryColumnHeaderFontChanged();
+    partial void OnSecondaryColumnHeaderSizeChanging(int value);
+    partial void OnSecondaryColumnHeaderSizeChanged();
+    partial void OnSecondaryColumnHeaderWeightChanging(string value);
+    partial void OnSecondaryColumnHeaderWeightChanged();
+    partial void OnSecondaryColumnHeaderStyleChanging(string value);
+    partial void OnSecondaryColumnHeaderStyleChanged();
+    partial void OnSecondaryColumnHeaderDecorationChanging(string value);
+    partial void OnSecondaryColumnHeaderDecorationChanged();
+    partial void OnSecondaryColumnHeaderColorChanging(string value);
+    partial void OnSecondaryColumnHeaderColorChanged();
+    partial void OnSecondaryDataGroupBackgroundColorChanging(string value);
+    partial void OnSecondaryDataGroupBackgroundColorChanged();
+    partial void OnSecondaryDataGroupAlignChanging(string value);
+    partial void OnSecondaryDataGroupAlignChanged();
+    partial void OnSecondaryDataGroupVerticalAlignChanging(string value);
+    partial void OnSecondaryDataGroupVerticalAlignChanged();
+    partial void OnSecondaryDataGroupIndentChanging(int value);
+    partial void OnSecondaryDataGroupIndentChanged();
+    partial void OnSecondaryDataGroupFontChanging(string value);
+    partial void OnSecondaryDataGroupFontChanged();
+    partial void OnSecondaryDataGroupSizeChanging(int value);
+    partial void OnSecondaryDataGroupSizeChanged();
+    partial void OnSecondaryDataGroupWeightChanging(string value);
+    partial void OnSecondaryDataGroupWeightChanged();
+    partial void OnSecondaryDataGroupStyleChanging(string value);
+    partial void OnSecondaryDataGroupStyleChanged();
+    partial void OnSecondaryDataGroupDecorationChanging(string value);
+    partial void OnSecondaryDataGroupDecorationChanged();
+    partial void OnSecondaryDataGroupColorChanging(string value);
+    partial void OnSecondaryDataGroupColorChanged();
+    partial void OnSecondaryDataElementBackgroundColorChanging(string value);
+    partial void OnSecondaryDataElementBackgroundColorChanged();
+    partial void OnSecondaryDataElementAlignChanging(string value);
+    partial void OnSecondaryDataElementAlignChanged();
+    partial void OnSecondaryDataElementVerticalAlignChanging(string value);
+    partial void OnSecondaryDataElementVerticalAlignChanged();
+    partial void OnSecondaryDataElementIndentChanging(int value);
+    partial void OnSecondaryDataElementIndentChanged();
+    partial void OnSecondaryDataElementFontChanging(string value);
+    partial void OnSecondaryDataElementFontChanged();
+    partial void OnSecondaryDataElementSizeChanging(int value);
+    partial void OnSecondaryDataElementSizeChanged();
+    partial void OnSecondaryDataElementWeightChanging(string value);
+    partial void OnSecondaryDataElementWeightChanged();
+    partial void OnSecondaryDataElementStyleChanging(string value);
+    partial void OnSecondaryDataElementStyleChanged();
+    partial void OnSecondaryDataElementDecorationChanging(string value);
+    partial void OnSecondaryDataElementDecorationChanged();
+    partial void OnSecondaryDataElementColorChanging(string value);
+    partial void OnSecondaryDataElementColorChanged();
+    partial void OnErrorBackgroundColorChanging(string value);
+    partial void OnErrorBackgroundColorChanged();
+    partial void OnErrorAlignChanging(string value);
+    partial void OnErrorAlignChanged();
+    partial void OnErrorVerticalAlignChanging(string value);
+    partial void OnErrorVerticalAlignChanged();
+    partial void OnErrorIndentChanging(int value);
+    partial void OnErrorIndentChanged();
+    partial void OnErrorFontChanging(string value);
+    partial void OnErrorFontChanged();
+    partial void OnErrorSizeChanging(int value);
+    partial void OnErrorSizeChanged();
+    partial void OnErrorWeightChanging(string value);
+    partial void OnErrorWeightChanged();
+    partial void OnErrorStyleChanging(string value);
+    partial void OnErrorStyleChanged();
+    partial void OnErrorDecorationChanging(string value);
+    partial void OnErrorDecorationChanged();
+    partial void OnErrorColorChanging(string value);
+    partial void OnErrorColorChanged();
+    partial void OnErrorBorderWidthChanging(int value);
+    partial void OnErrorBorderWidthChanged();
+    partial void OnErrorBorderStyleChanging(string value);
+    partial void OnErrorBorderStyleChanged();
+    partial void OnErrorBorderColorChanging(string value);
+    partial void OnErrorBorderColorChanged();
+    partial void OnErrorPaddingChanging(int value);
+    partial void OnErrorPaddingChanged();
+    partial void OnCopyrightBackgroundColorChanging(string value);
+    partial void OnCopyrightBackgroundColorChanged();
+    partial void OnCopyrightAlignChanging(string value);
+    partial void OnCopyrightAlignChanged();
+    partial void OnCopyrightVerticalAlignChanging(string value);
+    partial void OnCopyrightVerticalAlignChanged();
+    partial void OnCopyrightIndentChanging(int value);
+    partial void OnCopyrightIndentChanged();
+    partial void OnCopyrightFontChanging(string value);
+    partial void OnCopyrightFontChanged();
+    partial void OnCopyrightSizeChanging(int value);
+    partial void OnCopyrightSizeChanged();
+    partial void OnCopyrightWeightChanging(string value);
+    partial void OnCopyrightWeightChanged();
+    partial void OnCopyrightStyleChanging(string value);
+    partial void OnCopyrightStyleChanged();
+    partial void OnCopyrightDecorationChanging(string value);
+    partial void OnCopyrightDecorationChanged();
+    partial void OnCopyrightColorChanging(string value);
+    partial void OnCopyrightColorChanged();
+    partial void OnCopyrightPositionChanging(string value);
+    partial void OnCopyrightPositionChanged();
+    partial void OnCopyrightLeftChanging(int value);
+    partial void OnCopyrightLeftChanged();
+    partial void OnCopyrightTopChanging(int value);
+    partial void OnCopyrightTopChanged();
+    partial void OnFormFieldBackgroundColorChanging(string value);
+    partial void OnFormFieldBackgroundColorChanged();
+    partial void OnFormFieldAlignChanging(string value);
+    partial void OnFormFieldAlignChanged();
+    partial void OnFormFieldVerticalAlignChanging(string value);
+    partial void OnFormFieldVerticalAlignChanged();
+    partial void OnFormFieldIndentChanging(int value);
+    partial void OnFormFieldIndentChanged();
+    partial void OnFormFieldFontChanging(string value);
+    partial void OnFormFieldFontChanged();
+    partial void OnFormFieldSizeChanging(int value);
+    partial void OnFormFieldSizeChanged();
+    partial void OnFormFieldWeightChanging(string value);
+    partial void OnFormFieldWeightChanged();
+    partial void OnFormFieldStyleChanging(string value);
+    partial void OnFormFieldStyleChanged();
+    partial void OnFormFieldDecorationChanging(string value);
+    partial void OnFormFieldDecorationChanged();
+    partial void OnFormFieldColorChanging(string value);
+    partial void OnFormFieldColorChanged();
+    partial void OnFormFieldBorderWidthChanging(int value);
+    partial void OnFormFieldBorderWidthChanged();
+    partial void OnFormFieldBorderStyleChanging(string value);
+    partial void OnFormFieldBorderStyleChanged();
+    partial void OnFormFieldBorderColorChanging(string value);
+    partial void OnFormFieldBorderColorChanged();
+    partial void OnFormLabelBackgroundColorChanging(string value);
+    partial void OnFormLabelBackgroundColorChanged();
+    partial void OnFormLabelAlignChanging(string value);
+    partial void OnFormLabelAlignChanged();
+    partial void OnFormLabelVerticalAlignChanging(string value);
+    partial void OnFormLabelVerticalAlignChanged();
+    partial void OnFormLabelIndentChanging(int value);
+    partial void OnFormLabelIndentChanged();
+    partial void OnFormLabelFontChanging(string value);
+    partial void OnFormLabelFontChanged();
+    partial void OnFormLabelSizeChanging(int value);
+    partial void OnFormLabelSizeChanged();
+    partial void OnFormLabelWeightChanging(string value);
+    partial void OnFormLabelWeightChanged();
+    partial void OnFormLabelStyleChanging(string value);
+    partial void OnFormLabelStyleChanged();
+    partial void OnFormLabelDecorationChanging(string value);
+    partial void OnFormLabelDecorationChanged();
+    partial void OnFormLabelColorChanging(string value);
+    partial void OnFormLabelColorChanged();
+    partial void OnTitleBackgroundColorChanging(string value);
+    partial void OnTitleBackgroundColorChanged();
+    partial void OnTitleAlignChanging(string value);
+    partial void OnTitleAlignChanged();
+    partial void OnTitleVerticalAlignChanging(string value);
+    partial void OnTitleVerticalAlignChanged();
+    partial void OnTitleIndentChanging(int value);
+    partial void OnTitleIndentChanged();
+    partial void OnTitleFontChanging(string value);
+    partial void OnTitleFontChanged();
+    partial void OnTitleSizeChanging(int value);
+    partial void OnTitleSizeChanged();
+    partial void OnTitleWeightChanging(string value);
+    partial void OnTitleWeightChanged();
+    partial void OnTitleStyleChanging(string value);
+    partial void OnTitleStyleChanged();
+    partial void OnTitleDecorationChanging(string value);
+    partial void OnTitleDecorationChanged();
+    partial void OnTitleColorChanging(string value);
+    partial void OnTitleColorChanged();
+    partial void OnSubsectionBackgroundColorChanging(string value);
+    partial void OnSubsectionBackgroundColorChanged();
+    partial void OnSubsectionAlignChanging(string value);
+    partial void OnSubsectionAlignChanged();
+    partial void OnSubsectionVerticalAlignChanging(string value);
+    partial void OnSubsectionVerticalAlignChanged();
+    partial void OnSubsectionIndentChanging(int value);
+    partial void OnSubsectionIndentChanged();
+    partial void OnSubsectionFontChanging(string value);
+    partial void OnSubsectionFontChanged();
+    partial void OnSubsectionSizeChanging(int value);
+    partial void OnSubsectionSizeChanged();
+    partial void OnSubsectionWeightChanging(string value);
+    partial void OnSubsectionWeightChanged();
+    partial void OnSubsectionStyleChanging(string value);
+    partial void OnSubsectionStyleChanged();
+    partial void OnSubsectionDecorationChanging(string value);
+    partial void OnSubsectionDecorationChanged();
+    partial void OnSubsectionColorChanging(string value);
+    partial void OnSubsectionColorChanged();
+    partial void OnPlainTextBackgroundColorChanging(string value);
+    partial void OnPlainTextBackgroundColorChanged();
+    partial void OnPlainTextAlignChanging(string value);
+    partial void OnPlainTextAlignChanged();
+    partial void OnPlainTextVerticalAlignChanging(string value);
+    partial void OnPlainTextVerticalAlignChanged();
+    partial void OnPlainTextIndentChanging(int value);
+    partial void OnPlainTextIndentChanged();
+    partial void OnPlainTextFontChanging(string value);
+    partial void OnPlainTextFontChanged();
+    partial void OnPlainTextSizeChanging(int value);
+    partial void OnPlainTextSizeChanged();
+    partial void OnPlainTextWeightChanging(string value);
+    partial void OnPlainTextWeightChanged();
+    partial void OnPlainTextStyleChanging(string value);
+    partial void OnPlainTextStyleChanged();
+    partial void OnPlainTextDecorationChanging(string value);
+    partial void OnPlainTextDecorationChanged();
+    partial void OnPlainTextColorChanging(string value);
+    partial void OnPlainTextColorChanged();
+    partial void OnLinkColorChanging(string value);
+    partial void OnLinkColorChanged();
+    partial void OnLinkStyleChanging(string value);
+    partial void OnLinkStyleChanged();
+    partial void OnLinkDecorationChanging(string value);
+    partial void OnLinkDecorationChanged();
+    partial void OnActiveLinkColorChanging(string value);
+    partial void OnActiveLinkColorChanged();
+    partial void OnHoverLinkColorChanging(string value);
+    partial void OnHoverLinkColorChanged();
+    partial void OnVisitedLinkColorChanging(string value);
+    partial void OnVisitedLinkColorChanged();
+    partial void OnHorizontalRuleWidthChanging(int value);
+    partial void OnHorizontalRuleWidthChanged();
+    partial void OnHorizontalRuleHeightChanging(int value);
+    partial void OnHorizontalRuleHeightChanged();
+    partial void OnHorizontalRuleBorderStyleChanging(string value);
+    partial void OnHorizontalRuleBorderStyleChanged();
+    partial void OnHorizontalRuleBorderColorChanging(string value);
+    partial void OnHorizontalRuleBorderColorChanged();
+    partial void OnHeaderChanging(string value);
+    partial void OnHeaderChanged();
+    partial void OnFooterChanging(string value);
+    partial void OnFooterChanged();
+    partial void OnPageWidthChanging(int value);
+    partial void OnPageWidthChanged();
+    partial void OnPopUpHeaderChanging(string value);
+    partial void OnPopUpHeaderChanged();
+    partial void OnPopUpFooterChanging(string value);
+    partial void OnPopUpFooterChanged();
+    partial void OnPartnerTypeIDChanging(long value);
+    partial void OnPartnerTypeIDChanged();
+    partial void OnHeaderEvaluationMethodChanging(string value);
+    partial void OnHeaderEvaluationMethodChanged();
+    partial void OnFooterEvaluationMethodChanging(string value);
+    partial void OnFooterEvaluationMethodChanged();
+    partial void OnPopUpHeaderEvaluationMethodChanging(string value);
+    partial void OnPopUpHeaderEvaluationMethodChanged();
+    partial void OnPopUpFooterEvaluationMethodChanging(string value);
+    partial void OnPopUpFooterEvaluationMethodChanged();
+    partial void OnMainTableBackgroundColorChanging(string value);
+    partial void OnMainTableBackgroundColorChanged();
+    partial void OnResultsPageShowCounterChanging(bool value);
+    partial void OnResultsPageShowCounterChanged();
+    partial void OnResultsPageShowNumberChanging(int value);
+    partial void OnResultsPageShowNumberChanged();
+    partial void OnResultsPageNameColumnHeaderChanging(string value);
+    partial void OnResultsPageNameColumnHeaderChanged();
+    partial void OnResultsPageNameColumnHeaderEvaluationMethodChanging(string value);
+    partial void OnResultsPageNameColumnHeaderEvaluationMethodChanged();
+    partial void OnResultsPageLocationColumnHeaderChanging(string value);
+    partial void OnResultsPageLocationColumnHeaderChanged();
+    partial void OnResultsPageLocationColumnHeaderEvaluationMethodChanging(string value);
+    partial void OnResultsPageLocationColumnHeaderEvaluationMethodChanged();
+    partial void OnResultsPageDateColumnHeaderChanging(string value);
+    partial void OnResultsPageDateColumnHeaderChanged();
+    partial void OnResultsPageDateColumnHeaderEvaluationMethodChanging(string value);
+    partial void OnResultsPageDateColumnHeaderEvaluationMethodChanged();
+    partial void OnResultsPageTypeColumnHeaderChanging(string value);
+    partial void OnResultsPageTypeColumnHeaderChanged();
+    partial void OnResultsPageTypeColumnHeaderEvaluationMethodChanging(string value);
+    partial void OnResultsPageTypeColumnHeaderEvaluationMethodChanged();
+    partial void OnResultsPageLocationColumnOnChanging(bool value);
+    partial void OnResultsPageLocationColumnOnChanged();
+    partial void OnResultsPageDateColumnOnChanging(bool value);
+    partial void OnResultsPageDateColumnOnChanged();
+    partial void OnResultsPageTypeColumnOnChanging(bool value);
+    partial void OnResultsPageTypeColumnOnChanged();
+    partial void OnResultsPageTextChanging(string value);
+    partial void OnResultsPageTextChanged();
+    partial void OnResultsPageTextEvaluationMethodChanging(string value);
+    partial void OnResultsPageTextEvaluationMethodChanged();
+    partial void OnShowAccountLoginPopupChanging(bool value);
+    partial void OnShowAccountLoginPopupChanged();
+    partial void OnAccountNameChanging(string value);
+    partial void OnAccountNameChanged();
+    partial void OnAccountNameEvaluationMethodChanging(string value);
+    partial void OnAccountNameEvaluationMethodChanged();
+    partial void OnAuthorizationLockoutTextChanging(string value);
+    partial void OnAuthorizationLockoutTextChanged();
+    partial void OnAuthorizationLockoutTextEvaluationMethodChanging(string value);
+    partial void OnAuthorizationLockoutTextEvaluationMethodChanged();
+    partial void OnTermsOfServiceChanging(string value);
+    partial void OnTermsOfServiceChanged();
+    partial void OnTermsOfServiceEvaluationMethodChanging(string value);
+    partial void OnTermsOfServiceEvaluationMethodChanged();
+    partial void OnDirectorsToolsNameChanging(string value);
+    partial void OnDirectorsToolsNameChanged();
+    partial void OnDirectorsToolsNameEvaluationMethodChanging(string value);
+    partial void OnDirectorsToolsNameEvaluationMethodChanged();
+    partial void OnRegistrationNameChanging(string value);
+    partial void OnRegistrationNameChanged();
+    partial void OnRegistrationNameEvaluationMethodChanging(string value);
+    partial void OnRegistrationNameEvaluationMethodChanged();
+    partial void OnCancelNameChanging(string value);
+    partial void OnCancelNameChanged();
+    partial void OnCancelNameEvaluationMethodChanging(string value);
+    partial void OnCancelNameEvaluationMethodChanged();
+    partial void OnDirectorsSummaryPageTextChanging(string value);
+    partial void OnDirectorsSummaryPageTextChanged();
+    partial void OnDirectorsSummaryPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsSummaryPageTextEvaluationMethodChanged();
+    partial void OnDirectorsDetailsPageTextChanging(string value);
+    partial void OnDirectorsDetailsPageTextChanged();
+    partial void OnDirectorsDetailsPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsDetailsPageTextEvaluationMethodChanged();
+    partial void OnDirectorsReportsPageTextChanging(string value);
+    partial void OnDirectorsReportsPageTextChanged();
+    partial void OnDirectorsReportsPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsReportsPageTextEvaluationMethodChanged();
+    partial void OnDirectorsSearchPageTextChanging(string value);
+    partial void OnDirectorsSearchPageTextChanged();
+    partial void OnDirectorsSearchPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsSearchPageTextEvaluationMethodChanged();
+    partial void OnDirectorsSearchResultsPageTextChanging(string value);
+    partial void OnDirectorsSearchResultsPageTextChanged();
+    partial void OnDirectorsSearchResultsPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsSearchResultsPageTextEvaluationMethodChanged();
+    partial void OnDirectorsLoginPageTextChanging(string value);
+    partial void OnDirectorsLoginPageTextChanged();
+    partial void OnDirectorsLoginPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsLoginPageTextEvaluationMethodChanged();
+    partial void OnDirectorsCancelDialogTextChanging(string value);
+    partial void OnDirectorsCancelDialogTextChanged();
+    partial void OnDirectorsCancelDialogTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsCancelDialogTextEvaluationMethodChanged();
+    partial void OnDirectorsCustomReportsPageTextChanging(string value);
+    partial void OnDirectorsCustomReportsPageTextChanged();
+    partial void OnDirectorsCustomReportsPageTextEvaluationMethodChanging(string value);
+    partial void OnDirectorsCustomReportsPageTextEvaluationMethodChanged();
+    partial void OnInvalidBeginLinkTextChanging(string value);
+    partial void OnInvalidBeginLinkTextChanged();
+    partial void OnInvalidBeginLinkTextEvaluationMethodChanging(string value);
+    partial void OnInvalidBeginLinkTextEvaluationMethodChanged();
+    partial void OnManagementToolsHeaderChanging(string value);
+    partial void OnManagementToolsHeaderChanged();
+    partial void OnManagementToolsHeaderEvaluationMethodChanging(string value);
+    partial void OnManagementToolsHeaderEvaluationMethodChanged();
+    partial void OnManagementToolsFooterChanging(string value);
+    partial void OnManagementToolsFooterChanged();
+    partial void OnManagementToolsFooterEvaluationMethodChanging(string value);
+    partial void OnManagementToolsFooterEvaluationMethodChanged();
+    partial void OnManagementToolsPageWidthChanging(string value);
+    partial void OnManagementToolsPageWidthChanged();
+    partial void OnResourceNameChanging(string value);
+    partial void OnResourceNameChanged();
+    partial void OnResourceNameEvaluationMethodChanging(string value);
+    partial void OnResourceNameEvaluationMethodChanged();
+    partial void OnDirectorsTimeoutWarningChanging(System.Nullable<int> value);
+    partial void OnDirectorsTimeoutWarningChanged();
+    partial void OnAudit_ContactIDChanging(System.Nullable<long> value);
+    partial void OnAudit_ContactIDChanged();
+    #endregion
+		
+		public Partner()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartnerID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long PartnerID
+		{
+			get
+			{
+				return this._PartnerID;
+			}
+			set
+			{
+				if ((this._PartnerID != value))
+				{
+					this.OnPartnerIDChanging(value);
+					this.SendPropertyChanging();
+					this._PartnerID = value;
+					this.SendPropertyChanged("PartnerID");
+					this.OnPartnerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartnerCode", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PartnerCode
+		{
+			get
+			{
+				return this._PartnerCode;
+			}
+			set
+			{
+				if ((this._PartnerCode != value))
+				{
+					this.OnPartnerCodeChanging(value);
+					this.SendPropertyChanging();
+					this._PartnerCode = value;
+					this.SendPropertyChanged("PartnerCode");
+					this.OnPartnerCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartnerName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string PartnerName
+		{
+			get
+			{
+				return this._PartnerName;
+			}
+			set
+			{
+				if ((this._PartnerName != value))
+				{
+					this.OnPartnerNameChanging(value);
+					this.SendPropertyChanging();
+					this._PartnerName = value;
+					this.SendPropertyChanged("PartnerName");
+					this.OnPartnerNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TableBorderWidth", DbType="Int NOT NULL")]
+		public int TableBorderWidth
+		{
+			get
+			{
+				return this._TableBorderWidth;
+			}
+			set
+			{
+				if ((this._TableBorderWidth != value))
+				{
+					this.OnTableBorderWidthChanging(value);
+					this.SendPropertyChanging();
+					this._TableBorderWidth = value;
+					this.SendPropertyChanged("TableBorderWidth");
+					this.OnTableBorderWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TableBorderStyle", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TableBorderStyle
+		{
+			get
+			{
+				return this._TableBorderStyle;
+			}
+			set
+			{
+				if ((this._TableBorderStyle != value))
+				{
+					this.OnTableBorderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._TableBorderStyle = value;
+					this.SendPropertyChanged("TableBorderStyle");
+					this.OnTableBorderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TableBorderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TableBorderColor
+		{
+			get
+			{
+				return this._TableBorderColor;
+			}
+			set
+			{
+				if ((this._TableBorderColor != value))
+				{
+					this.OnTableBorderColorChanging(value);
+					this.SendPropertyChanging();
+					this._TableBorderColor = value;
+					this.SendPropertyChanged("TableBorderColor");
+					this.OnTableBorderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TableBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TableBackgroundColor
+		{
+			get
+			{
+				return this._TableBackgroundColor;
+			}
+			set
+			{
+				if ((this._TableBackgroundColor != value))
+				{
+					this.OnTableBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._TableBackgroundColor = value;
+					this.SendPropertyChanged("TableBackgroundColor");
+					this.OnTableBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderBackgroundColor
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderBackgroundColor;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderBackgroundColor != value))
+				{
+					this.OnPrimaryColumnHeaderBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderBackgroundColor = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderBackgroundColor");
+					this.OnPrimaryColumnHeaderBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderAlign
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderAlign;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderAlign != value))
+				{
+					this.OnPrimaryColumnHeaderAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderAlign = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderAlign");
+					this.OnPrimaryColumnHeaderAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderVerticalAlign
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderVerticalAlign;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderVerticalAlign != value))
+				{
+					this.OnPrimaryColumnHeaderVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderVerticalAlign = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderVerticalAlign");
+					this.OnPrimaryColumnHeaderVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderIndent", DbType="Int NOT NULL")]
+		public int PrimaryColumnHeaderIndent
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderIndent;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderIndent != value))
+				{
+					this.OnPrimaryColumnHeaderIndentChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderIndent = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderIndent");
+					this.OnPrimaryColumnHeaderIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderFont
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderFont;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderFont != value))
+				{
+					this.OnPrimaryColumnHeaderFontChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderFont = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderFont");
+					this.OnPrimaryColumnHeaderFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderSize", DbType="Int NOT NULL")]
+		public int PrimaryColumnHeaderSize
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderSize;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderSize != value))
+				{
+					this.OnPrimaryColumnHeaderSizeChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderSize = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderSize");
+					this.OnPrimaryColumnHeaderSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderWeight
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderWeight;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderWeight != value))
+				{
+					this.OnPrimaryColumnHeaderWeightChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderWeight = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderWeight");
+					this.OnPrimaryColumnHeaderWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderStyle
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderStyle;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderStyle != value))
+				{
+					this.OnPrimaryColumnHeaderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderStyle = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderStyle");
+					this.OnPrimaryColumnHeaderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderDecoration
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderDecoration;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderDecoration != value))
+				{
+					this.OnPrimaryColumnHeaderDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderDecoration = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderDecoration");
+					this.OnPrimaryColumnHeaderDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryColumnHeaderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryColumnHeaderColor
+		{
+			get
+			{
+				return this._PrimaryColumnHeaderColor;
+			}
+			set
+			{
+				if ((this._PrimaryColumnHeaderColor != value))
+				{
+					this.OnPrimaryColumnHeaderColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryColumnHeaderColor = value;
+					this.SendPropertyChanged("PrimaryColumnHeaderColor");
+					this.OnPrimaryColumnHeaderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupBackgroundColor
+		{
+			get
+			{
+				return this._PrimaryDataGroupBackgroundColor;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupBackgroundColor != value))
+				{
+					this.OnPrimaryDataGroupBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupBackgroundColor = value;
+					this.SendPropertyChanged("PrimaryDataGroupBackgroundColor");
+					this.OnPrimaryDataGroupBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupAlign
+		{
+			get
+			{
+				return this._PrimaryDataGroupAlign;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupAlign != value))
+				{
+					this.OnPrimaryDataGroupAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupAlign = value;
+					this.SendPropertyChanged("PrimaryDataGroupAlign");
+					this.OnPrimaryDataGroupAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupVerticalAlign
+		{
+			get
+			{
+				return this._PrimaryDataGroupVerticalAlign;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupVerticalAlign != value))
+				{
+					this.OnPrimaryDataGroupVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupVerticalAlign = value;
+					this.SendPropertyChanged("PrimaryDataGroupVerticalAlign");
+					this.OnPrimaryDataGroupVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupIndent", DbType="Int NOT NULL")]
+		public int PrimaryDataGroupIndent
+		{
+			get
+			{
+				return this._PrimaryDataGroupIndent;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupIndent != value))
+				{
+					this.OnPrimaryDataGroupIndentChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupIndent = value;
+					this.SendPropertyChanged("PrimaryDataGroupIndent");
+					this.OnPrimaryDataGroupIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupFont
+		{
+			get
+			{
+				return this._PrimaryDataGroupFont;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupFont != value))
+				{
+					this.OnPrimaryDataGroupFontChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupFont = value;
+					this.SendPropertyChanged("PrimaryDataGroupFont");
+					this.OnPrimaryDataGroupFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupSize", DbType="Int NOT NULL")]
+		public int PrimaryDataGroupSize
+		{
+			get
+			{
+				return this._PrimaryDataGroupSize;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupSize != value))
+				{
+					this.OnPrimaryDataGroupSizeChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupSize = value;
+					this.SendPropertyChanged("PrimaryDataGroupSize");
+					this.OnPrimaryDataGroupSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupWeight
+		{
+			get
+			{
+				return this._PrimaryDataGroupWeight;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupWeight != value))
+				{
+					this.OnPrimaryDataGroupWeightChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupWeight = value;
+					this.SendPropertyChanged("PrimaryDataGroupWeight");
+					this.OnPrimaryDataGroupWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupStyle
+		{
+			get
+			{
+				return this._PrimaryDataGroupStyle;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupStyle != value))
+				{
+					this.OnPrimaryDataGroupStyleChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupStyle = value;
+					this.SendPropertyChanged("PrimaryDataGroupStyle");
+					this.OnPrimaryDataGroupStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupDecoration
+		{
+			get
+			{
+				return this._PrimaryDataGroupDecoration;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupDecoration != value))
+				{
+					this.OnPrimaryDataGroupDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupDecoration = value;
+					this.SendPropertyChanged("PrimaryDataGroupDecoration");
+					this.OnPrimaryDataGroupDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataGroupColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataGroupColor
+		{
+			get
+			{
+				return this._PrimaryDataGroupColor;
+			}
+			set
+			{
+				if ((this._PrimaryDataGroupColor != value))
+				{
+					this.OnPrimaryDataGroupColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataGroupColor = value;
+					this.SendPropertyChanged("PrimaryDataGroupColor");
+					this.OnPrimaryDataGroupColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementBackgroundColor
+		{
+			get
+			{
+				return this._PrimaryDataElementBackgroundColor;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementBackgroundColor != value))
+				{
+					this.OnPrimaryDataElementBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementBackgroundColor = value;
+					this.SendPropertyChanged("PrimaryDataElementBackgroundColor");
+					this.OnPrimaryDataElementBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementAlign
+		{
+			get
+			{
+				return this._PrimaryDataElementAlign;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementAlign != value))
+				{
+					this.OnPrimaryDataElementAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementAlign = value;
+					this.SendPropertyChanged("PrimaryDataElementAlign");
+					this.OnPrimaryDataElementAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementVerticalAlign
+		{
+			get
+			{
+				return this._PrimaryDataElementVerticalAlign;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementVerticalAlign != value))
+				{
+					this.OnPrimaryDataElementVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementVerticalAlign = value;
+					this.SendPropertyChanged("PrimaryDataElementVerticalAlign");
+					this.OnPrimaryDataElementVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementIndent", DbType="Int NOT NULL")]
+		public int PrimaryDataElementIndent
+		{
+			get
+			{
+				return this._PrimaryDataElementIndent;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementIndent != value))
+				{
+					this.OnPrimaryDataElementIndentChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementIndent = value;
+					this.SendPropertyChanged("PrimaryDataElementIndent");
+					this.OnPrimaryDataElementIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementFont
+		{
+			get
+			{
+				return this._PrimaryDataElementFont;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementFont != value))
+				{
+					this.OnPrimaryDataElementFontChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementFont = value;
+					this.SendPropertyChanged("PrimaryDataElementFont");
+					this.OnPrimaryDataElementFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementSize", DbType="Int NOT NULL")]
+		public int PrimaryDataElementSize
+		{
+			get
+			{
+				return this._PrimaryDataElementSize;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementSize != value))
+				{
+					this.OnPrimaryDataElementSizeChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementSize = value;
+					this.SendPropertyChanged("PrimaryDataElementSize");
+					this.OnPrimaryDataElementSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementWeight
+		{
+			get
+			{
+				return this._PrimaryDataElementWeight;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementWeight != value))
+				{
+					this.OnPrimaryDataElementWeightChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementWeight = value;
+					this.SendPropertyChanged("PrimaryDataElementWeight");
+					this.OnPrimaryDataElementWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementStyle
+		{
+			get
+			{
+				return this._PrimaryDataElementStyle;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementStyle != value))
+				{
+					this.OnPrimaryDataElementStyleChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementStyle = value;
+					this.SendPropertyChanged("PrimaryDataElementStyle");
+					this.OnPrimaryDataElementStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementDecoration
+		{
+			get
+			{
+				return this._PrimaryDataElementDecoration;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementDecoration != value))
+				{
+					this.OnPrimaryDataElementDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementDecoration = value;
+					this.SendPropertyChanged("PrimaryDataElementDecoration");
+					this.OnPrimaryDataElementDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrimaryDataElementColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PrimaryDataElementColor
+		{
+			get
+			{
+				return this._PrimaryDataElementColor;
+			}
+			set
+			{
+				if ((this._PrimaryDataElementColor != value))
+				{
+					this.OnPrimaryDataElementColorChanging(value);
+					this.SendPropertyChanging();
+					this._PrimaryDataElementColor = value;
+					this.SendPropertyChanged("PrimaryDataElementColor");
+					this.OnPrimaryDataElementColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderBackgroundColor
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderBackgroundColor;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderBackgroundColor != value))
+				{
+					this.OnSecondaryColumnHeaderBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderBackgroundColor = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderBackgroundColor");
+					this.OnSecondaryColumnHeaderBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderAlign
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderAlign;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderAlign != value))
+				{
+					this.OnSecondaryColumnHeaderAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderAlign = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderAlign");
+					this.OnSecondaryColumnHeaderAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderVerticalAlign
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderVerticalAlign;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderVerticalAlign != value))
+				{
+					this.OnSecondaryColumnHeaderVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderVerticalAlign = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderVerticalAlign");
+					this.OnSecondaryColumnHeaderVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderIndent", DbType="Int NOT NULL")]
+		public int SecondaryColumnHeaderIndent
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderIndent;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderIndent != value))
+				{
+					this.OnSecondaryColumnHeaderIndentChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderIndent = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderIndent");
+					this.OnSecondaryColumnHeaderIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderFont
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderFont;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderFont != value))
+				{
+					this.OnSecondaryColumnHeaderFontChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderFont = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderFont");
+					this.OnSecondaryColumnHeaderFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderSize", DbType="Int NOT NULL")]
+		public int SecondaryColumnHeaderSize
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderSize;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderSize != value))
+				{
+					this.OnSecondaryColumnHeaderSizeChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderSize = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderSize");
+					this.OnSecondaryColumnHeaderSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderWeight
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderWeight;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderWeight != value))
+				{
+					this.OnSecondaryColumnHeaderWeightChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderWeight = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderWeight");
+					this.OnSecondaryColumnHeaderWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderStyle
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderStyle;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderStyle != value))
+				{
+					this.OnSecondaryColumnHeaderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderStyle = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderStyle");
+					this.OnSecondaryColumnHeaderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderDecoration
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderDecoration;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderDecoration != value))
+				{
+					this.OnSecondaryColumnHeaderDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderDecoration = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderDecoration");
+					this.OnSecondaryColumnHeaderDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryColumnHeaderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryColumnHeaderColor
+		{
+			get
+			{
+				return this._SecondaryColumnHeaderColor;
+			}
+			set
+			{
+				if ((this._SecondaryColumnHeaderColor != value))
+				{
+					this.OnSecondaryColumnHeaderColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryColumnHeaderColor = value;
+					this.SendPropertyChanged("SecondaryColumnHeaderColor");
+					this.OnSecondaryColumnHeaderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupBackgroundColor
+		{
+			get
+			{
+				return this._SecondaryDataGroupBackgroundColor;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupBackgroundColor != value))
+				{
+					this.OnSecondaryDataGroupBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupBackgroundColor = value;
+					this.SendPropertyChanged("SecondaryDataGroupBackgroundColor");
+					this.OnSecondaryDataGroupBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupAlign
+		{
+			get
+			{
+				return this._SecondaryDataGroupAlign;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupAlign != value))
+				{
+					this.OnSecondaryDataGroupAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupAlign = value;
+					this.SendPropertyChanged("SecondaryDataGroupAlign");
+					this.OnSecondaryDataGroupAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupVerticalAlign
+		{
+			get
+			{
+				return this._SecondaryDataGroupVerticalAlign;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupVerticalAlign != value))
+				{
+					this.OnSecondaryDataGroupVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupVerticalAlign = value;
+					this.SendPropertyChanged("SecondaryDataGroupVerticalAlign");
+					this.OnSecondaryDataGroupVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupIndent", DbType="Int NOT NULL")]
+		public int SecondaryDataGroupIndent
+		{
+			get
+			{
+				return this._SecondaryDataGroupIndent;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupIndent != value))
+				{
+					this.OnSecondaryDataGroupIndentChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupIndent = value;
+					this.SendPropertyChanged("SecondaryDataGroupIndent");
+					this.OnSecondaryDataGroupIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupFont
+		{
+			get
+			{
+				return this._SecondaryDataGroupFont;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupFont != value))
+				{
+					this.OnSecondaryDataGroupFontChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupFont = value;
+					this.SendPropertyChanged("SecondaryDataGroupFont");
+					this.OnSecondaryDataGroupFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupSize", DbType="Int NOT NULL")]
+		public int SecondaryDataGroupSize
+		{
+			get
+			{
+				return this._SecondaryDataGroupSize;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupSize != value))
+				{
+					this.OnSecondaryDataGroupSizeChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupSize = value;
+					this.SendPropertyChanged("SecondaryDataGroupSize");
+					this.OnSecondaryDataGroupSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupWeight
+		{
+			get
+			{
+				return this._SecondaryDataGroupWeight;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupWeight != value))
+				{
+					this.OnSecondaryDataGroupWeightChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupWeight = value;
+					this.SendPropertyChanged("SecondaryDataGroupWeight");
+					this.OnSecondaryDataGroupWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupStyle
+		{
+			get
+			{
+				return this._SecondaryDataGroupStyle;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupStyle != value))
+				{
+					this.OnSecondaryDataGroupStyleChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupStyle = value;
+					this.SendPropertyChanged("SecondaryDataGroupStyle");
+					this.OnSecondaryDataGroupStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupDecoration
+		{
+			get
+			{
+				return this._SecondaryDataGroupDecoration;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupDecoration != value))
+				{
+					this.OnSecondaryDataGroupDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupDecoration = value;
+					this.SendPropertyChanged("SecondaryDataGroupDecoration");
+					this.OnSecondaryDataGroupDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataGroupColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataGroupColor
+		{
+			get
+			{
+				return this._SecondaryDataGroupColor;
+			}
+			set
+			{
+				if ((this._SecondaryDataGroupColor != value))
+				{
+					this.OnSecondaryDataGroupColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataGroupColor = value;
+					this.SendPropertyChanged("SecondaryDataGroupColor");
+					this.OnSecondaryDataGroupColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementBackgroundColor
+		{
+			get
+			{
+				return this._SecondaryDataElementBackgroundColor;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementBackgroundColor != value))
+				{
+					this.OnSecondaryDataElementBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementBackgroundColor = value;
+					this.SendPropertyChanged("SecondaryDataElementBackgroundColor");
+					this.OnSecondaryDataElementBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementAlign
+		{
+			get
+			{
+				return this._SecondaryDataElementAlign;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementAlign != value))
+				{
+					this.OnSecondaryDataElementAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementAlign = value;
+					this.SendPropertyChanged("SecondaryDataElementAlign");
+					this.OnSecondaryDataElementAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementVerticalAlign
+		{
+			get
+			{
+				return this._SecondaryDataElementVerticalAlign;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementVerticalAlign != value))
+				{
+					this.OnSecondaryDataElementVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementVerticalAlign = value;
+					this.SendPropertyChanged("SecondaryDataElementVerticalAlign");
+					this.OnSecondaryDataElementVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementIndent", DbType="Int NOT NULL")]
+		public int SecondaryDataElementIndent
+		{
+			get
+			{
+				return this._SecondaryDataElementIndent;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementIndent != value))
+				{
+					this.OnSecondaryDataElementIndentChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementIndent = value;
+					this.SendPropertyChanged("SecondaryDataElementIndent");
+					this.OnSecondaryDataElementIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementFont
+		{
+			get
+			{
+				return this._SecondaryDataElementFont;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementFont != value))
+				{
+					this.OnSecondaryDataElementFontChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementFont = value;
+					this.SendPropertyChanged("SecondaryDataElementFont");
+					this.OnSecondaryDataElementFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementSize", DbType="Int NOT NULL")]
+		public int SecondaryDataElementSize
+		{
+			get
+			{
+				return this._SecondaryDataElementSize;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementSize != value))
+				{
+					this.OnSecondaryDataElementSizeChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementSize = value;
+					this.SendPropertyChanged("SecondaryDataElementSize");
+					this.OnSecondaryDataElementSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementWeight
+		{
+			get
+			{
+				return this._SecondaryDataElementWeight;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementWeight != value))
+				{
+					this.OnSecondaryDataElementWeightChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementWeight = value;
+					this.SendPropertyChanged("SecondaryDataElementWeight");
+					this.OnSecondaryDataElementWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementStyle
+		{
+			get
+			{
+				return this._SecondaryDataElementStyle;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementStyle != value))
+				{
+					this.OnSecondaryDataElementStyleChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementStyle = value;
+					this.SendPropertyChanged("SecondaryDataElementStyle");
+					this.OnSecondaryDataElementStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementDecoration
+		{
+			get
+			{
+				return this._SecondaryDataElementDecoration;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementDecoration != value))
+				{
+					this.OnSecondaryDataElementDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementDecoration = value;
+					this.SendPropertyChanged("SecondaryDataElementDecoration");
+					this.OnSecondaryDataElementDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondaryDataElementColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SecondaryDataElementColor
+		{
+			get
+			{
+				return this._SecondaryDataElementColor;
+			}
+			set
+			{
+				if ((this._SecondaryDataElementColor != value))
+				{
+					this.OnSecondaryDataElementColorChanging(value);
+					this.SendPropertyChanging();
+					this._SecondaryDataElementColor = value;
+					this.SendPropertyChanged("SecondaryDataElementColor");
+					this.OnSecondaryDataElementColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ErrorBackgroundColor
+		{
+			get
+			{
+				return this._ErrorBackgroundColor;
+			}
+			set
+			{
+				if ((this._ErrorBackgroundColor != value))
+				{
+					this.OnErrorBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorBackgroundColor = value;
+					this.SendPropertyChanged("ErrorBackgroundColor");
+					this.OnErrorBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string ErrorAlign
+		{
+			get
+			{
+				return this._ErrorAlign;
+			}
+			set
+			{
+				if ((this._ErrorAlign != value))
+				{
+					this.OnErrorAlignChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorAlign = value;
+					this.SendPropertyChanged("ErrorAlign");
+					this.OnErrorAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string ErrorVerticalAlign
+		{
+			get
+			{
+				return this._ErrorVerticalAlign;
+			}
+			set
+			{
+				if ((this._ErrorVerticalAlign != value))
+				{
+					this.OnErrorVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorVerticalAlign = value;
+					this.SendPropertyChanged("ErrorVerticalAlign");
+					this.OnErrorVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorIndent", DbType="Int NOT NULL")]
+		public int ErrorIndent
+		{
+			get
+			{
+				return this._ErrorIndent;
+			}
+			set
+			{
+				if ((this._ErrorIndent != value))
+				{
+					this.OnErrorIndentChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorIndent = value;
+					this.SendPropertyChanged("ErrorIndent");
+					this.OnErrorIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string ErrorFont
+		{
+			get
+			{
+				return this._ErrorFont;
+			}
+			set
+			{
+				if ((this._ErrorFont != value))
+				{
+					this.OnErrorFontChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorFont = value;
+					this.SendPropertyChanged("ErrorFont");
+					this.OnErrorFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorSize", DbType="Int NOT NULL")]
+		public int ErrorSize
+		{
+			get
+			{
+				return this._ErrorSize;
+			}
+			set
+			{
+				if ((this._ErrorSize != value))
+				{
+					this.OnErrorSizeChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorSize = value;
+					this.SendPropertyChanged("ErrorSize");
+					this.OnErrorSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ErrorWeight
+		{
+			get
+			{
+				return this._ErrorWeight;
+			}
+			set
+			{
+				if ((this._ErrorWeight != value))
+				{
+					this.OnErrorWeightChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorWeight = value;
+					this.SendPropertyChanged("ErrorWeight");
+					this.OnErrorWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string ErrorStyle
+		{
+			get
+			{
+				return this._ErrorStyle;
+			}
+			set
+			{
+				if ((this._ErrorStyle != value))
+				{
+					this.OnErrorStyleChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorStyle = value;
+					this.SendPropertyChanged("ErrorStyle");
+					this.OnErrorStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string ErrorDecoration
+		{
+			get
+			{
+				return this._ErrorDecoration;
+			}
+			set
+			{
+				if ((this._ErrorDecoration != value))
+				{
+					this.OnErrorDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorDecoration = value;
+					this.SendPropertyChanged("ErrorDecoration");
+					this.OnErrorDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ErrorColor
+		{
+			get
+			{
+				return this._ErrorColor;
+			}
+			set
+			{
+				if ((this._ErrorColor != value))
+				{
+					this.OnErrorColorChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorColor = value;
+					this.SendPropertyChanged("ErrorColor");
+					this.OnErrorColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorBorderWidth", DbType="Int NOT NULL")]
+		public int ErrorBorderWidth
+		{
+			get
+			{
+				return this._ErrorBorderWidth;
+			}
+			set
+			{
+				if ((this._ErrorBorderWidth != value))
+				{
+					this.OnErrorBorderWidthChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorBorderWidth = value;
+					this.SendPropertyChanged("ErrorBorderWidth");
+					this.OnErrorBorderWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorBorderStyle", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ErrorBorderStyle
+		{
+			get
+			{
+				return this._ErrorBorderStyle;
+			}
+			set
+			{
+				if ((this._ErrorBorderStyle != value))
+				{
+					this.OnErrorBorderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorBorderStyle = value;
+					this.SendPropertyChanged("ErrorBorderStyle");
+					this.OnErrorBorderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorBorderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ErrorBorderColor
+		{
+			get
+			{
+				return this._ErrorBorderColor;
+			}
+			set
+			{
+				if ((this._ErrorBorderColor != value))
+				{
+					this.OnErrorBorderColorChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorBorderColor = value;
+					this.SendPropertyChanged("ErrorBorderColor");
+					this.OnErrorBorderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorPadding", DbType="Int NOT NULL")]
+		public int ErrorPadding
+		{
+			get
+			{
+				return this._ErrorPadding;
+			}
+			set
+			{
+				if ((this._ErrorPadding != value))
+				{
+					this.OnErrorPaddingChanging(value);
+					this.SendPropertyChanging();
+					this._ErrorPadding = value;
+					this.SendPropertyChanged("ErrorPadding");
+					this.OnErrorPaddingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string CopyrightBackgroundColor
+		{
+			get
+			{
+				return this._CopyrightBackgroundColor;
+			}
+			set
+			{
+				if ((this._CopyrightBackgroundColor != value))
+				{
+					this.OnCopyrightBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightBackgroundColor = value;
+					this.SendPropertyChanged("CopyrightBackgroundColor");
+					this.OnCopyrightBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string CopyrightAlign
+		{
+			get
+			{
+				return this._CopyrightAlign;
+			}
+			set
+			{
+				if ((this._CopyrightAlign != value))
+				{
+					this.OnCopyrightAlignChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightAlign = value;
+					this.SendPropertyChanged("CopyrightAlign");
+					this.OnCopyrightAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string CopyrightVerticalAlign
+		{
+			get
+			{
+				return this._CopyrightVerticalAlign;
+			}
+			set
+			{
+				if ((this._CopyrightVerticalAlign != value))
+				{
+					this.OnCopyrightVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightVerticalAlign = value;
+					this.SendPropertyChanged("CopyrightVerticalAlign");
+					this.OnCopyrightVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightIndent", DbType="Int NOT NULL")]
+		public int CopyrightIndent
+		{
+			get
+			{
+				return this._CopyrightIndent;
+			}
+			set
+			{
+				if ((this._CopyrightIndent != value))
+				{
+					this.OnCopyrightIndentChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightIndent = value;
+					this.SendPropertyChanged("CopyrightIndent");
+					this.OnCopyrightIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string CopyrightFont
+		{
+			get
+			{
+				return this._CopyrightFont;
+			}
+			set
+			{
+				if ((this._CopyrightFont != value))
+				{
+					this.OnCopyrightFontChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightFont = value;
+					this.SendPropertyChanged("CopyrightFont");
+					this.OnCopyrightFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightSize", DbType="Int NOT NULL")]
+		public int CopyrightSize
+		{
+			get
+			{
+				return this._CopyrightSize;
+			}
+			set
+			{
+				if ((this._CopyrightSize != value))
+				{
+					this.OnCopyrightSizeChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightSize = value;
+					this.SendPropertyChanged("CopyrightSize");
+					this.OnCopyrightSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string CopyrightWeight
+		{
+			get
+			{
+				return this._CopyrightWeight;
+			}
+			set
+			{
+				if ((this._CopyrightWeight != value))
+				{
+					this.OnCopyrightWeightChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightWeight = value;
+					this.SendPropertyChanged("CopyrightWeight");
+					this.OnCopyrightWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string CopyrightStyle
+		{
+			get
+			{
+				return this._CopyrightStyle;
+			}
+			set
+			{
+				if ((this._CopyrightStyle != value))
+				{
+					this.OnCopyrightStyleChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightStyle = value;
+					this.SendPropertyChanged("CopyrightStyle");
+					this.OnCopyrightStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string CopyrightDecoration
+		{
+			get
+			{
+				return this._CopyrightDecoration;
+			}
+			set
+			{
+				if ((this._CopyrightDecoration != value))
+				{
+					this.OnCopyrightDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightDecoration = value;
+					this.SendPropertyChanged("CopyrightDecoration");
+					this.OnCopyrightDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string CopyrightColor
+		{
+			get
+			{
+				return this._CopyrightColor;
+			}
+			set
+			{
+				if ((this._CopyrightColor != value))
+				{
+					this.OnCopyrightColorChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightColor = value;
+					this.SendPropertyChanged("CopyrightColor");
+					this.OnCopyrightColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightPosition", DbType="NVarChar(9) NOT NULL", CanBeNull=false)]
+		public string CopyrightPosition
+		{
+			get
+			{
+				return this._CopyrightPosition;
+			}
+			set
+			{
+				if ((this._CopyrightPosition != value))
+				{
+					this.OnCopyrightPositionChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightPosition = value;
+					this.SendPropertyChanged("CopyrightPosition");
+					this.OnCopyrightPositionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightLeft", DbType="Int NOT NULL")]
+		public int CopyrightLeft
+		{
+			get
+			{
+				return this._CopyrightLeft;
+			}
+			set
+			{
+				if ((this._CopyrightLeft != value))
+				{
+					this.OnCopyrightLeftChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightLeft = value;
+					this.SendPropertyChanged("CopyrightLeft");
+					this.OnCopyrightLeftChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyrightTop", DbType="Int NOT NULL")]
+		public int CopyrightTop
+		{
+			get
+			{
+				return this._CopyrightTop;
+			}
+			set
+			{
+				if ((this._CopyrightTop != value))
+				{
+					this.OnCopyrightTopChanging(value);
+					this.SendPropertyChanging();
+					this._CopyrightTop = value;
+					this.SendPropertyChanged("CopyrightTop");
+					this.OnCopyrightTopChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormFieldBackgroundColor
+		{
+			get
+			{
+				return this._FormFieldBackgroundColor;
+			}
+			set
+			{
+				if ((this._FormFieldBackgroundColor != value))
+				{
+					this.OnFormFieldBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldBackgroundColor = value;
+					this.SendPropertyChanged("FormFieldBackgroundColor");
+					this.OnFormFieldBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string FormFieldAlign
+		{
+			get
+			{
+				return this._FormFieldAlign;
+			}
+			set
+			{
+				if ((this._FormFieldAlign != value))
+				{
+					this.OnFormFieldAlignChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldAlign = value;
+					this.SendPropertyChanged("FormFieldAlign");
+					this.OnFormFieldAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string FormFieldVerticalAlign
+		{
+			get
+			{
+				return this._FormFieldVerticalAlign;
+			}
+			set
+			{
+				if ((this._FormFieldVerticalAlign != value))
+				{
+					this.OnFormFieldVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldVerticalAlign = value;
+					this.SendPropertyChanged("FormFieldVerticalAlign");
+					this.OnFormFieldVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldIndent", DbType="Int NOT NULL")]
+		public int FormFieldIndent
+		{
+			get
+			{
+				return this._FormFieldIndent;
+			}
+			set
+			{
+				if ((this._FormFieldIndent != value))
+				{
+					this.OnFormFieldIndentChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldIndent = value;
+					this.SendPropertyChanged("FormFieldIndent");
+					this.OnFormFieldIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string FormFieldFont
+		{
+			get
+			{
+				return this._FormFieldFont;
+			}
+			set
+			{
+				if ((this._FormFieldFont != value))
+				{
+					this.OnFormFieldFontChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldFont = value;
+					this.SendPropertyChanged("FormFieldFont");
+					this.OnFormFieldFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldSize", DbType="Int NOT NULL")]
+		public int FormFieldSize
+		{
+			get
+			{
+				return this._FormFieldSize;
+			}
+			set
+			{
+				if ((this._FormFieldSize != value))
+				{
+					this.OnFormFieldSizeChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldSize = value;
+					this.SendPropertyChanged("FormFieldSize");
+					this.OnFormFieldSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormFieldWeight
+		{
+			get
+			{
+				return this._FormFieldWeight;
+			}
+			set
+			{
+				if ((this._FormFieldWeight != value))
+				{
+					this.OnFormFieldWeightChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldWeight = value;
+					this.SendPropertyChanged("FormFieldWeight");
+					this.OnFormFieldWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string FormFieldStyle
+		{
+			get
+			{
+				return this._FormFieldStyle;
+			}
+			set
+			{
+				if ((this._FormFieldStyle != value))
+				{
+					this.OnFormFieldStyleChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldStyle = value;
+					this.SendPropertyChanged("FormFieldStyle");
+					this.OnFormFieldStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string FormFieldDecoration
+		{
+			get
+			{
+				return this._FormFieldDecoration;
+			}
+			set
+			{
+				if ((this._FormFieldDecoration != value))
+				{
+					this.OnFormFieldDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldDecoration = value;
+					this.SendPropertyChanged("FormFieldDecoration");
+					this.OnFormFieldDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormFieldColor
+		{
+			get
+			{
+				return this._FormFieldColor;
+			}
+			set
+			{
+				if ((this._FormFieldColor != value))
+				{
+					this.OnFormFieldColorChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldColor = value;
+					this.SendPropertyChanged("FormFieldColor");
+					this.OnFormFieldColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldBorderWidth", DbType="Int NOT NULL")]
+		public int FormFieldBorderWidth
+		{
+			get
+			{
+				return this._FormFieldBorderWidth;
+			}
+			set
+			{
+				if ((this._FormFieldBorderWidth != value))
+				{
+					this.OnFormFieldBorderWidthChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldBorderWidth = value;
+					this.SendPropertyChanged("FormFieldBorderWidth");
+					this.OnFormFieldBorderWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldBorderStyle", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormFieldBorderStyle
+		{
+			get
+			{
+				return this._FormFieldBorderStyle;
+			}
+			set
+			{
+				if ((this._FormFieldBorderStyle != value))
+				{
+					this.OnFormFieldBorderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldBorderStyle = value;
+					this.SendPropertyChanged("FormFieldBorderStyle");
+					this.OnFormFieldBorderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormFieldBorderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormFieldBorderColor
+		{
+			get
+			{
+				return this._FormFieldBorderColor;
+			}
+			set
+			{
+				if ((this._FormFieldBorderColor != value))
+				{
+					this.OnFormFieldBorderColorChanging(value);
+					this.SendPropertyChanging();
+					this._FormFieldBorderColor = value;
+					this.SendPropertyChanged("FormFieldBorderColor");
+					this.OnFormFieldBorderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormLabelBackgroundColor
+		{
+			get
+			{
+				return this._FormLabelBackgroundColor;
+			}
+			set
+			{
+				if ((this._FormLabelBackgroundColor != value))
+				{
+					this.OnFormLabelBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelBackgroundColor = value;
+					this.SendPropertyChanged("FormLabelBackgroundColor");
+					this.OnFormLabelBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string FormLabelAlign
+		{
+			get
+			{
+				return this._FormLabelAlign;
+			}
+			set
+			{
+				if ((this._FormLabelAlign != value))
+				{
+					this.OnFormLabelAlignChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelAlign = value;
+					this.SendPropertyChanged("FormLabelAlign");
+					this.OnFormLabelAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string FormLabelVerticalAlign
+		{
+			get
+			{
+				return this._FormLabelVerticalAlign;
+			}
+			set
+			{
+				if ((this._FormLabelVerticalAlign != value))
+				{
+					this.OnFormLabelVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelVerticalAlign = value;
+					this.SendPropertyChanged("FormLabelVerticalAlign");
+					this.OnFormLabelVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelIndent", DbType="Int NOT NULL")]
+		public int FormLabelIndent
+		{
+			get
+			{
+				return this._FormLabelIndent;
+			}
+			set
+			{
+				if ((this._FormLabelIndent != value))
+				{
+					this.OnFormLabelIndentChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelIndent = value;
+					this.SendPropertyChanged("FormLabelIndent");
+					this.OnFormLabelIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string FormLabelFont
+		{
+			get
+			{
+				return this._FormLabelFont;
+			}
+			set
+			{
+				if ((this._FormLabelFont != value))
+				{
+					this.OnFormLabelFontChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelFont = value;
+					this.SendPropertyChanged("FormLabelFont");
+					this.OnFormLabelFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelSize", DbType="Int NOT NULL")]
+		public int FormLabelSize
+		{
+			get
+			{
+				return this._FormLabelSize;
+			}
+			set
+			{
+				if ((this._FormLabelSize != value))
+				{
+					this.OnFormLabelSizeChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelSize = value;
+					this.SendPropertyChanged("FormLabelSize");
+					this.OnFormLabelSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormLabelWeight
+		{
+			get
+			{
+				return this._FormLabelWeight;
+			}
+			set
+			{
+				if ((this._FormLabelWeight != value))
+				{
+					this.OnFormLabelWeightChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelWeight = value;
+					this.SendPropertyChanged("FormLabelWeight");
+					this.OnFormLabelWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string FormLabelStyle
+		{
+			get
+			{
+				return this._FormLabelStyle;
+			}
+			set
+			{
+				if ((this._FormLabelStyle != value))
+				{
+					this.OnFormLabelStyleChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelStyle = value;
+					this.SendPropertyChanged("FormLabelStyle");
+					this.OnFormLabelStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string FormLabelDecoration
+		{
+			get
+			{
+				return this._FormLabelDecoration;
+			}
+			set
+			{
+				if ((this._FormLabelDecoration != value))
+				{
+					this.OnFormLabelDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelDecoration = value;
+					this.SendPropertyChanged("FormLabelDecoration");
+					this.OnFormLabelDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FormLabelColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string FormLabelColor
+		{
+			get
+			{
+				return this._FormLabelColor;
+			}
+			set
+			{
+				if ((this._FormLabelColor != value))
+				{
+					this.OnFormLabelColorChanging(value);
+					this.SendPropertyChanging();
+					this._FormLabelColor = value;
+					this.SendPropertyChanged("FormLabelColor");
+					this.OnFormLabelColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TitleBackgroundColor
+		{
+			get
+			{
+				return this._TitleBackgroundColor;
+			}
+			set
+			{
+				if ((this._TitleBackgroundColor != value))
+				{
+					this.OnTitleBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._TitleBackgroundColor = value;
+					this.SendPropertyChanged("TitleBackgroundColor");
+					this.OnTitleBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string TitleAlign
+		{
+			get
+			{
+				return this._TitleAlign;
+			}
+			set
+			{
+				if ((this._TitleAlign != value))
+				{
+					this.OnTitleAlignChanging(value);
+					this.SendPropertyChanging();
+					this._TitleAlign = value;
+					this.SendPropertyChanged("TitleAlign");
+					this.OnTitleAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string TitleVerticalAlign
+		{
+			get
+			{
+				return this._TitleVerticalAlign;
+			}
+			set
+			{
+				if ((this._TitleVerticalAlign != value))
+				{
+					this.OnTitleVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._TitleVerticalAlign = value;
+					this.SendPropertyChanged("TitleVerticalAlign");
+					this.OnTitleVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleIndent", DbType="Int NOT NULL")]
+		public int TitleIndent
+		{
+			get
+			{
+				return this._TitleIndent;
+			}
+			set
+			{
+				if ((this._TitleIndent != value))
+				{
+					this.OnTitleIndentChanging(value);
+					this.SendPropertyChanging();
+					this._TitleIndent = value;
+					this.SendPropertyChanged("TitleIndent");
+					this.OnTitleIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string TitleFont
+		{
+			get
+			{
+				return this._TitleFont;
+			}
+			set
+			{
+				if ((this._TitleFont != value))
+				{
+					this.OnTitleFontChanging(value);
+					this.SendPropertyChanging();
+					this._TitleFont = value;
+					this.SendPropertyChanged("TitleFont");
+					this.OnTitleFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleSize", DbType="Int NOT NULL")]
+		public int TitleSize
+		{
+			get
+			{
+				return this._TitleSize;
+			}
+			set
+			{
+				if ((this._TitleSize != value))
+				{
+					this.OnTitleSizeChanging(value);
+					this.SendPropertyChanging();
+					this._TitleSize = value;
+					this.SendPropertyChanged("TitleSize");
+					this.OnTitleSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TitleWeight
+		{
+			get
+			{
+				return this._TitleWeight;
+			}
+			set
+			{
+				if ((this._TitleWeight != value))
+				{
+					this.OnTitleWeightChanging(value);
+					this.SendPropertyChanging();
+					this._TitleWeight = value;
+					this.SendPropertyChanged("TitleWeight");
+					this.OnTitleWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string TitleStyle
+		{
+			get
+			{
+				return this._TitleStyle;
+			}
+			set
+			{
+				if ((this._TitleStyle != value))
+				{
+					this.OnTitleStyleChanging(value);
+					this.SendPropertyChanging();
+					this._TitleStyle = value;
+					this.SendPropertyChanged("TitleStyle");
+					this.OnTitleStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string TitleDecoration
+		{
+			get
+			{
+				return this._TitleDecoration;
+			}
+			set
+			{
+				if ((this._TitleDecoration != value))
+				{
+					this.OnTitleDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._TitleDecoration = value;
+					this.SendPropertyChanged("TitleDecoration");
+					this.OnTitleDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TitleColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string TitleColor
+		{
+			get
+			{
+				return this._TitleColor;
+			}
+			set
+			{
+				if ((this._TitleColor != value))
+				{
+					this.OnTitleColorChanging(value);
+					this.SendPropertyChanging();
+					this._TitleColor = value;
+					this.SendPropertyChanged("TitleColor");
+					this.OnTitleColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SubsectionBackgroundColor
+		{
+			get
+			{
+				return this._SubsectionBackgroundColor;
+			}
+			set
+			{
+				if ((this._SubsectionBackgroundColor != value))
+				{
+					this.OnSubsectionBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionBackgroundColor = value;
+					this.SendPropertyChanged("SubsectionBackgroundColor");
+					this.OnSubsectionBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SubsectionAlign
+		{
+			get
+			{
+				return this._SubsectionAlign;
+			}
+			set
+			{
+				if ((this._SubsectionAlign != value))
+				{
+					this.OnSubsectionAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionAlign = value;
+					this.SendPropertyChanged("SubsectionAlign");
+					this.OnSubsectionAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string SubsectionVerticalAlign
+		{
+			get
+			{
+				return this._SubsectionVerticalAlign;
+			}
+			set
+			{
+				if ((this._SubsectionVerticalAlign != value))
+				{
+					this.OnSubsectionVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionVerticalAlign = value;
+					this.SendPropertyChanged("SubsectionVerticalAlign");
+					this.OnSubsectionVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionIndent", DbType="Int NOT NULL")]
+		public int SubsectionIndent
+		{
+			get
+			{
+				return this._SubsectionIndent;
+			}
+			set
+			{
+				if ((this._SubsectionIndent != value))
+				{
+					this.OnSubsectionIndentChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionIndent = value;
+					this.SendPropertyChanged("SubsectionIndent");
+					this.OnSubsectionIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string SubsectionFont
+		{
+			get
+			{
+				return this._SubsectionFont;
+			}
+			set
+			{
+				if ((this._SubsectionFont != value))
+				{
+					this.OnSubsectionFontChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionFont = value;
+					this.SendPropertyChanged("SubsectionFont");
+					this.OnSubsectionFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionSize", DbType="Int NOT NULL")]
+		public int SubsectionSize
+		{
+			get
+			{
+				return this._SubsectionSize;
+			}
+			set
+			{
+				if ((this._SubsectionSize != value))
+				{
+					this.OnSubsectionSizeChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionSize = value;
+					this.SendPropertyChanged("SubsectionSize");
+					this.OnSubsectionSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SubsectionWeight
+		{
+			get
+			{
+				return this._SubsectionWeight;
+			}
+			set
+			{
+				if ((this._SubsectionWeight != value))
+				{
+					this.OnSubsectionWeightChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionWeight = value;
+					this.SendPropertyChanged("SubsectionWeight");
+					this.OnSubsectionWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string SubsectionStyle
+		{
+			get
+			{
+				return this._SubsectionStyle;
+			}
+			set
+			{
+				if ((this._SubsectionStyle != value))
+				{
+					this.OnSubsectionStyleChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionStyle = value;
+					this.SendPropertyChanged("SubsectionStyle");
+					this.OnSubsectionStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string SubsectionDecoration
+		{
+			get
+			{
+				return this._SubsectionDecoration;
+			}
+			set
+			{
+				if ((this._SubsectionDecoration != value))
+				{
+					this.OnSubsectionDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionDecoration = value;
+					this.SendPropertyChanged("SubsectionDecoration");
+					this.OnSubsectionDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubsectionColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string SubsectionColor
+		{
+			get
+			{
+				return this._SubsectionColor;
+			}
+			set
+			{
+				if ((this._SubsectionColor != value))
+				{
+					this.OnSubsectionColorChanging(value);
+					this.SendPropertyChanging();
+					this._SubsectionColor = value;
+					this.SendPropertyChanged("SubsectionColor");
+					this.OnSubsectionColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PlainTextBackgroundColor
+		{
+			get
+			{
+				return this._PlainTextBackgroundColor;
+			}
+			set
+			{
+				if ((this._PlainTextBackgroundColor != value))
+				{
+					this.OnPlainTextBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextBackgroundColor = value;
+					this.SendPropertyChanged("PlainTextBackgroundColor");
+					this.OnPlainTextBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextAlign", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PlainTextAlign
+		{
+			get
+			{
+				return this._PlainTextAlign;
+			}
+			set
+			{
+				if ((this._PlainTextAlign != value))
+				{
+					this.OnPlainTextAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextAlign = value;
+					this.SendPropertyChanged("PlainTextAlign");
+					this.OnPlainTextAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextVerticalAlign", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string PlainTextVerticalAlign
+		{
+			get
+			{
+				return this._PlainTextVerticalAlign;
+			}
+			set
+			{
+				if ((this._PlainTextVerticalAlign != value))
+				{
+					this.OnPlainTextVerticalAlignChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextVerticalAlign = value;
+					this.SendPropertyChanged("PlainTextVerticalAlign");
+					this.OnPlainTextVerticalAlignChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextIndent", DbType="Int NOT NULL")]
+		public int PlainTextIndent
+		{
+			get
+			{
+				return this._PlainTextIndent;
+			}
+			set
+			{
+				if ((this._PlainTextIndent != value))
+				{
+					this.OnPlainTextIndentChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextIndent = value;
+					this.SendPropertyChanged("PlainTextIndent");
+					this.OnPlainTextIndentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextFont", DbType="NVarChar(25) NOT NULL", CanBeNull=false)]
+		public string PlainTextFont
+		{
+			get
+			{
+				return this._PlainTextFont;
+			}
+			set
+			{
+				if ((this._PlainTextFont != value))
+				{
+					this.OnPlainTextFontChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextFont = value;
+					this.SendPropertyChanged("PlainTextFont");
+					this.OnPlainTextFontChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextSize", DbType="Int NOT NULL")]
+		public int PlainTextSize
+		{
+			get
+			{
+				return this._PlainTextSize;
+			}
+			set
+			{
+				if ((this._PlainTextSize != value))
+				{
+					this.OnPlainTextSizeChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextSize = value;
+					this.SendPropertyChanged("PlainTextSize");
+					this.OnPlainTextSizeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextWeight", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PlainTextWeight
+		{
+			get
+			{
+				return this._PlainTextWeight;
+			}
+			set
+			{
+				if ((this._PlainTextWeight != value))
+				{
+					this.OnPlainTextWeightChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextWeight = value;
+					this.SendPropertyChanged("PlainTextWeight");
+					this.OnPlainTextWeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string PlainTextStyle
+		{
+			get
+			{
+				return this._PlainTextStyle;
+			}
+			set
+			{
+				if ((this._PlainTextStyle != value))
+				{
+					this.OnPlainTextStyleChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextStyle = value;
+					this.SendPropertyChanged("PlainTextStyle");
+					this.OnPlainTextStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string PlainTextDecoration
+		{
+			get
+			{
+				return this._PlainTextDecoration;
+			}
+			set
+			{
+				if ((this._PlainTextDecoration != value))
+				{
+					this.OnPlainTextDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextDecoration = value;
+					this.SendPropertyChanged("PlainTextDecoration");
+					this.OnPlainTextDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlainTextColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string PlainTextColor
+		{
+			get
+			{
+				return this._PlainTextColor;
+			}
+			set
+			{
+				if ((this._PlainTextColor != value))
+				{
+					this.OnPlainTextColorChanging(value);
+					this.SendPropertyChanging();
+					this._PlainTextColor = value;
+					this.SendPropertyChanged("PlainTextColor");
+					this.OnPlainTextColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LinkColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string LinkColor
+		{
+			get
+			{
+				return this._LinkColor;
+			}
+			set
+			{
+				if ((this._LinkColor != value))
+				{
+					this.OnLinkColorChanging(value);
+					this.SendPropertyChanging();
+					this._LinkColor = value;
+					this.SendPropertyChanged("LinkColor");
+					this.OnLinkColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LinkStyle", DbType="NVarChar(7) NOT NULL", CanBeNull=false)]
+		public string LinkStyle
+		{
+			get
+			{
+				return this._LinkStyle;
+			}
+			set
+			{
+				if ((this._LinkStyle != value))
+				{
+					this.OnLinkStyleChanging(value);
+					this.SendPropertyChanging();
+					this._LinkStyle = value;
+					this.SendPropertyChanged("LinkStyle");
+					this.OnLinkStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LinkDecoration", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string LinkDecoration
+		{
+			get
+			{
+				return this._LinkDecoration;
+			}
+			set
+			{
+				if ((this._LinkDecoration != value))
+				{
+					this.OnLinkDecorationChanging(value);
+					this.SendPropertyChanging();
+					this._LinkDecoration = value;
+					this.SendPropertyChanged("LinkDecoration");
+					this.OnLinkDecorationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActiveLinkColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string ActiveLinkColor
+		{
+			get
+			{
+				return this._ActiveLinkColor;
+			}
+			set
+			{
+				if ((this._ActiveLinkColor != value))
+				{
+					this.OnActiveLinkColorChanging(value);
+					this.SendPropertyChanging();
+					this._ActiveLinkColor = value;
+					this.SendPropertyChanged("ActiveLinkColor");
+					this.OnActiveLinkColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HoverLinkColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string HoverLinkColor
+		{
+			get
+			{
+				return this._HoverLinkColor;
+			}
+			set
+			{
+				if ((this._HoverLinkColor != value))
+				{
+					this.OnHoverLinkColorChanging(value);
+					this.SendPropertyChanging();
+					this._HoverLinkColor = value;
+					this.SendPropertyChanged("HoverLinkColor");
+					this.OnHoverLinkColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VisitedLinkColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string VisitedLinkColor
+		{
+			get
+			{
+				return this._VisitedLinkColor;
+			}
+			set
+			{
+				if ((this._VisitedLinkColor != value))
+				{
+					this.OnVisitedLinkColorChanging(value);
+					this.SendPropertyChanging();
+					this._VisitedLinkColor = value;
+					this.SendPropertyChanged("VisitedLinkColor");
+					this.OnVisitedLinkColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HorizontalRuleWidth", DbType="Int NOT NULL")]
+		public int HorizontalRuleWidth
+		{
+			get
+			{
+				return this._HorizontalRuleWidth;
+			}
+			set
+			{
+				if ((this._HorizontalRuleWidth != value))
+				{
+					this.OnHorizontalRuleWidthChanging(value);
+					this.SendPropertyChanging();
+					this._HorizontalRuleWidth = value;
+					this.SendPropertyChanged("HorizontalRuleWidth");
+					this.OnHorizontalRuleWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HorizontalRuleHeight", DbType="Int NOT NULL")]
+		public int HorizontalRuleHeight
+		{
+			get
+			{
+				return this._HorizontalRuleHeight;
+			}
+			set
+			{
+				if ((this._HorizontalRuleHeight != value))
+				{
+					this.OnHorizontalRuleHeightChanging(value);
+					this.SendPropertyChanging();
+					this._HorizontalRuleHeight = value;
+					this.SendPropertyChanged("HorizontalRuleHeight");
+					this.OnHorizontalRuleHeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HorizontalRuleBorderStyle", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string HorizontalRuleBorderStyle
+		{
+			get
+			{
+				return this._HorizontalRuleBorderStyle;
+			}
+			set
+			{
+				if ((this._HorizontalRuleBorderStyle != value))
+				{
+					this.OnHorizontalRuleBorderStyleChanging(value);
+					this.SendPropertyChanging();
+					this._HorizontalRuleBorderStyle = value;
+					this.SendPropertyChanged("HorizontalRuleBorderStyle");
+					this.OnHorizontalRuleBorderStyleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HorizontalRuleBorderColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string HorizontalRuleBorderColor
+		{
+			get
+			{
+				return this._HorizontalRuleBorderColor;
+			}
+			set
+			{
+				if ((this._HorizontalRuleBorderColor != value))
+				{
+					this.OnHorizontalRuleBorderColorChanging(value);
+					this.SendPropertyChanging();
+					this._HorizontalRuleBorderColor = value;
+					this.SendPropertyChanged("HorizontalRuleBorderColor");
+					this.OnHorizontalRuleBorderColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Header", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Header
+		{
+			get
+			{
+				return this._Header;
+			}
+			set
+			{
+				if ((this._Header != value))
+				{
+					this.OnHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._Header = value;
+					this.SendPropertyChanged("Header");
+					this.OnHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Footer", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Footer
+		{
+			get
+			{
+				return this._Footer;
+			}
+			set
+			{
+				if ((this._Footer != value))
+				{
+					this.OnFooterChanging(value);
+					this.SendPropertyChanging();
+					this._Footer = value;
+					this.SendPropertyChanged("Footer");
+					this.OnFooterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PageWidth", DbType="Int NOT NULL")]
+		public int PageWidth
+		{
+			get
+			{
+				return this._PageWidth;
+			}
+			set
+			{
+				if ((this._PageWidth != value))
+				{
+					this.OnPageWidthChanging(value);
+					this.SendPropertyChanging();
+					this._PageWidth = value;
+					this.SendPropertyChanged("PageWidth");
+					this.OnPageWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PopUpHeader", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string PopUpHeader
+		{
+			get
+			{
+				return this._PopUpHeader;
+			}
+			set
+			{
+				if ((this._PopUpHeader != value))
+				{
+					this.OnPopUpHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._PopUpHeader = value;
+					this.SendPropertyChanged("PopUpHeader");
+					this.OnPopUpHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PopUpFooter", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string PopUpFooter
+		{
+			get
+			{
+				return this._PopUpFooter;
+			}
+			set
+			{
+				if ((this._PopUpFooter != value))
+				{
+					this.OnPopUpFooterChanging(value);
+					this.SendPropertyChanging();
+					this._PopUpFooter = value;
+					this.SendPropertyChanged("PopUpFooter");
+					this.OnPopUpFooterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartnerTypeID", DbType="BigInt NOT NULL")]
+		public long PartnerTypeID
+		{
+			get
+			{
+				return this._PartnerTypeID;
+			}
+			set
+			{
+				if ((this._PartnerTypeID != value))
+				{
+					this.OnPartnerTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._PartnerTypeID = value;
+					this.SendPropertyChanged("PartnerTypeID");
+					this.OnPartnerTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HeaderEvaluationMethod", DbType="NVarChar(100)")]
+		public string HeaderEvaluationMethod
+		{
+			get
+			{
+				return this._HeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._HeaderEvaluationMethod != value))
+				{
+					this.OnHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._HeaderEvaluationMethod = value;
+					this.SendPropertyChanged("HeaderEvaluationMethod");
+					this.OnHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FooterEvaluationMethod", DbType="NVarChar(100)")]
+		public string FooterEvaluationMethod
+		{
+			get
+			{
+				return this._FooterEvaluationMethod;
+			}
+			set
+			{
+				if ((this._FooterEvaluationMethod != value))
+				{
+					this.OnFooterEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._FooterEvaluationMethod = value;
+					this.SendPropertyChanged("FooterEvaluationMethod");
+					this.OnFooterEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PopUpHeaderEvaluationMethod", DbType="NVarChar(100)")]
+		public string PopUpHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._PopUpHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._PopUpHeaderEvaluationMethod != value))
+				{
+					this.OnPopUpHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._PopUpHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("PopUpHeaderEvaluationMethod");
+					this.OnPopUpHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PopUpFooterEvaluationMethod", DbType="NVarChar(100)")]
+		public string PopUpFooterEvaluationMethod
+		{
+			get
+			{
+				return this._PopUpFooterEvaluationMethod;
+			}
+			set
+			{
+				if ((this._PopUpFooterEvaluationMethod != value))
+				{
+					this.OnPopUpFooterEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._PopUpFooterEvaluationMethod = value;
+					this.SendPropertyChanged("PopUpFooterEvaluationMethod");
+					this.OnPopUpFooterEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MainTableBackgroundColor", DbType="NVarChar(6) NOT NULL", CanBeNull=false)]
+		public string MainTableBackgroundColor
+		{
+			get
+			{
+				return this._MainTableBackgroundColor;
+			}
+			set
+			{
+				if ((this._MainTableBackgroundColor != value))
+				{
+					this.OnMainTableBackgroundColorChanging(value);
+					this.SendPropertyChanging();
+					this._MainTableBackgroundColor = value;
+					this.SendPropertyChanged("MainTableBackgroundColor");
+					this.OnMainTableBackgroundColorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageShowCounter", DbType="Bit NOT NULL")]
+		public bool ResultsPageShowCounter
+		{
+			get
+			{
+				return this._ResultsPageShowCounter;
+			}
+			set
+			{
+				if ((this._ResultsPageShowCounter != value))
+				{
+					this.OnResultsPageShowCounterChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageShowCounter = value;
+					this.SendPropertyChanged("ResultsPageShowCounter");
+					this.OnResultsPageShowCounterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageShowNumber", DbType="Int NOT NULL")]
+		public int ResultsPageShowNumber
+		{
+			get
+			{
+				return this._ResultsPageShowNumber;
+			}
+			set
+			{
+				if ((this._ResultsPageShowNumber != value))
+				{
+					this.OnResultsPageShowNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageShowNumber = value;
+					this.SendPropertyChanged("ResultsPageShowNumber");
+					this.OnResultsPageShowNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageNameColumnHeader", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ResultsPageNameColumnHeader
+		{
+			get
+			{
+				return this._ResultsPageNameColumnHeader;
+			}
+			set
+			{
+				if ((this._ResultsPageNameColumnHeader != value))
+				{
+					this.OnResultsPageNameColumnHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageNameColumnHeader = value;
+					this.SendPropertyChanged("ResultsPageNameColumnHeader");
+					this.OnResultsPageNameColumnHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageNameColumnHeaderEvaluationMethod", DbType="NVarChar(7)")]
+		public string ResultsPageNameColumnHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._ResultsPageNameColumnHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResultsPageNameColumnHeaderEvaluationMethod != value))
+				{
+					this.OnResultsPageNameColumnHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageNameColumnHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("ResultsPageNameColumnHeaderEvaluationMethod");
+					this.OnResultsPageNameColumnHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageLocationColumnHeader", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ResultsPageLocationColumnHeader
+		{
+			get
+			{
+				return this._ResultsPageLocationColumnHeader;
+			}
+			set
+			{
+				if ((this._ResultsPageLocationColumnHeader != value))
+				{
+					this.OnResultsPageLocationColumnHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageLocationColumnHeader = value;
+					this.SendPropertyChanged("ResultsPageLocationColumnHeader");
+					this.OnResultsPageLocationColumnHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageLocationColumnHeaderEvaluationMethod", DbType="NVarChar(7)")]
+		public string ResultsPageLocationColumnHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._ResultsPageLocationColumnHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResultsPageLocationColumnHeaderEvaluationMethod != value))
+				{
+					this.OnResultsPageLocationColumnHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageLocationColumnHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("ResultsPageLocationColumnHeaderEvaluationMethod");
+					this.OnResultsPageLocationColumnHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageDateColumnHeader", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ResultsPageDateColumnHeader
+		{
+			get
+			{
+				return this._ResultsPageDateColumnHeader;
+			}
+			set
+			{
+				if ((this._ResultsPageDateColumnHeader != value))
+				{
+					this.OnResultsPageDateColumnHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageDateColumnHeader = value;
+					this.SendPropertyChanged("ResultsPageDateColumnHeader");
+					this.OnResultsPageDateColumnHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageDateColumnHeaderEvaluationMethod", DbType="NVarChar(7)")]
+		public string ResultsPageDateColumnHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._ResultsPageDateColumnHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResultsPageDateColumnHeaderEvaluationMethod != value))
+				{
+					this.OnResultsPageDateColumnHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageDateColumnHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("ResultsPageDateColumnHeaderEvaluationMethod");
+					this.OnResultsPageDateColumnHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageTypeColumnHeader", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ResultsPageTypeColumnHeader
+		{
+			get
+			{
+				return this._ResultsPageTypeColumnHeader;
+			}
+			set
+			{
+				if ((this._ResultsPageTypeColumnHeader != value))
+				{
+					this.OnResultsPageTypeColumnHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageTypeColumnHeader = value;
+					this.SendPropertyChanged("ResultsPageTypeColumnHeader");
+					this.OnResultsPageTypeColumnHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageTypeColumnHeaderEvaluationMethod", DbType="NVarChar(7)")]
+		public string ResultsPageTypeColumnHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._ResultsPageTypeColumnHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResultsPageTypeColumnHeaderEvaluationMethod != value))
+				{
+					this.OnResultsPageTypeColumnHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageTypeColumnHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("ResultsPageTypeColumnHeaderEvaluationMethod");
+					this.OnResultsPageTypeColumnHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageLocationColumnOn", DbType="Bit NOT NULL")]
+		public bool ResultsPageLocationColumnOn
+		{
+			get
+			{
+				return this._ResultsPageLocationColumnOn;
+			}
+			set
+			{
+				if ((this._ResultsPageLocationColumnOn != value))
+				{
+					this.OnResultsPageLocationColumnOnChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageLocationColumnOn = value;
+					this.SendPropertyChanged("ResultsPageLocationColumnOn");
+					this.OnResultsPageLocationColumnOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageDateColumnOn", DbType="Bit NOT NULL")]
+		public bool ResultsPageDateColumnOn
+		{
+			get
+			{
+				return this._ResultsPageDateColumnOn;
+			}
+			set
+			{
+				if ((this._ResultsPageDateColumnOn != value))
+				{
+					this.OnResultsPageDateColumnOnChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageDateColumnOn = value;
+					this.SendPropertyChanged("ResultsPageDateColumnOn");
+					this.OnResultsPageDateColumnOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageTypeColumnOn", DbType="Bit NOT NULL")]
+		public bool ResultsPageTypeColumnOn
+		{
+			get
+			{
+				return this._ResultsPageTypeColumnOn;
+			}
+			set
+			{
+				if ((this._ResultsPageTypeColumnOn != value))
+				{
+					this.OnResultsPageTypeColumnOnChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageTypeColumnOn = value;
+					this.SendPropertyChanged("ResultsPageTypeColumnOn");
+					this.OnResultsPageTypeColumnOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageText", DbType="NVarChar(MAX)")]
+		public string ResultsPageText
+		{
+			get
+			{
+				return this._ResultsPageText;
+			}
+			set
+			{
+				if ((this._ResultsPageText != value))
+				{
+					this.OnResultsPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageText = value;
+					this.SendPropertyChanged("ResultsPageText");
+					this.OnResultsPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResultsPageTextEvaluationMethod", DbType="NVarChar(7)")]
+		public string ResultsPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._ResultsPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResultsPageTextEvaluationMethod != value))
+				{
+					this.OnResultsPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResultsPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("ResultsPageTextEvaluationMethod");
+					this.OnResultsPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShowAccountLoginPopup", DbType="Bit NOT NULL")]
+		public bool ShowAccountLoginPopup
+		{
+			get
+			{
+				return this._ShowAccountLoginPopup;
+			}
+			set
+			{
+				if ((this._ShowAccountLoginPopup != value))
+				{
+					this.OnShowAccountLoginPopupChanging(value);
+					this.SendPropertyChanging();
+					this._ShowAccountLoginPopup = value;
+					this.SendPropertyChanged("ShowAccountLoginPopup");
+					this.OnShowAccountLoginPopupChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string AccountName
+		{
+			get
+			{
+				return this._AccountName;
+			}
+			set
+			{
+				if ((this._AccountName != value))
+				{
+					this.OnAccountNameChanging(value);
+					this.SendPropertyChanging();
+					this._AccountName = value;
+					this.SendPropertyChanged("AccountName");
+					this.OnAccountNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountNameEvaluationMethod", DbType="NVarChar(7)")]
+		public string AccountNameEvaluationMethod
+		{
+			get
+			{
+				return this._AccountNameEvaluationMethod;
+			}
+			set
+			{
+				if ((this._AccountNameEvaluationMethod != value))
+				{
+					this.OnAccountNameEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._AccountNameEvaluationMethod = value;
+					this.SendPropertyChanged("AccountNameEvaluationMethod");
+					this.OnAccountNameEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorizationLockoutText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string AuthorizationLockoutText
+		{
+			get
+			{
+				return this._AuthorizationLockoutText;
+			}
+			set
+			{
+				if ((this._AuthorizationLockoutText != value))
+				{
+					this.OnAuthorizationLockoutTextChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorizationLockoutText = value;
+					this.SendPropertyChanged("AuthorizationLockoutText");
+					this.OnAuthorizationLockoutTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorizationLockoutTextEvaluationMethod", DbType="NVarChar(7)")]
+		public string AuthorizationLockoutTextEvaluationMethod
+		{
+			get
+			{
+				return this._AuthorizationLockoutTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._AuthorizationLockoutTextEvaluationMethod != value))
+				{
+					this.OnAuthorizationLockoutTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorizationLockoutTextEvaluationMethod = value;
+					this.SendPropertyChanged("AuthorizationLockoutTextEvaluationMethod");
+					this.OnAuthorizationLockoutTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TermsOfService", DbType="NVarChar(MAX)")]
+		public string TermsOfService
+		{
+			get
+			{
+				return this._TermsOfService;
+			}
+			set
+			{
+				if ((this._TermsOfService != value))
+				{
+					this.OnTermsOfServiceChanging(value);
+					this.SendPropertyChanging();
+					this._TermsOfService = value;
+					this.SendPropertyChanged("TermsOfService");
+					this.OnTermsOfServiceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TermsOfServiceEvaluationMethod", DbType="NVarChar(7)")]
+		public string TermsOfServiceEvaluationMethod
+		{
+			get
+			{
+				return this._TermsOfServiceEvaluationMethod;
+			}
+			set
+			{
+				if ((this._TermsOfServiceEvaluationMethod != value))
+				{
+					this.OnTermsOfServiceEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._TermsOfServiceEvaluationMethod = value;
+					this.SendPropertyChanged("TermsOfServiceEvaluationMethod");
+					this.OnTermsOfServiceEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsToolsName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsToolsName
+		{
+			get
+			{
+				return this._DirectorsToolsName;
+			}
+			set
+			{
+				if ((this._DirectorsToolsName != value))
+				{
+					this.OnDirectorsToolsNameChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsToolsName = value;
+					this.SendPropertyChanged("DirectorsToolsName");
+					this.OnDirectorsToolsNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsToolsNameEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsToolsNameEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsToolsNameEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsToolsNameEvaluationMethod != value))
+				{
+					this.OnDirectorsToolsNameEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsToolsNameEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsToolsNameEvaluationMethod");
+					this.OnDirectorsToolsNameEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegistrationName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string RegistrationName
+		{
+			get
+			{
+				return this._RegistrationName;
+			}
+			set
+			{
+				if ((this._RegistrationName != value))
+				{
+					this.OnRegistrationNameChanging(value);
+					this.SendPropertyChanging();
+					this._RegistrationName = value;
+					this.SendPropertyChanged("RegistrationName");
+					this.OnRegistrationNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegistrationNameEvaluationMethod", DbType="VarChar(7)")]
+		public string RegistrationNameEvaluationMethod
+		{
+			get
+			{
+				return this._RegistrationNameEvaluationMethod;
+			}
+			set
+			{
+				if ((this._RegistrationNameEvaluationMethod != value))
+				{
+					this.OnRegistrationNameEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._RegistrationNameEvaluationMethod = value;
+					this.SendPropertyChanged("RegistrationNameEvaluationMethod");
+					this.OnRegistrationNameEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CancelName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string CancelName
+		{
+			get
+			{
+				return this._CancelName;
+			}
+			set
+			{
+				if ((this._CancelName != value))
+				{
+					this.OnCancelNameChanging(value);
+					this.SendPropertyChanging();
+					this._CancelName = value;
+					this.SendPropertyChanged("CancelName");
+					this.OnCancelNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CancelNameEvaluationMethod", DbType="VarChar(7)")]
+		public string CancelNameEvaluationMethod
+		{
+			get
+			{
+				return this._CancelNameEvaluationMethod;
+			}
+			set
+			{
+				if ((this._CancelNameEvaluationMethod != value))
+				{
+					this.OnCancelNameEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._CancelNameEvaluationMethod = value;
+					this.SendPropertyChanged("CancelNameEvaluationMethod");
+					this.OnCancelNameEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSummaryPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsSummaryPageText
+		{
+			get
+			{
+				return this._DirectorsSummaryPageText;
+			}
+			set
+			{
+				if ((this._DirectorsSummaryPageText != value))
+				{
+					this.OnDirectorsSummaryPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSummaryPageText = value;
+					this.SendPropertyChanged("DirectorsSummaryPageText");
+					this.OnDirectorsSummaryPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSummaryPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsSummaryPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsSummaryPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsSummaryPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsSummaryPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSummaryPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsSummaryPageTextEvaluationMethod");
+					this.OnDirectorsSummaryPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsDetailsPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsDetailsPageText
+		{
+			get
+			{
+				return this._DirectorsDetailsPageText;
+			}
+			set
+			{
+				if ((this._DirectorsDetailsPageText != value))
+				{
+					this.OnDirectorsDetailsPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsDetailsPageText = value;
+					this.SendPropertyChanged("DirectorsDetailsPageText");
+					this.OnDirectorsDetailsPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsDetailsPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsDetailsPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsDetailsPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsDetailsPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsDetailsPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsDetailsPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsDetailsPageTextEvaluationMethod");
+					this.OnDirectorsDetailsPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsReportsPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsReportsPageText
+		{
+			get
+			{
+				return this._DirectorsReportsPageText;
+			}
+			set
+			{
+				if ((this._DirectorsReportsPageText != value))
+				{
+					this.OnDirectorsReportsPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsReportsPageText = value;
+					this.SendPropertyChanged("DirectorsReportsPageText");
+					this.OnDirectorsReportsPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsReportsPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsReportsPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsReportsPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsReportsPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsReportsPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsReportsPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsReportsPageTextEvaluationMethod");
+					this.OnDirectorsReportsPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSearchPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsSearchPageText
+		{
+			get
+			{
+				return this._DirectorsSearchPageText;
+			}
+			set
+			{
+				if ((this._DirectorsSearchPageText != value))
+				{
+					this.OnDirectorsSearchPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSearchPageText = value;
+					this.SendPropertyChanged("DirectorsSearchPageText");
+					this.OnDirectorsSearchPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSearchPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsSearchPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsSearchPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsSearchPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsSearchPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSearchPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsSearchPageTextEvaluationMethod");
+					this.OnDirectorsSearchPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSearchResultsPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsSearchResultsPageText
+		{
+			get
+			{
+				return this._DirectorsSearchResultsPageText;
+			}
+			set
+			{
+				if ((this._DirectorsSearchResultsPageText != value))
+				{
+					this.OnDirectorsSearchResultsPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSearchResultsPageText = value;
+					this.SendPropertyChanged("DirectorsSearchResultsPageText");
+					this.OnDirectorsSearchResultsPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsSearchResultsPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsSearchResultsPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsSearchResultsPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsSearchResultsPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsSearchResultsPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsSearchResultsPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsSearchResultsPageTextEvaluationMethod");
+					this.OnDirectorsSearchResultsPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsLoginPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsLoginPageText
+		{
+			get
+			{
+				return this._DirectorsLoginPageText;
+			}
+			set
+			{
+				if ((this._DirectorsLoginPageText != value))
+				{
+					this.OnDirectorsLoginPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsLoginPageText = value;
+					this.SendPropertyChanged("DirectorsLoginPageText");
+					this.OnDirectorsLoginPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsLoginPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsLoginPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsLoginPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsLoginPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsLoginPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsLoginPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsLoginPageTextEvaluationMethod");
+					this.OnDirectorsLoginPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsCancelDialogText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsCancelDialogText
+		{
+			get
+			{
+				return this._DirectorsCancelDialogText;
+			}
+			set
+			{
+				if ((this._DirectorsCancelDialogText != value))
+				{
+					this.OnDirectorsCancelDialogTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsCancelDialogText = value;
+					this.SendPropertyChanged("DirectorsCancelDialogText");
+					this.OnDirectorsCancelDialogTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsCancelDialogTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsCancelDialogTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsCancelDialogTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsCancelDialogTextEvaluationMethod != value))
+				{
+					this.OnDirectorsCancelDialogTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsCancelDialogTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsCancelDialogTextEvaluationMethod");
+					this.OnDirectorsCancelDialogTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsCustomReportsPageText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string DirectorsCustomReportsPageText
+		{
+			get
+			{
+				return this._DirectorsCustomReportsPageText;
+			}
+			set
+			{
+				if ((this._DirectorsCustomReportsPageText != value))
+				{
+					this.OnDirectorsCustomReportsPageTextChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsCustomReportsPageText = value;
+					this.SendPropertyChanged("DirectorsCustomReportsPageText");
+					this.OnDirectorsCustomReportsPageTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsCustomReportsPageTextEvaluationMethod", DbType="VarChar(7)")]
+		public string DirectorsCustomReportsPageTextEvaluationMethod
+		{
+			get
+			{
+				return this._DirectorsCustomReportsPageTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._DirectorsCustomReportsPageTextEvaluationMethod != value))
+				{
+					this.OnDirectorsCustomReportsPageTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsCustomReportsPageTextEvaluationMethod = value;
+					this.SendPropertyChanged("DirectorsCustomReportsPageTextEvaluationMethod");
+					this.OnDirectorsCustomReportsPageTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvalidBeginLinkText", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string InvalidBeginLinkText
+		{
+			get
+			{
+				return this._InvalidBeginLinkText;
+			}
+			set
+			{
+				if ((this._InvalidBeginLinkText != value))
+				{
+					this.OnInvalidBeginLinkTextChanging(value);
+					this.SendPropertyChanging();
+					this._InvalidBeginLinkText = value;
+					this.SendPropertyChanged("InvalidBeginLinkText");
+					this.OnInvalidBeginLinkTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvalidBeginLinkTextEvaluationMethod", DbType="NVarChar(7)")]
+		public string InvalidBeginLinkTextEvaluationMethod
+		{
+			get
+			{
+				return this._InvalidBeginLinkTextEvaluationMethod;
+			}
+			set
+			{
+				if ((this._InvalidBeginLinkTextEvaluationMethod != value))
+				{
+					this.OnInvalidBeginLinkTextEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._InvalidBeginLinkTextEvaluationMethod = value;
+					this.SendPropertyChanged("InvalidBeginLinkTextEvaluationMethod");
+					this.OnInvalidBeginLinkTextEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagementToolsHeader", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string ManagementToolsHeader
+		{
+			get
+			{
+				return this._ManagementToolsHeader;
+			}
+			set
+			{
+				if ((this._ManagementToolsHeader != value))
+				{
+					this.OnManagementToolsHeaderChanging(value);
+					this.SendPropertyChanging();
+					this._ManagementToolsHeader = value;
+					this.SendPropertyChanged("ManagementToolsHeader");
+					this.OnManagementToolsHeaderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagementToolsHeaderEvaluationMethod", DbType="NVarChar(MAX)")]
+		public string ManagementToolsHeaderEvaluationMethod
+		{
+			get
+			{
+				return this._ManagementToolsHeaderEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ManagementToolsHeaderEvaluationMethod != value))
+				{
+					this.OnManagementToolsHeaderEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ManagementToolsHeaderEvaluationMethod = value;
+					this.SendPropertyChanged("ManagementToolsHeaderEvaluationMethod");
+					this.OnManagementToolsHeaderEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagementToolsFooter", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string ManagementToolsFooter
+		{
+			get
+			{
+				return this._ManagementToolsFooter;
+			}
+			set
+			{
+				if ((this._ManagementToolsFooter != value))
+				{
+					this.OnManagementToolsFooterChanging(value);
+					this.SendPropertyChanging();
+					this._ManagementToolsFooter = value;
+					this.SendPropertyChanged("ManagementToolsFooter");
+					this.OnManagementToolsFooterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagementToolsFooterEvaluationMethod", DbType="NVarChar(MAX)")]
+		public string ManagementToolsFooterEvaluationMethod
+		{
+			get
+			{
+				return this._ManagementToolsFooterEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ManagementToolsFooterEvaluationMethod != value))
+				{
+					this.OnManagementToolsFooterEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ManagementToolsFooterEvaluationMethod = value;
+					this.SendPropertyChanged("ManagementToolsFooterEvaluationMethod");
+					this.OnManagementToolsFooterEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagementToolsPageWidth", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string ManagementToolsPageWidth
+		{
+			get
+			{
+				return this._ManagementToolsPageWidth;
+			}
+			set
+			{
+				if ((this._ManagementToolsPageWidth != value))
+				{
+					this.OnManagementToolsPageWidthChanging(value);
+					this.SendPropertyChanging();
+					this._ManagementToolsPageWidth = value;
+					this.SendPropertyChanged("ManagementToolsPageWidth");
+					this.OnManagementToolsPageWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResourceName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string ResourceName
+		{
+			get
+			{
+				return this._ResourceName;
+			}
+			set
+			{
+				if ((this._ResourceName != value))
+				{
+					this.OnResourceNameChanging(value);
+					this.SendPropertyChanging();
+					this._ResourceName = value;
+					this.SendPropertyChanged("ResourceName");
+					this.OnResourceNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResourceNameEvaluationMethod", DbType="VarChar(7)")]
+		public string ResourceNameEvaluationMethod
+		{
+			get
+			{
+				return this._ResourceNameEvaluationMethod;
+			}
+			set
+			{
+				if ((this._ResourceNameEvaluationMethod != value))
+				{
+					this.OnResourceNameEvaluationMethodChanging(value);
+					this.SendPropertyChanging();
+					this._ResourceNameEvaluationMethod = value;
+					this.SendPropertyChanged("ResourceNameEvaluationMethod");
+					this.OnResourceNameEvaluationMethodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorsTimeoutWarning", DbType="Int")]
+		public System.Nullable<int> DirectorsTimeoutWarning
+		{
+			get
+			{
+				return this._DirectorsTimeoutWarning;
+			}
+			set
+			{
+				if ((this._DirectorsTimeoutWarning != value))
+				{
+					this.OnDirectorsTimeoutWarningChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorsTimeoutWarning = value;
+					this.SendPropertyChanged("DirectorsTimeoutWarning");
+					this.OnDirectorsTimeoutWarningChanged();
 				}
 			}
 		}
