@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AttributeRouting.Web.Http;
 
 namespace KinsailMVC.Controllers
 {
@@ -15,8 +16,8 @@ namespace KinsailMVC.Controllers
         static readonly PartnerRepository repository = new PartnerRepository();
 
 
-        [HttpGet]
-        [ActionName("Partners")]
+        
+        [GET("Partners")]
         public IEnumerable<DataAccess.Partner> GetPartners()
         {
             var objPartner = repository.GetAll();
@@ -29,8 +30,8 @@ namespace KinsailMVC.Controllers
             return objPartner;
         }
 
-        [HttpGet]
-        [ActionName("Partner")]
+
+        [GET("Partners/{IdPartner}")]
         public IEnumerable<DataAccess.Partner> GetPartner(int IdPartner)
         {
             var objPartner = repository.GetbyId(IdPartner);
