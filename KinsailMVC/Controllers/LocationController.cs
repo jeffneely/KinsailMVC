@@ -12,21 +12,44 @@ namespace KinsailMVC.Controllers
 {
     public class LocationController : ApiController
     {
-        static readonly ILocationRepository repository = new LocationRepository();
+        static readonly LocationRepository repository = new LocationRepository();
 
         public String Index()
         {
             return "Hello World";
         }
 
-        public JsonResult  GetAllLocations()
+    [System.Web.Mvc.HttpGet]
+        public IEnumerable<DataAccess.Location>  GetAllLocations()
         {
             var objLocations = repository.GetAll();
             JsonResult locationJson = new JsonResult();
             locationJson.Data = objLocations;
 
-            return locationJson;
+            foreach (DataAccess.Location objl in objLocations)
+            {
+                var name = objl.LocationName;
+            }
+
+            return objLocations;
         }
+
+
+    [System.Web.Mvc.HttpGet]
+    public IEnumerable<DataAccess.Location> Locations()
+    {
+        var objLocations = repository.GetAll();
+        JsonResult locationJson = new JsonResult();
+        locationJson.Data = objLocations;
+
+        foreach (DataAccess.Location objl in objLocations)
+        {
+            var name = objl.LocationName;
+        }
+
+        return objLocations;
+    }
+
 
         
 
