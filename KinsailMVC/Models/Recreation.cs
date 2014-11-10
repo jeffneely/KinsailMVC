@@ -9,10 +9,10 @@ namespace KinsailMVC.Models
 /**
  * Represents an address within the United States
  */
-class Address {
+public class Address {
  
-    public Int64 longitude; //Geospacial coordinates
-    public Int64 latitude; //Geospacial coordinates
+    public float longitude; //Geospacial coordinates
+    public float latitude; //Geospacial coordinates
     public String street; //Exmaple: 1234 Sesame St.
     public String city; //Example: McLean
     public String state; //Example: Virginia
@@ -23,10 +23,10 @@ class Address {
 /**
  * A Gallery Image has an Icon representation for a full sized image
  */
-class GalleryImage {
+public class GalleryImage {
 
     //constructor();
-    GalleryImage(string iconUrl, string fullImgUrl) {
+    public GalleryImage(string iconUrl, string fullImgUrl) {
         this.icon = iconUrl;
         this.fullImage = fullImgUrl;
     }
@@ -47,41 +47,69 @@ public class FeatureAttribute<T> {
         
     }
 
+    public FeatureAttribute(string name, String value) { //preset common parameters
+        this.name = name;
+        this.value = value;
+        
+    }
+
+    public FeatureAttribute(string name, SurfaceType value) { //preset common parameters
+        this.name = name;
+        this.value = value.ToString();
+        
+    }
+
+    public FeatureAttribute(string name, ShadeType value) { //preset common parameters
+        this.name = name;
+        this.value = value.ToString();
+        
+    }
+
+
+    
+
+    public FeatureAttribute(string name, int value) { //preset common parameters
+        this.name = name;
+        this.value = value.ToString();
+        
+    }
+
+
     public FeatureAttribute(string name, string value, string desc) { //preset common parameters
         this.name = name;
         this.value = value;
         this.description = desc;
     }
 
-    String name;
-    String description;
-    String value ;
+    public String name;
+    public String description;
+    public String value ;
 }
 
 /**
  * A LocationDetail contains all the information for a given location.
  * For example: A Campground's name, address, etc
  */
-class LocationDetail {
-   
-    Int64 objectId; //Database identifier. Never displayed to the user.
+public class LocationDetail {
 
-    String title; //Example the name of a camp ground
-    Address address; //See Address class
-    String operatingOrganization; //Example: Department of Forestry
-    String operatingOrganizationPhone; //Example: (703) 555-1234 - The phone number to the organization which operates the site
-    String reservationPhone; //Example: (703) 555-1324 - The phone number to the organization which can reserve a given site
-    Int64 totalReservableSites; //Example 33 - defines how many sites the location has which can be reserved (includes camp sites, rv sites, shelters, etc)
-    String reservationPolicies; //A very large string which describes all the legal mumbojumbo of reserving or canceling a reservation.
-    int cancellationDaysBeforeReservation; //Example: 5 - Cancellation must occur before 5 days from the date of reservervation.
-    int availabilityStartMonth; //The calendar month which defines the first month a reservation can be made. Example 5 - May
-    int availabilityStartDay; ////The calendar day (within respective calendar month) which defines the first date which reservations can be made. Example: 1 - First day of May
-    int availabilityEndMonth; //The calendar month which defines the last month for whcih reservations can be made. Example 12 - December
-    int availabilityEndDay; ////The calendar day (with in respective calendar month) which defines the last day in which reservations can be made. Example: 31 - Last day of December
-    float priceMin; //defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
-    float priceMax; //defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
+    public Int64 objectId; //Database identifier. Never displayed to the user.
+
+    public String title; //Example the name of a camp ground
+    public Address address; //See Address class
+    public String operatingOrganization; //Example: Department of Forestry
+    public String operatingOrganizationPhone; //Example: (703) 555-1234 - The phone number to the organization which operates the site
+    public String reservationPhone; //Example: (703) 555-1324 - The phone number to the organization which can reserve a given site
+    public Int64 totalReservableSites; //Example 33 - defines how many sites the location has which can be reserved (includes camp sites, rv sites, shelters, etc)
+    public String reservationPolicies; //A very large string which describes all the legal mumbojumbo of reserving or canceling a reservation.
+    public int cancellationDaysBeforeReservation; //Example: 5 - Cancellation must occur before 5 days from the date of reservervation.
+    public int availabilityStartMonth; //The calendar month which defines the first month a reservation can be made. Example 5 - May
+    public int availabilityStartDay; ////The calendar day (within respective calendar month) which defines the first date which reservations can be made. Example: 1 - First day of May
+    public int availabilityEndMonth; //The calendar month which defines the last month for whcih reservations can be made. Example 12 - December
+    public int availabilityEndDay; ////The calendar day (with in respective calendar month) which defines the last day in which reservations can be made. Example: 31 - Last day of December
+    public int priceMin; //defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
+    public int priceMax; //defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
     
-     FeatureAttribute<Boolean>[] features; // Collection of Feature/Attributes for a location
+    public  FeatureAttribute<object>[] features; // Collection of Feature/Attributes for a location
     
     //Known features attributes with sample values that may appear in the above collection.
     //new FeatureAttribute<boolean>("Equestrian", false); //Has an equestrian course or horse riding trails
@@ -123,16 +151,16 @@ class LocationDetail {
     //new FeatureAttribute<boolean>("recreationalVehicleSites",false); //location has sites for RVs
 
     //non queryable attributes
-    String mapTilesBaseURL; // the base URL to a set of map tiles, eg: http://www.someurl.com/tiles/
-    GalleryImage image; // The primary image to display for the site
-    GalleryImage banner ; // The banner image to use in branding
+    public String mapTilesBaseURL; // the base URL to a set of map tiles, eg: http://www.someurl.com/tiles/
+    public GalleryImage image; // The primary image to display for the site
+    public GalleryImage banner ; // The banner image to use in branding
 
 }
 
 /**
  * Defines a reservable type of site
  */
-enum SiteType {
+public enum SiteType {
     tentSite = 1,      // Tent Site
     rvSite = 2,        // Recreational Vehicle (RV) Site
     picnicShelter = 4, // Picnic Shelter
@@ -149,7 +177,7 @@ enum SiteType {
  */
 class CostPeriod {
 
-    CostPeriod(int startMonth, int startDay, int endMonth, int endDay, int minDur, float weekdayRate, float weekendRate, Boolean notAvailable) {
+    public CostPeriod(int startMonth, int startDay, int endMonth, int endDay, int minDur, float weekdayRate, float weekendRate, Boolean notAvailable) {
         this.startMonth = startMonth;
         this.startDay = startDay;
         this.endMonth = endMonth;
@@ -179,9 +207,9 @@ class CostPeriod {
  */
 class CostStructure {
 
-     CostPeriod[] periods;
+     public CostPeriod[] periods;
 
-    CostStructure(CostPeriod[] periods) {
+    public CostStructure(CostPeriod[] periods) {
         this.periods = periods;
     }
     
@@ -193,31 +221,35 @@ class CostStructure {
         //TODO: Implement correctly
         DateTime st = new DateTime(1970,1,1);
 
-        return (GetTime(endDate) - GetTime(startDate)) * 25;
+        return (Utils.GetTime(endDate) - Utils.GetTime(startDate)) * 25;
     }
 
-    private Int64 GetTime(DateTime exDate)
-  {
-      Int64 retval=0;
-      var  st=  new DateTime(1970,1,1);
-      TimeSpan t= (exDate.ToUniversalTime()-st);
-       retval= (Int64)(t.TotalMilliseconds+0.5);
-      return retval;
-  }
+  
+}
+
+public static class Utils {
+    static public Int64 GetTime(DateTime exDate)
+    {
+        Int64 retval = 0;
+        var st = new DateTime(1970, 1, 1);
+        TimeSpan t = (exDate.ToUniversalTime() - st);
+        retval = (Int64)(t.TotalMilliseconds + 0.5);
+        return retval;
+    }
 }
 
 /**
  * Represents the X and Y cordinate values on a map where 0,0 is the top,left most coordinate.
  */
-class MapCoordinates {
-    float X;
-    float Y;
+public class MapCoordinates {
+    public float X;
+    public float Y;
 }
 
 /**
  * Defines a type of surface, for drive ways, tent pads, etc.
  */
-enum SurfaceType {
+public enum SurfaceType {
     gravel = 0,
     pavement = 1,
     dirt = 2
@@ -226,7 +258,7 @@ enum SurfaceType {
 /**
  * Defines the type of shade available at a particular site.
  */
-enum ShadeType {
+public enum ShadeType {
     none = 0, // no share is available
     full = 1, // the site is completely covered in shade
     partial = 2 // the site has partial shade
@@ -235,32 +267,32 @@ enum ShadeType {
 /** 
  * Defines basic information about a reservable site.
  */
-class SiteBasic {
+public class SiteBasic {
 
-    Int64 objectId; // Database identifier. Never displayed to user.
-    Int64 locationObjectId; //The Database Identifier for the location which a site belongs
+    public Int64 objectId; // Database identifier. Never displayed to user.
+    public Int64 locationObjectId; //The Database Identifier for the location which a site belongs
 
-    SiteType type; // The type of site
-    string siteIdentifier; // A short identifier, eg: "A001"
-    MapCoordinates coords; // Defines where this site is located on the map
+    public SiteType type; // The type of site
+    public string siteIdentifier; // A short identifier, eg: "A001"
+    public MapCoordinates coords; // Defines where this site is located on the map
 
     //non queryable attributes 
-     GalleryImage image; // The primary image to display for the site
+    public GalleryImage image; // The primary image to display for the site
 }
 
 /**
  * Extended details for a specific site
  */
 class SiteDetail : SiteBasic {
-     string description; // A verbose description of the site.
-    int maxAccommodatingUnits; // Number tents/rvs/hourse/etc supported depending on site type.
-    int minDuration; // the minimum number of days this site is reservable. Eg 1
-    int maxDuration; // the maximum number of days this site is reservable. Eg 15
-    int advancedReservationPeriod; // The number of days before the desired reservation startDate customers are allowed to make a reservation.
+     public string description; // A verbose description of the site.
+     public int maxAccommodatingUnits; // Number tents/rvs/hourse/etc supported depending on site type.
+     public int minDuration; // the minimum number of days this site is reservable. Eg 1
+     public int maxDuration; // the maximum number of days this site is reservable. Eg 15
+     public int advancedReservationPeriod; // The number of days before the desired reservation startDate customers are allowed to make a reservation.
                                        //  Eg. If this value is 30, and I desired to make a reservation started on May 31th, I can make a reservation anytime 
                                        //    between May 1st and May 30th.
 
-    FeatureAttribute<any>[] features; //a list of features associated with this site.
+     public  FeatureAttribute<object>[] features; //a list of features associated with this site.
 
     //possible feature attributes which may be available in the collection above:
     //new FeatureAttribute<boolean>("handicapAccessible", false); // Is this site handdicap accessible 
@@ -279,19 +311,19 @@ class SiteDetail : SiteBasic {
     //new FeatureAttribute<boolean>("petsAllowed", false); // Whether pets are allowed during the stay at the site.
 
     //non queryable attributes 
-    CostStructure cost; // Defines the costs associated with the site.
+    public CostStructure cost; // Defines the costs associated with the site.
 }
 
 /**
  * An Activity specifies something a customer can "do" while at a given location.
  */
 class Activity {
-    Int64 objectId; // Database identifier - never displayed to a user.
-    Int64 locationObjectId; //Database identifier for the location where this activity is accessible.
+    public Int64 objectId; // Database identifier - never displayed to a user.
+    public Int64 locationObjectId; //Database identifier for the location where this activity is accessible.
 
-    String title; // The name of an activity;
-    String descriptionHtml; //A block of text with a detailed description of an activity
-    GalleryImage image; //An image for the activity.
+    public String title; // The name of an activity;
+    public String descriptionHtml; //A block of text with a detailed description of an activity
+    public GalleryImage image; //An image for the activity.
 
     //TODO: Costs?
     //TODO: Event Calendar?
@@ -301,10 +333,10 @@ class Activity {
  * An event is much like an activity except it has a definitive start/end date.
  */
 class EventDetail : Activity {
-    DateTime start; // The start of an event
-    DateTime end; // The end date of an event
+    public DateTime start; // The start of an event
+    public DateTime end; // The end date of an event
 
-    Boolean reservationRequired; // defines whether the event requires a registration or not.
+    public Boolean reservationRequired; // defines whether the event requires a registration or not.
 }
 
 /**
@@ -312,21 +344,21 @@ class EventDetail : Activity {
  *  also keeps track of selected activities.
  */
 class ItineraryBasic {
-    DateTime start; // Defines the beginning of an Itinerary item
-    DateTime end; // Defines the end of an Itinerary item
+    public DateTime start; // Defines the beginning of an Itinerary item
+    public DateTime end; // Defines the end of an Itinerary item
 
-    Int64 locationObjectId; //Specifies the location where a customer will be staying during the start/end dates
-    Int64 siteObjectId; // Specifies the specific site within a location where a customer will be staying.
-    Int64[] activityId; // A collection of activities the customer wishes to particpate with during their stay.
+    public Int64 locationObjectId; //Specifies the location where a customer will be staying during the start/end dates
+    public Int64 siteObjectId; // Specifies the specific site within a location where a customer will be staying.
+    public Int64[] activityId; // A collection of activities the customer wishes to particpate with during their stay.
 }
 
 /**
  * Itinerary detail provides more information about an itinerary which would not be readily available.
  */
 class ItineraryDetail : ItineraryBasic {
-    LocationDetail location; // The complete information about the location of their stay.
-    SiteDetail site; // The complete information about the site of their stay.
-    Activity[] activity ; // a Collection of activities selected by the customer.
+    public LocationDetail location; // The complete information about the location of their stay.
+    public SiteDetail site; // The complete information about the site of their stay.
+    public Activity[] activity ; // a Collection of activities selected by the customer.
 }
 
 /**
@@ -341,46 +373,46 @@ class ItineraryCart {
  */
 class RecUser {
 
-    Int64 objectId; // the database object id - never display to user
+    public Int64 objectId; // the database object id - never display to user
 
-    string userName; //the username used to authenticate with.
-    string firstName; // A user's first name
-    string lastName; // a user's last name
-    GalleryImage profilePicture ; // a user's profile picture.
+    public string userName; //the username used to authenticate with.
+    public string firstName; // A user's first name
+    public string lastName; // a user's last name
+    public GalleryImage profilePicture; // a user's profile picture.
 }
 
 /**
  * Represents a review of something, like a Location
  */
 class Review {
-    Int64 objectId; //A Database ObjectID, never display to user
-    Int64 locationObjectId; //The Object ID for the location which this is a review of.
-    String summary; // the short summary review
-    int rating; // a value between 1 and 5 where 5 is the best rating.
-    String description; //a verbose review write up
-    RecUser reviewBy; // the user who submitted the review.
+    public Int64 objectId; //A Database ObjectID, never display to user
+    public Int64 locationObjectId; //The Object ID for the location which this is a review of.
+    public String summary; // the short summary review
+    public int rating; // a value between 1 and 5 where 5 is the best rating.
+    public String description; //a verbose review write up
+    public RecUser reviewBy; // the user who submitted the review.
 }
 
 /**
  * Specifies which dates ARE not available.
  */
-class SiteAvailability : SiteBasic {
-    DateRange[] bookedRanges; // specifies the dates which are not available for booking.
+public class SiteAvailability : SiteBasic {
+    public DateRange[] bookedRanges; // specifies the dates which are not available for booking.
 }
 
 /**
  * A Date Range, specifies a start and end date.
  * The precisions is to the day
  */
-class DateRange {
-    DateTime startDate;
-    DateTime endDate;
+public class DateRange {
+    public DateTime startDate;
+    public DateTime endDate;
 }
 
 
 class SiteAvailabilityCriteria : DateRange {
-    Int64 siteObjectId; //The site ID to search for.
-    Int64 locationObjectId; //The location to search for available sites.
+    public Int64 siteObjectId; //The site ID to search for.
+    public Int64 locationObjectId; //The location to search for available sites.
     //super class specifies parameters for start/end date which specifiy the date range to search for availability.
     //Either a siteObjectId or locationObjectId are required. 
     //If not start/end date is specified, then the server will assume start is the current date, and end is +3 months.
@@ -390,18 +422,18 @@ class SiteAvailabilityCriteria : DateRange {
  * Defines a query for information from the server.
  */
 class Query<T> {
-    T criteria; //defines the criteria for a query
-    int startRow = 0; //defines the record number to start returning results. Support for pagination.
-    int rowCount = 25; //the number of rows to return for the query.
+    public T criteria; //defines the criteria for a query
+    public int startRow = 0; //defines the record number to start returning results. Support for pagination.
+    public int rowCount = 25; //the number of rows to return for the query.
 }
 
 /**
  * Defines the results of a query where T is the type of records being returned.
  */
 class QueryResults<T> {
-    T[] results ;
-    int startRow ; //defines the record number to start returning results. Support for pagination.
-    int totalRecords; //the number of rows the query would have returned had there been no restriction on rowCount. Support for pagination.
+    public T[] results ;
+    public int startRow; //defines the record number to start returning results. Support for pagination.
+    public int totalRecords; //the number of rows the query would have returned had there been no restriction on rowCount. Support for pagination.
 }
 
 /**
@@ -409,10 +441,10 @@ class QueryResults<T> {
  */
 class ASyncReply<T> {
     
-    T success;
-    ASyncFailureResult  failure;
+    public T success;
+    public ASyncFailureResult  failure;
 
-    ASyncReply(T success, ASyncFailureResult failure) {
+    public ASyncReply(T success, ASyncFailureResult failure) {
         this.success = success;
         this.failure = failure;
     }
@@ -430,9 +462,9 @@ class ASyncFailureResult {
  * Defines the results of a reservation request
  */
 class ReservationResults {
-    Boolean success; 
-    String failureReason; // if there is a failure completing the reservation, this text describes why.
-    String paymentUrl; // The URL to direct the user's web browser to complete payments.
+    public Boolean success;
+    public String failureReason; // if there is a failure completing the reservation, this text describes why.
+    public String paymentUrl; // The URL to direct the user's web browser to complete payments.
 }
 
 /**
@@ -444,13 +476,13 @@ interface RecreationServer {
      * Returns an array of GalleryImage objects for a given Location.
      * query.criteria - defines the objectId for a location for which to return a galary of images.
      */
-    getLocationGallery(Query<int> query, ASyncReply<QueryResults<GalleryImage>> callback);
+    void getLocationGallery(Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback);
 
     /**
      * Returns an array of GalleryImage objects for a given Site.
      * query.criteria - defines the objectId for a site for which to return a galary of images.
      */
-    getSiteGallary(query: Query<number>, callback: ASyncReply<QueryResults<GalleryImage>>): void;
+     void getSiteGallary(Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback);
 
     /**
      * Returns a collection of SiteBasic objects which match the given criteria
@@ -464,41 +496,41 @@ interface RecreationServer {
      * Passing in null values for the siteExample, reservationStart, and reservationEnd parameters 
      *  will return a complete list of SiteBasic objects for the given location.
      */
-    filterSitesByExample(query: Query<SiteDetail>, reservationStart: Date, reservationEnd: Date, callback: ASyncReply<QueryResults<SiteBasic>>): void;
+     void filterSitesByExample(Query<SiteDetail> query, DateTime reservationStart, DateTime reservationEnd, ASyncReply<QueryResults<SiteDetail>> callback);
 
     /**
      * Returns SiteDetail object which contains much more information about a given site
      */
-    getSiteDetail(siteObjectId: number,  callback: ASyncReply<SiteDetail>): void;
+     void getSiteDetail(Int64 siteObjectId, ASyncReply<SiteDetail> callback);
 
     /**
      * Returns a list of available activites at a given location.
      * query.criteria - defines the objectId for a location for which to return activities. 
      */
-    getActivities(query: Query<Activity>, callback: ASyncReply<QueryResults<Activity>>): void;
+     void getActivities(Query<Activity> query, ASyncReply<QueryResults<Activity>> callback);
 
     /**
      * returns reviews for a given location
      * query.criteria - defines the objectId for a location for which to return reviews
      */
-    getReviews(query: Query<Review>, callback: ASyncReply<QueryResults<Review>>): void;
+     void getReviews(Query<Review> query, ASyncReply<QueryResults<Review>> callback);
 
     /**
      * returns a collection of upcoming events for a given location
      *
      * query.criteria - defines the objectId for a location for which to return events.
      */
-    getEvents(query: Query<EventDetail>, callback: ASyncReply<QueryResults<EventDetail>>): void;
+     void getEvents(Query<EventDetail> query, ASyncReply<QueryResults<EventDetail>> callback);
 
     /**
      * Completes a reservation for a given user and itinerary.
      */
-    makeReservation(intinerary: ItineraryCart, callback: ASyncReply<ReservationResults>): void;
+     void makeReservation(ItineraryCart intinerary, ASyncReply<ReservationResults> callback);
 
     /**
      * Returns a list of Sites and their unavailable date ranges.
      */ 
-    getSiteAvailability(query: Query<SiteAvailabilityCriteria>, results: ASyncReply<QueryResults<SiteAvailability>>): void;
+     void getSiteAvailability(Query<SiteAvailabilityCriteria> query, ASyncReply<QueryResults<SiteAvailability>> results);
 }
 
 
