@@ -1,7 +1,10 @@
 ﻿using ExpressionEvaluator;
+using Microsoft.CSharp;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace KinsailMVC.Models
@@ -96,11 +99,12 @@ class RecreationServerTestHarness :  RecreationServer {
 
     SiteDetail[] sites;
 
-    RecreationServerTestHarness () {
+    public RecreationServerTestHarness () {
         this.location = this.getRandomLocation();
         this.activities = this.getRandomActivities();
         this.reviews = this.getRandomReviews();
         this.events = this.getRandomEvents();
+        this.sites = new SiteDetail[location.totalReservableSites];
         for (int i = 0; i < this.location.totalReservableSites; i++) {
             this.sites[i] = this.getRandomSite();
         }
@@ -155,7 +159,7 @@ class RecreationServerTestHarness :  RecreationServer {
     /**
      * Generates a random SiteAvailabiltiy object
      */
-    private SiteAvailability genSiteAvailability(Int64 locationObjectId, Int64 siteObjectId, DateTime startDate, DateTime endDate) {
+    public SiteAvailability genSiteAvailability(Int64 locationObjectId, Int64 siteObjectId, DateTime startDate, DateTime endDate) {
          SiteAvailability sa = new SiteAvailability();
         SiteDetail detail = this.findSite(siteObjectId);
         sa.locationObjectId = locationObjectId;
@@ -288,7 +292,7 @@ class RecreationServerTestHarness :  RecreationServer {
         return evts;
     }
 
-    private EventDetail genEvent() {
+    public EventDetail genEvent() {
         EventDetail ed = new EventDetail();
         ed.descriptionHtml = genString(555);
         ed.image = (GalleryImage)getRandomArrayValue(this.locationImages);
@@ -309,17 +313,18 @@ class RecreationServerTestHarness :  RecreationServer {
         return revs;
     }
 
-    private Review  genReview() {
+    public Review  genReview() {
         Review  r = new Review();
         r.description = genString(555);
         r.rating = genNumber(1, 5);
-        r.reviewBy = (RecUser)getRandomArrayValue(__names);
+        r.reviewBy = new RecUser();
+        r.reviewBy.firstName = getRandomArrayValue(names).ToString();
         r.summary = genString(100);
 
         return r;
     }
 
-    private Activity[] getRandomActivities() {
+    public Activity[] getRandomActivities() {
 
         Activity[] act = new Activity[500];
         for (int i = 0; i < 500; i++) {
@@ -329,7 +334,7 @@ class RecreationServerTestHarness :  RecreationServer {
         return act;
     }
 
-    private Activity genActivity()  {
+    public Activity genActivity()  {
         Activity act = new Activity();
         act.descriptionHtml = genString(5000);
         act.image = (GalleryImage)getRandomArrayValue(this.locationImages);
@@ -338,7 +343,7 @@ class RecreationServerTestHarness :  RecreationServer {
         return act;
     }
 
-    private LocationDetail getRandomLocation()  {
+    public LocationDetail getRandomLocation()  {
 
         LocationDetail  loc = new LocationDetail();
         Address addr  = new Address();
@@ -371,10 +376,13 @@ class RecreationServerTestHarness :  RecreationServer {
         return loc;
     }
 
-    private SiteDetail getRandomSite()  {
+    public SiteDetail getRandomSite()  {
          SiteDetail detail = new SiteDetail();
+        
 
         detail.objectId = this.sites.Length;
+
+        //detail.objectId = getRandom(1, 100);
         detail.advancedReservationPeriod = getRandom(2, 15);
         detail.coords = this.getRandomMapCoordinates();
         detail.cost = this.getRandomCostStructure();
@@ -390,18 +398,19 @@ class RecreationServerTestHarness :  RecreationServer {
         return detail;
     }
 
-    private FeatureAttribute<object>[] getRandomLocationAttributes() {
+    private FeatureAttribute<Boolean>[] getRandomLocationAttributes() {
 
         int rnd = getRandom(0, this.locationAttributes.Length);
-        FeatureAttribute<object>[] attrs = new FeatureAttribute<object>[rnd];
+        FeatureAttribute<Boolean>[] attrs = new FeatureAttribute<Boolean>[rnd];
       
         for (int  i= 0; i < rnd; i++) {
-            attrs[i] = (FeatureAttribute<object>) getRandomArrayValue(this.locationAttributes);
+            attrs[i] = (FeatureAttribute<Boolean>)getRandomArrayValue(this.locationAttributes);
 
-            if (attrs[i].value.GetType() ==  typeof( Boolean)) {
+            //if (attrs[i].value.GetType() ==  typeof( Boolean)) {
                 attrs[i].value = genBool().ToString();
-            }
+            //}
 
+            /*
             if (attrs[i].value.GetType() == typeof(int)) {
                 attrs[i].value = getRandom(0, int.Parse(attrs[i].value)).ToString();
             }
@@ -409,6 +418,7 @@ class RecreationServerTestHarness :  RecreationServer {
             if (attrs[i].value.GetType() == typeof(String)) {
                 attrs[i].value = genString(attrs[i].value.Length);
             }
+             * */
         }
 
         return attrs;
@@ -422,6 +432,11 @@ class RecreationServerTestHarness :  RecreationServer {
         
         for (int i= 0; i < rnd; i++) {
             attrs[i] = (FeatureAttribute<object>)getRandomArrayValue(this.siteAttributes);
+
+            if (attrs[i].value == null)
+            {
+                attrs[i].value = String.Empty;
+            }
 
             if (attrs[i].value.GetType() == typeof(Boolean)) {
                 attrs[i].value = genBool().ToString();
@@ -484,18 +499,18 @@ class RecreationServerTestHarness :  RecreationServer {
 
 
 
-public string[] __names  = new string[] {"Sean", "Tim", "Jacob", "Jon", "Pete", "Alex", "Bryan", "Tiffany", "Phil", "Dane", "Walter"};
-public string[] __places = new string[] {"Greenberry's", "Starbucks", "the well", "Jiffylube", "FedEx", "Kinsail", "Kazan", "The Thia place", "McDonalds", "Moby Dicks", "the mountain", "the trail", "the field"};
-public string[] __things = new string[] {"soap", "poison", "spoon", "vase", "pickle", "pail", "goose", "dress", "fruit", "bitcoin", "laptop", "furniture", "jellyfish", "ghost", "doll", "program"};
-public string[] __affects = new string[] {"stomach bloating", "bad gas", "high", "mental paralysis", "a limp"};
-public string[] __actions = new string[] {"hop on one foot", "dance", "sing", "climb"};
-public string[] __adjectives = new string[] {"big", "tiny", "small"};
-public string[] __adverbs = new string[] {"silicitiously", "acutely", "dimly", "evenly", "highly", "mockingly", "respectfully"};
-public string[] __verbs = new string[] {"answer", "arrest", "annoy", "bury", "coach", "disapprove", "dust", "enjoy", "fill", "grease", "hum", "influence", "jam", "license", "melt"};
+public string[] names  = new string[] {"Sean", "Tim", "Jacob", "Jon", "Pete", "Alex", "Bryan", "Tiffany", "Phil", "Dane", "Walter"};
+public string[] places = new string[] {"Greenberry's", "Starbucks", "the well", "Jiffylube", "FedEx", "Kinsail", "Kazan", "The Thia place", "McDonalds", "Moby Dicks", "the mountain", "the trail", "the field"};
+public string[] things = new string[] {"soap", "poison", "spoon", "vase", "pickle", "pail", "goose", "dress", "fruit", "bitcoin", "laptop", "furniture", "jellyfish", "ghost", "doll", "program"};
+public string[] affects = new string[] {"stomach bloating", "bad gas", "high", "mental paralysis", "a limp"};
+public string[] actions = new string[] {"hop on one foot", "dance", "sing", "climb"};
+public string[] adjectives = new string[] {"big", "tiny", "small"};
+public string[] adverbs = new string[] {"silicitiously", "acutely", "dimly", "evenly", "highly", "mockingly", "respectfully"};
+public string[] verbs = new string[] {"answer", "arrest", "annoy", "bury", "coach", "disapprove", "dust", "enjoy", "fill", "grease", "hum", "influence", "jam", "license", "melt"};
 
-public string[] __intros = new string[] {"[__names] went to [__places] in order to [__actions].", "[__names] and [__names] always try to avoid [__places] as it tends to cause [__affects].", "When visiting [__places] it is always a problem for [__names] and [__names] because their [__things] [__verbs] all day long.", "it isn't [__adverbs] for [__names] to [__verbs] because of thier [____adjectives] [__things]!", "Once upon a time in a [__places] [__adverbs] away [__names], [__names], and [_names] [__adverbs] [__adverbs] each other."};
-public string[] __etcs = new string[] {"Its not easy being cheesy!", "The [__things] they were creating was not [__verbs]ed enough.", "Who knows how long it would have taken them if it wasn't for [__names] interrupting.", "If it wasn't for [__names] they would have never been searching for the [__things] for a [__adjectives] amount of time!", "Their hunt for the [__things] was never ending.", "They [__verbs] for the [__things], hoping that maybe one day their [__affects] would wear off before it was theirs!"};
-public string[] __summaries = new string[] {"Afterall, how could they have continued in light of their [__affects]?", "Thus avoid [__places] which cause [__affects]. You won't regret it!", "It is quite apparent that too much [__actions] is [__verbs] for you.", "In summary, never [__verbs] the [__things], it'll cause [__affects] of the [__things]!", "The End!"};
+public string[] intros = new string[] {"[names] went to [places] in order to [actions].", "[names] and [names] always try to avoid [places] as it tends to cause [affects].", "When visiting [places] it is always a problem for [names] and [names] because their [things] [verbs] all day long.", "it isn't [adverbs] for [names] to [verbs] because of thier [adjectives] [things]!", "Once upon a time in a [places] [adverbs] away [names], [names], and [_names] [adverbs] [adverbs] each other."};
+public string[] etcs = new string[] {"Its not easy being cheesy!", "The [things] they were creating was not [verbs]ed enough.", "Who knows how long it would have taken them if it wasn't for [names] interrupting.", "If it wasn't for [names] they would have never been searching for the [things] for a [adjectives] amount of time!", "Their hunt for the [things] was never ending.", "They [verbs] for the [things], hoping that maybe one day their [affects] would wear off before it was theirs!"};
+public string[] summaries = new string[] {"Afterall, how could they have continued in light of their [affects]?", "Thus avoid [places] which cause [affects]. You won't regret it!", "It is quite apparent that too much [actions] is [verbs] for you.", "In summary, never [verbs] the [things], it'll cause [affects] of the [things]!", "The End!"};
 
 /**
  * Returns a random date in the future.
@@ -508,11 +523,13 @@ DateTime genRandomDateInFuture(int min, int max){
  * Returns a random date in the future, after the supplied date
  */
 DateTime genRandomDateInFutureFromStart(DateTime start, int min, int max) {
-    DateTime dt= new DateTime(Utils.GetTime(start));
+   // DateTime dt= new DateTime(Utils.GetTime(start));
 
     int rnd = getRandom(min, max);
+    DateTime newDate = start.AddDays(rnd);
 
-    return new DateTime(Utils.GetTime(dt) + (rnd * (1000 * 60 * 60 * 24)));
+    //return new DateTime(Utils.GetTime(dt) + (rnd * (1000 * 60 * 60 * 24)));
+    return newDate;
 }
 
 /**
@@ -534,11 +551,11 @@ Boolean genBool() {
  */
 String genString(int length){
 
-    string str= getRandomString(__intros);
-    string  endStr= getRandomString(__summaries);
+    string str= getRandomString(intros);
+    string  endStr= getRandomString(summaries);
 
     while ((str.Length + endStr.Length) < length) {
-        str += getRandomString(__etcs) + " ";
+        str += getRandomString(etcs) + " ";
     }
 
     str += endStr;
@@ -561,25 +578,70 @@ object getRandomArrayValue(object[] possibleValues) {
 }
 
 /**
- * Examines the input string for special input tokes [__ and ] which designate placeholder for additional text. 
+ * Examines the input string for special input tokes [ and ] which designate placeholder for additional text. 
  */
 String fillString(string input){
 
-    string openToken  = "[__";
+    string openToken  = "[";
     string closeToken  = "]";
 
     int sidx = input.IndexOf(openToken);
     while (sidx >= 0) {
         int eidx = input.IndexOf(closeToken, sidx);
-        var varName = input.Substring(sidx+1, eidx);
+        var varName = input.Substring(sidx, eidx - sidx + 1);
         
         string beginStr = input.Substring(0, sidx);
         string endStr = input.Substring(eidx+1);
         try {
-            var Expression = new CompiledExpression(varName);
 
+            String strExpression = varName;
+            strExpression = strExpression.Replace("[", "");
+            strExpression = strExpression.Replace("]", "");
 
-            string[] possibleValues  = (string[])Expression.Eval();
+            //var Expression = new CompiledExpression(strExpression);
+
+            
+            //string[] possibleValues = (string[])Expression.Eval();
+
+            string[] possibleValues = new string[1];
+            switch(strExpression)
+            {
+                case "names":
+                    possibleValues = names;
+                    break;
+                case "places":
+                    possibleValues = places;
+                    break;
+                case "things":
+                    possibleValues = things;
+                    break;
+                case "affects":
+                    possibleValues = affects;
+                    break;
+                case "actions":
+                    possibleValues = actions;
+                    break;
+                case "adjectives":
+                    possibleValues = adjectives;
+                    break;
+                case "adverbs":
+                    possibleValues = adverbs;
+                    break;
+                case "verbs":
+                    possibleValues = verbs;
+                    break;
+                case "intros":
+                    possibleValues = intros;
+                    break;
+                case "etcs":
+                    possibleValues = etcs;
+                    break;
+                case "summaries":
+                    possibleValues = summaries;
+                    break;
+            
+            }
+            
             var rndResult = getRandom(0, possibleValues.Length-1);
             string placeHolderValue  = possibleValues[rndResult];
             if (placeHolderValue.IndexOf(openToken) >= 0) {
@@ -606,8 +668,7 @@ public int getRandom(int min, int max){
     Random objRandom = new Random();
     return objRandom.Next(min, max);
     //return Math.Floor(Math.random() * (max - min + 1)) + min;
-}   
-
+}
 
 
 
