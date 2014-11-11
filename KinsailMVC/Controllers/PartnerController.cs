@@ -68,24 +68,26 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Images")]
-        public GalleryImage[] GetPartnerLocation(int IdPartner, int IdLocation)
+        public GalleryImage[] GetPartnerLocationImages(int IdPartner, int IdLocation)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
-            GalleryImage[] objImage = new GalleryImage[5];
+            GalleryImage[] objImages = new GalleryImage[5];
 
             for (int i = 0; i < 5; i++)
             {
-                objImage[i] = objRecreation.getRandomLocation().image;
+                LocationDetail objLocation = new LocationDetail();
+                objLocation = objRecreation.getRandomLocation();
+                objImages[i] = objLocation.image;
             }
 
-            return objImage;
+            return objImages;
 
 
         }
 
         
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Images/{IdImage}")]
-        public GalleryImage GetPartnerLocation(int IdPartner, int IdLocation, int IdImage)
+        public GalleryImage GetPartnerLocationImage(int IdPartner, int IdLocation, int IdImage)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             GalleryImage objImage = new GalleryImage();
@@ -96,7 +98,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Activities")]
-        public Activity[] GetPartnerLocation(int IdPartner, int IdLocation)
+        public Activity[] GetPartnerLocationActivities(int IdPartner, int IdLocation)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             Activity[] objActivity = new Activity[5];
@@ -111,40 +113,9 @@ namespace KinsailMVC.Controllers
 
         }
 
-        [GET("Partners/{IdPartner}/Locations/{IdLocation}/Activities")]
-        public Activity[] GetPartnerLocation(int IdPartner, int IdLocation)
-        {
-            RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
-            Activity[] objActivity = new Activity[5];
-
-
-            for (int i = 0; i < 5; i++)
-            {
-                objActivity[i] = objRecreation.genActivity();
-            }
-
-            return objActivity;
-
-        }
-
-        [GET("Partners/{IdPartner}/Locations/{IdLocation}/Activities")]
-        public Activity[] GetPartnerLocation(int IdPartner, int IdLocation)
-        {
-            RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
-            Activity[] objActivity = new Activity[5];
-
-
-            for (int i = 0; i < 5; i++)
-            {
-                objActivity[i] = objRecreation.genActivity();
-            }
-
-            return objActivity;
-
-        }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Activities/{IdActivity}")]
-        public Activity GetPartnerLocation(int IdPartner, int IdLocation, int IdActivity)
+        public Activity GetPartnerLocationActivity(int IdPartner, int IdLocation, int IdActivity)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             Activity objActivity = new Activity();
@@ -157,7 +128,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Reviews")]
-        public Review[] GetPartnerLocation(int IdPartner, int IdLocation)
+        public Review[] GetPartnerLocationReviews(int IdPartner, int IdLocation)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             Review[] objReview = new Review[5];
@@ -174,7 +145,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Reviews/{IdReview}")]
-        public Review GetPartnerLocation(int IdPartner, int IdLocation, int IdReview)
+        public Review GetPartnerLocationReview(int IdPartner, int IdLocation, int IdReview)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             Review objReview = new Review();
@@ -187,7 +158,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Events")]
-        public EventDetail[] GetPartnerLocation(int IdPartner, int IdLocation)
+        public EventDetail[] GetPartnerLocationEvents(int IdPartner, int IdLocation)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             EventDetail[] objEvent = new EventDetail[5];
@@ -204,7 +175,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Events{IdEvent}")]
-        public EventDetail GetPartnerLocation(int IdPartner, int IdLocation, int IdEvent)
+        public EventDetail GetPartnerLocationEvent(int IdPartner, int IdLocation, int IdEvent)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             EventDetail objEvent = new EventDetail();
@@ -219,7 +190,7 @@ namespace KinsailMVC.Controllers
 
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites")]
-        public SiteDetail[] GetPartnerLocation(int IdPartner, int IdLocation)
+        public SiteDetail[] GetPartnerLocationSites(int IdPartner, int IdLocation)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             SiteDetail[] objSite = new SiteDetail[5];
@@ -240,7 +211,7 @@ namespace KinsailMVC.Controllers
 
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites/{IdSite}")]
-        public SiteDetail GetPartnerLocation(int IdPartner, int IdLocation, int IdSite)
+        public SiteDetail GetPartnerLocationSite(int IdPartner, int IdLocation, int IdSite)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             SiteDetail objSite = new SiteDetail();
@@ -255,7 +226,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites/{IdSite}/Images")]
-        public GalleryImage[] GetPartnerLocation(int IdPartner, int IdLocation, int IdSite)
+        public GalleryImage[] GetPartnerLocationSitesImages(int IdPartner, int IdLocation, int IdSite)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             GalleryImage[] objImage = new GalleryImage[5];
@@ -270,7 +241,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites/{IdSite}/Images/{IdImage}")]
-        public GalleryImage GetPartnerLocation(int IdPartner, int IdLocation, int IdSite, int IdImage)
+        public GalleryImage GetPartnerLocationSitesImage(int IdPartner, int IdLocation, int IdSite, int IdImage)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             GalleryImage objImage = new GalleryImage();
@@ -284,7 +255,7 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites/{IdSite}/availabilityranges")]
-        public SiteAvailability[] GetPartnerLocation(int IdPartner, int IdLocation, int IdSite)
+        public SiteAvailability[] GetPartnerLocationSitesAvailabilityRanges(int IdPartner, int IdLocation, int IdSite)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             SiteAvailability[] objSiteAvailability = new SiteAvailability[5];
@@ -304,7 +275,7 @@ namespace KinsailMVC.Controllers
 
 
         [GET("Partners/{IdPartner}/Locations/{IdLocation}/Sites/{IdSite}/availabilityranges/{IdAvailibility}")]
-        public SiteAvailability GetPartnerLocation(int IdPartner, int IdLocation, int IDAvailibility)
+        public SiteAvailability GetPartnerLocationSitesAvailabilityRange(int IdPartner, int IdLocation, int IDAvailibility)
         {
             RecreationServerTestHarness objRecreation = new RecreationServerTestHarness();
             SiteAvailability objSiteAvailability = new SiteAvailability();
