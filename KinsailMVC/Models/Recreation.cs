@@ -30,6 +30,12 @@ public class GalleryImage {
         this.icon = iconUrl;
         this.fullImage = fullImgUrl;
     }
+
+    public GalleryImage()
+    {
+        this.icon = string.Empty;
+        this.fullImage = string.Empty;
+    }
     
 
     string icon; //URL to Icon image
@@ -109,7 +115,7 @@ public class LocationDetail {
     public int priceMin; //defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
     public int priceMax; //defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
     
-    public  FeatureAttribute<object>[] features; // Collection of Feature/Attributes for a location
+    public  FeatureAttribute<Boolean>[] features; // Collection of Feature/Attributes for a location
     
     //Known features attributes with sample values that may appear in the above collection.
     //new FeatureAttribute<boolean>("Equestrian", false); //Has an equestrian course or horse riding trails
