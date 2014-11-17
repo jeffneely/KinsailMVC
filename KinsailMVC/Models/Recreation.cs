@@ -30,10 +30,16 @@ public class GalleryImage {
         this.icon = iconUrl;
         this.fullImage = fullImgUrl;
     }
+
+    public GalleryImage()
+    {
+        this.icon = string.Empty;
+        this.fullImage = string.Empty;
+    }
     
 
-    string icon; //URL to Icon image
-    string fullImage; //URL to full image
+    public string icon; //URL to Icon image
+    public string fullImage; //URL to full image
 }
 
 /**
@@ -109,7 +115,7 @@ public class LocationDetail {
     public int priceMin; //defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
     public int priceMax; //defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay.
     
-    public  FeatureAttribute<object>[] features; // Collection of Feature/Attributes for a location
+    public  FeatureAttribute<Boolean>[] features; // Collection of Feature/Attributes for a location
     
     //Known features attributes with sample values that may appear in the above collection.
     //new FeatureAttribute<boolean>("Equestrian", false); //Has an equestrian course or horse riding trails
@@ -175,7 +181,7 @@ public enum SiteType {
  * A Cost Period defines a period of time within a calendar year,
  *   and the associated rates to reserve the site on a daily basis. 
  */
-class CostPeriod {
+public class CostPeriod {
 
     public CostPeriod(int startMonth, int startDay, int endMonth, int endDay, int minDur, float weekdayRate, float weekendRate, Boolean notAvailable) {
         this.startMonth = startMonth;
@@ -205,7 +211,7 @@ class CostPeriod {
  * When calculating a total cost, it is necessary to select the appropriate cost period
  *  based on the duration of the reservation.
  */
-class CostStructure {
+public class CostStructure {
 
      public CostPeriod[] periods;
 
@@ -283,7 +289,7 @@ public class SiteBasic {
 /**
  * Extended details for a specific site
  */
-class SiteDetail : SiteBasic {
+public class SiteDetail : SiteBasic {
      public string description; // A verbose description of the site.
      public int maxAccommodatingUnits; // Number tents/rvs/hourse/etc supported depending on site type.
      public int minDuration; // the minimum number of days this site is reservable. Eg 1
@@ -317,7 +323,7 @@ class SiteDetail : SiteBasic {
 /**
  * An Activity specifies something a customer can "do" while at a given location.
  */
-class Activity {
+public class Activity {
     public Int64 objectId; // Database identifier - never displayed to a user.
     public Int64 locationObjectId; //Database identifier for the location where this activity is accessible.
 
@@ -332,7 +338,7 @@ class Activity {
 /**
  * An event is much like an activity except it has a definitive start/end date.
  */
-class EventDetail : Activity {
+public class EventDetail : Activity {
     public DateTime start; // The start of an event
     public DateTime end; // The end date of an event
 
@@ -343,7 +349,7 @@ class EventDetail : Activity {
  * Specifies a leg on an itinerary, where a customer is staying, and for how long.
  *  also keeps track of selected activities.
  */
-class ItineraryBasic {
+public class ItineraryBasic {
     public DateTime start; // Defines the beginning of an Itinerary item
     public DateTime end; // Defines the end of an Itinerary item
 
@@ -371,7 +377,7 @@ class ItineraryCart {
 /**
  * A user of the system
  */
-class RecUser {
+public class RecUser {
 
     public Int64 objectId; // the database object id - never display to user
 
@@ -384,7 +390,7 @@ class RecUser {
 /**
  * Represents a review of something, like a Location
  */
-class Review {
+public class Review {
     public Int64 objectId; //A Database ObjectID, never display to user
     public Int64 locationObjectId; //The Object ID for the location which this is a review of.
     public String summary; // the short summary review
