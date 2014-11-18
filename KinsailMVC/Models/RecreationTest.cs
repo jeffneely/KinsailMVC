@@ -324,6 +324,18 @@ class RecreationServerTestHarness :  RecreationServer {
         return r;
     }
 
+    public RecUser genRecUser() {
+        RecUser r = new RecUser();
+        r.firstName = getRandomArrayValue(names).ToString();
+        r.lastName = getRandomArrayValue(names).ToString();
+        r.objectId = genNumber(1, 1000);
+        r.profilePicture = new GalleryImage();
+        r.profilePicture = (GalleryImage)getRandomArrayValue(this.locationImages);
+        r.userName = getRandomArrayValue(names).ToString();
+
+        return r;
+    }
+
     public Activity[] getRandomActivities() {
 
         Activity[] act = new Activity[500];
