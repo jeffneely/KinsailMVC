@@ -593,7 +593,7 @@ namespace KinsailMVC.Controllers
         {
             //TODO: Create delete method for Site Images
             return "Rec User was deleted with success";
-            
+           
         }
 
 
