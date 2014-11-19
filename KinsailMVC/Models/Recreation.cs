@@ -387,6 +387,8 @@ public class RecUser {
     public GalleryImage profilePicture; // a user's profile picture.
 }
 
+
+
 /**
  * Represents a review of something, like a Location
  */
@@ -398,6 +400,7 @@ public class Review {
     public String description; //a verbose review write up
     public RecUser reviewBy; // the user who submitted the review.
 }
+
 
 /**
  * Specifies which dates ARE not available.
