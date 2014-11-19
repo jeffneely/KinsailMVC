@@ -7,8 +7,11 @@ namespace KinsailMVC.Models
 {
     public class Partner
     {
-        Int64 PartnerID;
-        String PartnerCode;
-        String ParterName;
+        // identifiers
+        public long partnerId { get; set; }  // database identifier, never displayed to the user
+
+        // attributes
+        public string code { get; set; }     // example: "FS"
+        public string name { get; set; }     // example: "Forestry Service"
     }
 }

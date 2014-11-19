@@ -99,7 +99,10 @@ class RecreationServerTestHarness :  RecreationServer {
 
     SiteDetail[] sites;
 
-    public RecreationServerTestHarness () {
+    Random random = new Random();
+    
+    public RecreationServerTestHarness()
+    {
         this.location = this.getRandomLocation();
         this.activities = this.getRandomActivities();
         this.reviews = this.getRandomReviews();
@@ -346,6 +349,7 @@ class RecreationServerTestHarness :  RecreationServer {
     public LocationDetail getRandomLocation()  {
 
         LocationDetail  loc = new LocationDetail();
+
         Address addr  = new Address();
         addr.city = genString(50);
         addr.latitude = float.Parse(genNumber(0, 99) + "." + genNumber(1000000, 9999999));
@@ -355,19 +359,26 @@ class RecreationServerTestHarness :  RecreationServer {
         String zip = ("0000" + genNumber(0, 99999));
         addr.zip = zip.Substring(zip.Length - 5);
         loc.address = addr;
+
         loc.availabilityEndDay = 31;
         loc.availabilityEndMonth = 12;
         loc.availabilityStartDay = 1;
         loc.availabilityStartMonth = 1;
-        loc.banner = new GalleryImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
         loc.cancellationDaysBeforeReservation = 5;
+
         loc.features = this.getRandomLocationAttributes();
+
+        loc.banner = new GalleryImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
         loc.image = new GalleryImage("http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg", "http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg");
+
         loc.mapTilesBaseURL = "";//TODO:
+
         loc.operatingOrganization = genString(35);
         loc.operatingOrganizationPhone = genNumber(100, 999) + "-" + genNumber(100, 999) + "-" + genNumber(1000, 9999);
+
         loc.priceMin = genNumber(5, 10);
         loc.priceMax = genNumber(loc.priceMin, 35);
+
         loc.reservationPhone = genNumber(100, 999) + "-" + genNumber(100, 999) + "-" + genNumber(1000, 9999);
         loc.reservationPolicies = genString(1000);
         loc.title = genString(35);
@@ -665,8 +676,7 @@ String fillString(string input){
  */
 public int getRandom(int min, int max){
 
-    Random objRandom = new Random();
-    return objRandom.Next(min, max);
+    return random.Next(min, max);
     //return Math.Floor(Math.random() * (max - min + 1)) + min;
 }
 
