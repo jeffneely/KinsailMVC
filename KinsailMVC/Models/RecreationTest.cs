@@ -126,16 +126,16 @@ class RecreationServerTestHarness :  RecreationServer {
 
         QueryResults<SiteAvailability> res = new QueryResults<SiteAvailability>();
 
-        if (query.criteria.siteObjectId != null) {
+        if (query.criteria.siteId != null) {
             res.startRow = 0;
             res.totalRecords = 1;
-            res.results[0] = this.genSiteAvailability(query.criteria.locationObjectId,query.criteria.siteObjectId, sdate, edate);
+            res.results[0] = this.genSiteAvailability(query.criteria.locationId,query.criteria.siteId, sdate, edate);
         } else {
             res.startRow = query.startRow;
             res.results = new SiteAvailability[query.rowCount + 1];
             for (int i = 0; i < query.rowCount; i++) {
                 SiteDetail objSite = (SiteDetail)getRandomArrayValue(this.sites);
-                res.results[i] = this.genSiteAvailability(query.criteria.locationObjectId, objSite.objectId, sdate, edate) ;
+                res.results[i] = this.genSiteAvailability(query.criteria.locationId, objSite.siteId, sdate, edate) ;
             }
             res.totalRecords = this.sites.Length;
         }
@@ -147,11 +147,11 @@ class RecreationServerTestHarness :  RecreationServer {
     /**
      * Searches the Sites collection for a matching SiteID and returns the corresponding SiteDetail record
      */
-    private SiteDetail findSite(Int64 siteId){
+    private SiteDetail findSite(long siteId){
 
         for (int i= 0; i < this.sites.Length; i++) {
             SiteDetail s = this.sites[i];
-            if (s.objectId == siteId) {
+            if (s.siteId == siteId) {
                 return s;
             }
         }
@@ -162,11 +162,11 @@ class RecreationServerTestHarness :  RecreationServer {
     /**
      * Generates a random SiteAvailabiltiy object
      */
-    public SiteAvailability genSiteAvailability(Int64 locationObjectId, Int64 siteObjectId, DateTime startDate, DateTime endDate) {
+    public SiteAvailability genSiteAvailability(long locationId, long siteId, DateTime startDate, DateTime endDate) {
          SiteAvailability sa = new SiteAvailability();
-        SiteDetail detail = this.findSite(siteObjectId);
-        sa.locationObjectId = locationObjectId;
-        sa.objectId = siteObjectId;
+        SiteDetail detail = this.findSite(siteId);
+        sa.locationId = locationId;
+        sa.siteId = siteId;
         sa.coords = detail.coords;
         sa.siteIdentifier = detail.siteIdentifier;
         sa.type = detail.type;
@@ -403,7 +403,7 @@ class RecreationServerTestHarness :  RecreationServer {
          SiteDetail detail = new SiteDetail();
         
 
-        detail.objectId = this.sites.Length;
+        detail.siteId = this.sites.Length;
 
         //detail.objectId = getRandom(1, 100);
         detail.advancedReservationPeriod = getRandom(2, 15);

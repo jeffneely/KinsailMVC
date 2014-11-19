@@ -146,8 +146,8 @@ public class DateRange {
 
 
 class SiteAvailabilityCriteria : DateRange {
-    public Int64 siteObjectId; //The site ID to search for.
-    public Int64 locationObjectId; //The location to search for available sites.
+    public long siteId; //The site ID to search for.
+    public long locationId; //The location to search for available sites.
     //super class specifies parameters for start/end date which specifiy the date range to search for availability.
     //Either a siteObjectId or locationObjectId are required. 
     //If not start/end date is specified, then the server will assume start is the current date, and end is +3 months.

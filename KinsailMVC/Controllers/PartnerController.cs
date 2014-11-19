@@ -488,7 +488,7 @@ namespace KinsailMVC.Controllers
             for (int i = 0; i < 5; i++)
             {
                 SiteDetail objSite = objRecreation.getRandomSite();
-                objSiteAvailability[i] = objRecreation.genSiteAvailability(objSite.locationObjectId, objSite.objectId, startDate, endDate);
+                objSiteAvailability[i] = objRecreation.genSiteAvailability(objSite.locationId, objSite.siteId, startDate, endDate);
 
             }
 
@@ -506,7 +506,7 @@ namespace KinsailMVC.Controllers
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddMonths(3);
                 SiteDetail objSite = objRecreation.getRandomSite();
-                objSiteAvailability = objRecreation.genSiteAvailability(objSite.locationObjectId, objSite.objectId, startDate, endDate);
+                objSiteAvailability = objRecreation.genSiteAvailability(objSite.locationId, objSite.siteId, startDate, endDate);
 
             
 
