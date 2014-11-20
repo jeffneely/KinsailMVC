@@ -157,6 +157,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
+    <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataAccess\DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
@@ -166,23 +167,41 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\CostPeriod.cs" />
     <Compile Include="Models\CostStructure.cs" />
+    <Compile Include="Models\DateRange.cs" />
+    <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\FeatureAttribute.cs" />
     <Compile Include="Models\GalleryImage.cs" />
     <Compile Include="Models\ILocationRepository.cs" />
+    <Compile Include="Models\ItineraryBasic.cs" />
+    <Compile Include="Models\ItineraryCart.cs" />
+    <Compile Include="Models\ItineraryDetail.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationDetail.cs" />
     <Compile Include="Models\LocationBasic.cs" />
     <Compile Include="Models\LocationRepository.cs" />
+    <Compile Include="Models\LocationReview.cs" />
+    <Compile Include="Models\MapCoordinates.cs" />
     <Compile Include="Models\Partner.cs" />
     <Compile Include="Models\PartnerRepository.cs" />
+    <Compile Include="Models\Query.cs" />
+    <Compile Include="Models\QueryResults.cs" />
     <Compile Include="Models\Recreation.cs" />
     <Compile Include="Models\RecreationTest.cs" />
+    <Compile Include="Models\RecUser.cs" />
+    <Compile Include="Models\ReservationResult.cs" />
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\ShadeType.cs" />
+    <Compile Include="Models\SiteAvailability.cs" />
     <Compile Include="Models\SiteBasic.cs" />
     <Compile Include="Models\SiteDetail.cs" />
+    <Compile Include="Models\SiteRepository.cs" />
+    <Compile Include="Models\SiteReview.cs" />
     <Compile Include="Models\SiteType.cs" />
+    <Compile Include="Models\SurfaceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +280,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="DB\001_CREATE_TABLES.sql" />
+    <Content Include="DB\010_REF_DATA_ItemTypes.sql" />
+    <Content Include="DB\011_REF_DATA_FeatureTypes.sql" />
+    <Content Include="DB\012_REF_DATA_Features.sql" />
+    <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="DataAccess\DataClasses.dbml">

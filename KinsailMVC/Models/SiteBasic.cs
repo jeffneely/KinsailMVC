@@ -8,9 +8,12 @@ namespace KinsailMVC.Models
     /** 
      * Defines basic information about a reservable site
      */
+    [NPoco.TableName("Items")]
+    [NPoco.PrimaryKey("siteId")]
     public class SiteBasic
     {
         // identifiers
+        [NPoco.Column("ItemID")]
         public long siteId { get; set; }           // database identifier, never displayed to user
         public long locationId { get; set; }       // database identifier for the location to which the site belongs
 

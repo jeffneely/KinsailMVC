@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KinsailMVC.Models;
+using NPoco;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +12,12 @@ namespace KinsailMVC.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            IDatabase db = new Database("DB1/Kinsail_JNeely");
+            List<Address> addrList = db.Fetch<Address>("SELECT Name AS Street, OutputColumns AS State FROM ItemTypes");
+
+            string output = String.Join("<br/>", addrList.Select(x => x.street + " | " + x.state));
+
+            return Content(output);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace KinsailMVC.Models
     /**
      * Defines the type of a reservable site
      */
-    public enum SiteType
+    public enum SiteType : byte
     {
         tentSite = 1,      // Tent Site
         rvSite = 2,        // Recreational Vehicle (RV) Site

@@ -113,7 +113,8 @@ class RecreationServerTestHarness :  RecreationServer {
         }
     }
     
-    public void getSiteAvailability(Query<SiteAvailabilityCriteria> query, ASyncReply<QueryResults<SiteAvailability>> results) {
+
+   public void getSiteAvailability(Query<SiteAvailabilityCriteria> query, QueryResults<SiteAvailability> results) {
         DateTime  sdate = query.criteria.startDate;
         if (sdate == null) {
             sdate = DateTime.Now;
@@ -128,7 +129,7 @@ class RecreationServerTestHarness :  RecreationServer {
 
         if (query.criteria.siteId != null) {
             res.startRow = 0;
-            res.totalRecords = 1;
+            res.totalRows = 1;
             res.results[0] = this.genSiteAvailability(query.criteria.locationId,query.criteria.siteId, sdate, edate);
         } else {
             res.startRow = query.startRow;
@@ -137,11 +138,8 @@ class RecreationServerTestHarness :  RecreationServer {
                 SiteDetail objSite = (SiteDetail)getRandomArrayValue(this.sites);
                 res.results[i] = this.genSiteAvailability(query.criteria.locationId, objSite.siteId, sdate, edate) ;
             }
-            res.totalRecords = this.sites.Length;
+            res.totalRows = this.sites.Length;
         }
-
-        results.success = res;
-
     }
 
     /**
@@ -195,7 +193,8 @@ class RecreationServerTestHarness :  RecreationServer {
         return notAvail;
     }
 
-    public void getLocationGallery( Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback) {
+
+    public void getLocationGallery(Query<long> query, QueryResults<GalleryImage> callback) {
         int total= getRandom(0, this.locationImages.Length);
         GalleryImage[] imgs  = new GalleryImage[total + 1];
         for (int  i= 0; i < total; i++) {
@@ -203,18 +202,16 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<GalleryImage> qr = new QueryResults<GalleryImage>();
         qr.startRow = query.startRow;
-        qr.totalRecords = imgs.Length;
+        qr.totalRows = imgs.Length;
         qr.results = imgs;
-
-        callback.success = qr;
     }
 
     
-    public void getSiteGallary(Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback) {
+    public void getSiteGallery(Query<Int64> query, QueryResults<GalleryImage> callback) {
         this.getLocationGallery(query, callback);
     }
 
-    public void filterSitesByExample(Query<SiteDetail> query, DateTime reservationStart, DateTime reservationEnd,  ASyncReply<QueryResults<SiteDetail>> callback){
+    public void filterSitesByExample(Query<SiteDetail> query, DateTime reservationStart, DateTime reservationEnd,  QueryResults<SiteDetail> callback){
         
         int rnd = getRandom(0, this.sites.Length);
         SiteDetail[]  filtered = new SiteDetail[rnd + 1];
@@ -226,21 +223,18 @@ class RecreationServerTestHarness :  RecreationServer {
          QueryResults<SiteDetail> qr = new QueryResults<SiteDetail>();
         qr.results = filtered;
         qr.startRow = 0;
-        qr.totalRecords = filtered.Length;
-        callback.success = qr;
-
+        qr.totalRows = filtered.Length;
     }
 
     /**
-     * Returns SiteDetail object which contains much more information about a given site
+    * Returns SiteDetail object which contains much more information about a given site
     */
-    public void getSiteDetail(Int64 siteObjectId, ASyncReply<SiteDetail> callback)
+    public void getSiteDetail(Int64 siteObjectId, SiteDetail site)
     {
-        callback.success = (SiteDetail)getRandomArrayValue(this.sites);
+        //callback.success = (SiteDetail)getRandomArrayValue(this.sites);
     }
 
-
-    public void getActivities(Query<Activity> query,  ASyncReply<QueryResults<Activity>> callback) {
+    public void getActivities(Query<Activity> query, QueryResults<Activity> callback) {
         Activity[] page = new Activity[query.startRow + query.rowCount + 1];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -248,12 +242,11 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<Activity> qr = new QueryResults<Activity>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void getReviews(Query<Review> query, ASyncReply<QueryResults<Review>> callback) {
+    public void getReviews(Query<Review> query, QueryResults<Review> callback) {
         Review[] page = new Review[query.startRow + query.rowCount + 1];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -261,12 +254,11 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<Review> qr = new QueryResults<Review>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void getEvents(Query<EventDetail> query, ASyncReply<QueryResults<EventDetail>> callback) {
+    public void getEvents(Query<EventDetail> query, QueryResults<EventDetail> callback) {
         EventDetail[] page = new EventDetail[query.startRow + query.rowCount];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -274,20 +266,17 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<EventDetail> qr = new QueryResults<EventDetail>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void makeReservation(ItineraryCart intinerary, ASyncReply<ReservationResults> callback) {
-        ReservationResults rr = new ReservationResults();
+    public void makeReservation(ItineraryCart intinerary, ReservationResult callback) {
+        ReservationResult rr = new ReservationResult();
         rr.paymentUrl = "http://www.kinsail.com";
         rr.success = true;
-
-        callback.success = rr;
     }
 
-    private  EventDetail[] getRandomEvents() {
+    private EventDetail[] getRandomEvents() {
         EventDetail[] evts   = new EventDetail[500];
         for (int i = 0; i < 500; i++) {
             evts[i] = this.genEvent();
@@ -331,7 +320,7 @@ class RecreationServerTestHarness :  RecreationServer {
         RecUser r = new RecUser();
         r.firstName = getRandomArrayValue(names).ToString();
         r.lastName = getRandomArrayValue(names).ToString();
-        r.objectId = genNumber(1, 1000);
+        r.userId = genNumber(1, 1000);
         r.profilePicture = new GalleryImage();
         r.profilePicture = (GalleryImage)getRandomArrayValue(this.locationImages);
         r.userName = getRandomArrayValue(names).ToString();
