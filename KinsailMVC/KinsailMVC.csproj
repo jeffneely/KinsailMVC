@@ -284,7 +284,9 @@
     <Content Include="DB\010_REF_DATA_ItemTypes.sql" />
     <Content Include="DB\011_REF_DATA_FeatureTypes.sql" />
     <Content Include="DB\012_REF_DATA_Features.sql" />
+    <Content Include="DB\013_REF_DATA_ImageTypes.sql" />
     <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
+    <Content Include="DB\210_SAMPLE_DATA_Locations.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="DataAccess\DataClasses.dbml">

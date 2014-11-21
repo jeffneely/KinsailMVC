@@ -78,3 +78,15 @@ INSERT INTO [dbo].[FeatureTypes]
             'Enumerated type, describing the shade characteristics',
             1)
 GO
+
+INSERT INTO [dbo].[FeatureTypes]
+           ([Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ('SiteType',
+            'SiteType',
+            'Enumerated type, describing the kind of site',
+            1)
+GO

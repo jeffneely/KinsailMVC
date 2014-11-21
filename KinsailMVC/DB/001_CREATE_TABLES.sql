@@ -190,6 +190,116 @@ ELSE
 	) ON [PRIMARY]
 GO
 
+-- Association of an Item with a Location
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'ItemsXLocations')
+	PRINT 'Table dbo.ItemsXLocations already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[ItemsXLocations](
+		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXLocations_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
+		[LocationID]	[bigint] NOT NULL CONSTRAINT [FK_ItemsXLocations_LocationID] REFERENCES [Locations]([LocationID]) NOT FOR REPLICATION,
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXLocations_DisplayOrder]  DEFAULT ((0)),
+		[Description]	[nvarchar](200) NULL,
+		CONSTRAINT [PK_ItemsXLocations] PRIMARY KEY CLUSTERED ([ID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Organizations
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'Organizations')
+	PRINT 'Table dbo.Organizations already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[Organizations](
+		[OrgID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[Name]			[nvarchar](200) NOT NULL,
+		[Abbreviation]	[nvarchar](40) NULL,
+		[Description]	[nvarchar](1000) NULL,
+		[Phone]			[nvarchar](100) NULL,
+		[PhoneLabel]	[nvarchar](20) NULL,
+		[Phone2]		[nvarchar](100) NULL,
+		[Phone2Label]	[nvarchar](20) NULL,
+		[Email]			[nvarchar](100) NULL,
+		[EmailLabel]	[nvarchar](20) NULL,
+		[URL]			[nvarchar](1000) NULL,
+		[URLLabel]		[nvarchar](20) NULL,
+		[Active]		[bit] NOT NULL CONSTRAINT [DF_Organizations_Active] DEFAULT ((1)),
+		CONSTRAINT [PK_Organizations] PRIMARY KEY CLUSTERED ([OrgID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Association of an Item with an Organization
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'ItemsXOrganizations')
+	PRINT 'Table dbo.ItemsXOrganizations already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[ItemsXOrganizations](
+		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXOrganizations_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
+		[OrgID]			[bigint] NOT NULL CONSTRAINT [FK_ItemsXOrganizations_OrgID] REFERENCES [Organizations]([OrgID]) NOT FOR REPLICATION,
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXOrganizations_DisplayOrder]  DEFAULT ((0)),
+		[Description]	[nvarchar](200) NULL,
+		CONSTRAINT [PK_ItemsXLocations] PRIMARY KEY CLUSTERED ([ID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Availability Info
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'Availability')
+	PRINT 'Table dbo.Availability already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[Availability](
+		[AvailID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[Name]				[nvarchar](200) NOT NULL,
+		[Description]		[nvarchar](1000) NULL,
+		[Policies]			[nvarchar](1000) NULL,
+		[AvailStartYear]	[int] NULL,
+		[AvailStartMonth]	[int] NULL,
+		[AvailStartDay]		[int] NULL,
+		[AvailEndYear]		[int] NULL,
+		[AvailEndMonth]		[int] NULL,
+		[AvailEndDay]		[int] NULL,
+		[AvailBeforeDays]	[int] NULL,
+		[ReserveBeforeDays]	[int] NULL,
+		[CancelBeforeDays]	[int] NULL,
+		[MinDurationDays]	[int] NULL,
+		[MaxDurationDays]	[int] NULL,
+		[Active]			[bit] NOT NULL CONSTRAINT [DF_Availability_Active] DEFAULT ((1)),
+		CONSTRAINT [PK_Availability] PRIMARY KEY CLUSTERED ([AvailID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Association of an Item with Availability info
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'ItemsXAvailability')
+	PRINT 'Table dbo.ItemsXAvailability already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[ItemsXAvailability](
+		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
+		[AvailID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_AvailID] REFERENCES [Availability]([AvailID]) NOT FOR REPLICATION,
+		[MaxUnits]		[int] NOT NULL CONSTRAINT [DF_ItemsXAvailability_MaxUnits] DEFAULT ((1)),
+		[BasePrice]		[numeric](18,5) NULL CONSTRAINT [DF_ItemsXAvailability_BasePrice] DEFAULT ((0.00)),
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXAvailability_DisplayOrder] DEFAULT ((0)),
+		[Description]	[nvarchar](200) NULL,
+		CONSTRAINT [PK_ItemsXAvailability] PRIMARY KEY CLUSTERED ([ID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
 --
 -- Decision to not use Groups, so the following are now commented out
 --
