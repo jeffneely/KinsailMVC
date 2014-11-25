@@ -397,14 +397,14 @@ class RecreationServerTestHarness :  RecreationServer {
         //detail.objectId = getRandom(1, 100);
         detail.advancedReservationPeriod = getRandom(2, 15);
         detail.coords = this.getRandomMapCoordinates();
-        detail.cost = this.getRandomCostStructure();
+        detail.cost = (float)100.00;  // this.getRandomCostStructure(); TEMP - converted this to float for now
         detail.description = genString(500);
         detail.image = (GalleryImage) getRandomArrayValue(this.locationImages);
         detail.maxAccommodatingUnits = getRandom(1, 3);
         detail.minDuration = getRandom(1, 3);
         detail.maxDuration = getRandom(detail.minDuration, detail.minDuration + 10);
         detail.siteIdentifier = genString(3) + getRandom(100, 999);
-        detail.type = this.getRandomSiteType();
+        detail.type = (int)this.getRandomSiteType();  // TEMP - converted property to int
         detail.features = this.getRandomSiteAttributes();
 
         return detail;

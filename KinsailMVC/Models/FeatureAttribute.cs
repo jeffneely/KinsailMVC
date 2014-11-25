@@ -10,7 +10,19 @@ namespace KinsailMVC.Models
      */
     public class FeatureAttribute<T>
     {
+        // identifiers
+        public long featureId { get; set; }     // database identifier, never displayed to the user
+
+        // attributes
+        public String name { get; set; }        // example: "Color"
+        public String description { get; set; } // example: "Primary exterior color"
+        public String value { get; set; }       // example: "Red"
+        
         // ctors
+        public FeatureAttribute()
+        {
+        }
+
         public FeatureAttribute(string name, Boolean value)
         { 
             this.name = name;
@@ -48,13 +60,7 @@ namespace KinsailMVC.Models
             this.description = desc;
         }
 
-        // identifiers
-        public long featureId { get; set; }     // database identifier, never displayed to the user
-        
-        // attributes
-        public String name { get; set; }        // example: "Color"
-        public String description { get; set; } // example: "Primary exterior color"
-        public String value { get; set; }       // example: "Red"
+
     }
 
     //Known features attributes with sample values that may appear

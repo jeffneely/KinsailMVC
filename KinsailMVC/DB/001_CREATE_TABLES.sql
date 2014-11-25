@@ -293,13 +293,16 @@ ELSE
 		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
 		[AvailID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_AvailID] REFERENCES [Availability]([AvailID]) NOT FOR REPLICATION,
 		[MaxUnits]		[int] NOT NULL CONSTRAINT [DF_ItemsXAvailability_MaxUnits] DEFAULT ((1)),
-		[BasePrice]		[numeric](18,5) NULL CONSTRAINT [DF_ItemsXAvailability_BasePrice] DEFAULT ((0.00)),
+		[BaseRate]		[numeric](18,5) NULL CONSTRAINT [DF_ItemsXAvailability_BaseRate] DEFAULT ((0.00)),
+		[WeekdayRate]	[numeric](18,5) NULL CONSTRAINT [DF_ItemsXAvailability_WeekdayRate] DEFAULT ((0.00)),
+		[WeekendRate]	[numeric](18,5) NULL CONSTRAINT [DF_ItemsXAvailability_WeekendRate] DEFAULT ((0.00)),
 		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXAvailability_DisplayOrder] DEFAULT ((0)),
 		[Description]	[nvarchar](200) NULL,
 		CONSTRAINT [PK_ItemsXAvailability] PRIMARY KEY CLUSTERED ([ID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
+
 --
 -- Decision to not use Groups, so the following are now commented out
 --

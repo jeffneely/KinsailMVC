@@ -9,12 +9,16 @@ namespace KinsailMVC.Models
      * Core information about a location, such as its name, address, phone, icon, etc...
      * Locations represent campgrounds or other recreation facilities or spaces
      */
+    [NPoco.TableName("Items")]
+    [NPoco.PrimaryKey("ItemID")]
     public class LocationBasic
     {
         // identifiers
+        [NPoco.Column("ItemID")]
         public long locationId { get; set; }                       // database identifier, never displayed to the user
         
         // attributes
+        [NPoco.Column("Name")]
         public string title { get; set; }                          // the name of a camp ground or recreation facility
         public Address address { get; set; }                       // primary address of the location (see Address class)
         public string operatingOrganization { get; set; }          // example: "Department of Forestry"

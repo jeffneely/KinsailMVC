@@ -732,3 +732,17 @@ INSERT INTO [dbo].[Features]
             'Whether pets are allowed during the stay',
             1)
 GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'SiteType'),
+		    'Site Type',
+            'siteType',
+            'The type of recreation site',
+            1)
+GO

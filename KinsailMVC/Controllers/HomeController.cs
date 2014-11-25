@@ -15,7 +15,7 @@ namespace KinsailMVC.Controllers
             IDatabase db = new Database("DB1/Kinsail_JNeely");
             List<Address> addrList = db.Fetch<Address>("SELECT Name AS Street, OutputColumns AS State FROM ItemTypes");
 
-            string output = String.Join("<br/>", addrList.Select(x => x.street + " | " + x.state));
+            string output = "Testing DB connectivity...<br />" + String.Join("<br/>", addrList.Select(x => x.street + " | " + x.state));
 
             return Content(output);
         }
