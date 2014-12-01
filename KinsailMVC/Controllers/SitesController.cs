@@ -14,6 +14,12 @@ namespace KinsailMVC.Controllers
     {
         static readonly SiteRepository repository = new SiteRepository();
 
+        // GET api/values
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
+
         [GET("sites")]
         public List<SiteBasic> GetSites()
         {
@@ -40,6 +46,36 @@ namespace KinsailMVC.Controllers
         {
             var result = repository.GetDetailbyId(idSite);
             return result;
+        }
+
+        [POST("sites")]
+        public void AddSite([FromBody]string value)
+        {
+            //TODO: add method to SiteRepository for adding a SiteBasic
+        }
+
+        [POST("sites/details")]
+        public void AddSiteDetail([FromBody]string value)
+        {
+            //TODO: add method to SiteRepository for adding a SiteDetail
+        }
+
+        [PUT("sites")]
+        public void UpdateSite(long idSite, [FromBody]string value)
+        {
+            //TODO: add method to SiteRepository for updating a SiteBasic
+        }
+
+        [PUT("sites")]
+        public void UpdateSiteDetail(long idSite, [FromBody]string value)
+        {
+            //TODO: add method to SiteRepository for updating a SiteDetail
+        }
+
+        [DELETE("sites")]
+        public void Delete(long siteId)
+        {
+            //TODO: add method to SiteRepository for deleting a site
         }
     }
 }

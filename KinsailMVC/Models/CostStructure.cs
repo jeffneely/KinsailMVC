@@ -16,6 +16,11 @@ namespace KinsailMVC.Models
     {
         public CostPeriod[] periods { get; set; }
 
+        // ctors
+        public CostStructure()
+        {
+        }
+
         public CostStructure(CostPeriod[] periods)
         {
             this.periods = periods;

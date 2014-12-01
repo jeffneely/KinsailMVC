@@ -13,44 +13,44 @@ namespace KinsailMVC.Models
 
 class RecreationServerTestHarness :  RecreationServer {
     
-     FeatureAttribute<Boolean>[] locationAttributes  = new FeatureAttribute<Boolean>[] {
-        new FeatureAttribute<Boolean> ("Equestrian", false),
-        new FeatureAttribute<Boolean>("equestrianRental", false),
-        new FeatureAttribute<Boolean>("golfCourse",false), //Has a golf course
-        new FeatureAttribute<Boolean>("discCourse",false), //Has a disc golf course
-        new FeatureAttribute<Boolean>("fishing",false), //Has opportunities to fish
-        new FeatureAttribute<Boolean>("miniGolf",false), //Has a minigolf course
-        new FeatureAttribute<Boolean>("boatLaunch",false), //Has a boat launch
-        new FeatureAttribute<Boolean>("boatRentals",false), //Has boat rentals
-        new FeatureAttribute<Boolean>("motorBoatsPermitted",false), //Boats with gasoline engines are permitted
-        new FeatureAttribute<Boolean>("waterSkiing",false), //Water feature supports water skiing.
-        new FeatureAttribute<Boolean>("skiing",false), //Has skiing slope. 
-        new FeatureAttribute<Boolean>("snowboarding",false), //Has snowboarding slope
-        new FeatureAttribute<Boolean>("marina",false),  //Has a Marina
-        new FeatureAttribute<Boolean>("kayakOrCanoeRentals",false), //Rents Kayaks or Canoes
-        new FeatureAttribute<Boolean>("swimmingPool",false), //Has a swimming pool
-        new FeatureAttribute<Boolean>("swimmingBeach",false), //Has a beach and swimming in a natural water feature
-        new FeatureAttribute<Boolean>("picnicShelters",false), //Has picnic shelters
-        new FeatureAttribute<Boolean>("playground",false), //Has a playgound
-        new FeatureAttribute<Boolean>("meetingRoom",false), //Has a common/shared meeting room
-        new FeatureAttribute<Boolean>("campStore",false), //Has a camp store
-        new FeatureAttribute<Boolean>("playingFields",false), //has large fields for baseball/football/soccer
-        new FeatureAttribute<Boolean>("tennis",false), //Has tennis courts
-        new FeatureAttribute<Boolean>("hikingTrails",false), //Has hiking trails
-        new FeatureAttribute<Boolean>("mountainBikeTrails",false), //Has mountain biking trails
-        new FeatureAttribute<Boolean>("atvTrail",false), //Has ATV Trail riding
-        new FeatureAttribute<Boolean>("restrooms",false), //Location supports enclosed restrooms
-        new FeatureAttribute<Boolean>("showers",false), //Location has showers
-        new FeatureAttribute<Boolean>("hotwater",false), //Location supports hot water of some sort
-        new FeatureAttribute<Boolean>("guidedPrograms",false), //location has programs guided by someone. Eg guided hikes, wildlife programs, etc
-        new FeatureAttribute<Boolean>("resturant",false), //The location has a resturant/cafe with prepared foods
-        new FeatureAttribute<Boolean>("ampitheatre",false), //The location has a ampitheatre
-        new FeatureAttribute<Boolean>("groupTenting",false), //Has group camping sites
-        new FeatureAttribute<Boolean>("tentSites",false), //Has sites for tents
-        new FeatureAttribute<Boolean>("cabinLodging",false), //Has cabins for rent
-        new FeatureAttribute<Boolean>("hotelLodging",false), //Has lodging in a hotel type of facility
-        new FeatureAttribute<Boolean>("picnicShelterRentals",false), // can rent picnic shelters
-        new FeatureAttribute<Boolean>("recreationalVehicleSites",false) //location has sites for RVs
+     FeatureAttribute<object>[] locationAttributes  = new FeatureAttribute<object>[] {
+        new FeatureAttribute<object> ("Equestrian", false),
+        new FeatureAttribute<object>("equestrianRental", false),
+        new FeatureAttribute<object>("golfCourse",false), //Has a golf course
+        new FeatureAttribute<object>("discCourse",false), //Has a disc golf course
+        new FeatureAttribute<object>("fishing",false), //Has opportunities to fish
+        new FeatureAttribute<object>("miniGolf",false), //Has a minigolf course
+        new FeatureAttribute<object>("boatLaunch",false), //Has a boat launch
+        new FeatureAttribute<object>("boatRentals",false), //Has boat rentals
+        new FeatureAttribute<object>("motorBoatsPermitted",false), //Boats with gasoline engines are permitted
+        new FeatureAttribute<object>("waterSkiing",false), //Water feature supports water skiing.
+        new FeatureAttribute<object>("skiing",false), //Has skiing slope. 
+        new FeatureAttribute<object>("snowboarding",false), //Has snowboarding slope
+        new FeatureAttribute<object>("marina",false),  //Has a Marina
+        new FeatureAttribute<object>("kayakOrCanoeRentals",false), //Rents Kayaks or Canoes
+        new FeatureAttribute<object>("swimmingPool",false), //Has a swimming pool
+        new FeatureAttribute<object>("swimmingBeach",false), //Has a beach and swimming in a natural water feature
+        new FeatureAttribute<object>("picnicShelters",false), //Has picnic shelters
+        new FeatureAttribute<object>("playground",false), //Has a playgound
+        new FeatureAttribute<object>("meetingRoom",false), //Has a common/shared meeting room
+        new FeatureAttribute<object>("campStore",false), //Has a camp store
+        new FeatureAttribute<object>("playingFields",false), //has large fields for baseball/football/soccer
+        new FeatureAttribute<object>("tennis",false), //Has tennis courts
+        new FeatureAttribute<object>("hikingTrails",false), //Has hiking trails
+        new FeatureAttribute<object>("mountainBikeTrails",false), //Has mountain biking trails
+        new FeatureAttribute<object>("atvTrail",false), //Has ATV Trail riding
+        new FeatureAttribute<object>("restrooms",false), //Location supports enclosed restrooms
+        new FeatureAttribute<object>("showers",false), //Location has showers
+        new FeatureAttribute<object>("hotwater",false), //Location supports hot water of some sort
+        new FeatureAttribute<object>("guidedPrograms",false), //location has programs guided by someone. Eg guided hikes, wildlife programs, etc
+        new FeatureAttribute<object>("resturant",false), //The location has a resturant/cafe with prepared foods
+        new FeatureAttribute<object>("ampitheatre",false), //The location has a ampitheatre
+        new FeatureAttribute<object>("groupTenting",false), //Has group camping sites
+        new FeatureAttribute<object>("tentSites",false), //Has sites for tents
+        new FeatureAttribute<object>("cabinLodging",false), //Has cabins for rent
+        new FeatureAttribute<object>("hotelLodging",false), //Has lodging in a hotel type of facility
+        new FeatureAttribute<object>("picnicShelterRentals",false), // can rent picnic shelters
+        new FeatureAttribute<object>("recreationalVehicleSites",false) //location has sites for RVs
      };
 
     
@@ -369,7 +369,7 @@ class RecreationServerTestHarness :  RecreationServer {
 
         loc.features = this.getRandomLocationAttributes();
 
-        loc.banner = new GalleryImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
+        loc.banner = new BannerImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
         loc.image = new GalleryImage("http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg", "http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg");
 
         loc.mapTilesBaseURL = "";//TODO:
@@ -397,7 +397,7 @@ class RecreationServerTestHarness :  RecreationServer {
         //detail.objectId = getRandom(1, 100);
         detail.advancedReservationPeriod = getRandom(2, 15);
         detail.coords = this.getRandomMapCoordinates();
-        detail.cost = (float)100.00;  // this.getRandomCostStructure(); TEMP - converted this to float for now
+        detail.cost = this.getRandomCostStructure();
         detail.description = genString(500);
         detail.image = (GalleryImage) getRandomArrayValue(this.locationImages);
         detail.maxAccommodatingUnits = getRandom(1, 3);
@@ -410,13 +410,13 @@ class RecreationServerTestHarness :  RecreationServer {
         return detail;
     }
 
-    private FeatureAttribute<Boolean>[] getRandomLocationAttributes() {
+    private FeatureAttribute<object>[] getRandomLocationAttributes() {
 
         int rnd = getRandom(0, this.locationAttributes.Length);
-        FeatureAttribute<Boolean>[] attrs = new FeatureAttribute<Boolean>[rnd];
+        FeatureAttribute<object>[] attrs = new FeatureAttribute<object>[rnd];
       
         for (int  i= 0; i < rnd; i++) {
-            attrs[i] = (FeatureAttribute<Boolean>)getRandomArrayValue(this.locationAttributes);
+            attrs[i] = (FeatureAttribute<object>)getRandomArrayValue(this.locationAttributes);
 
             //if (attrs[i].value.GetType() ==  typeof( Boolean)) {
                 attrs[i].value = genBool().ToString();

@@ -9,8 +9,8 @@ namespace KinsailMVC.Models
     // TODO refactor db connection as a factory?
     // TODO account for multiples on JOINs to ItemsXItems
     // TODO account for multiples on JOINs to ItemsXMaps/Maps
-    // TODO account for multiples on JOINs to ItemsXImages/Images
-    // TODO add Feature children to objects
+    // TODO account for multiples on JOINs to ItemsXAvailability/Availability
+    // TODO Apply DB unique constraints to limit some of the above??
     public class SiteRepository
     {
         private IDatabase db;
@@ -25,7 +25,7 @@ namespace KinsailMVC.Models
 
         private static string selectSiteDetail =
             "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type, " +
-                   "ixa.MaxUnits AS MaxAccomodatingUnits, ixa.BaseRate AS cost, " +
+                   "ixa.MaxUnits AS MaxAccomodatingUnits, " +
                    "a.MinDurationDays AS MinDuration, a.MaxDurationDays AS MaxDuration, a.AvailBeforeDays AS AdvancedReservationPeriod, " +
                    "ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
 
@@ -67,7 +67,17 @@ namespace KinsailMVC.Models
             "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value " +
             "  FROM ItemsXFeatures ixf " +
             "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID " +
-            "  WHERE f.FeatureID <> @0 ";
+            " WHERE f.FeatureID <> @0 " +
+            "   AND ixf.ItemID = @1";
+
+        private static string selectCostPeriods =
+            "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth, " +
+            "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate, " +
+            "       0 AS NotAvailable " +
+            "  FROM Items i " +
+            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID " +
+            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID " +
+            " WHERE i.ItemID = @0";
 
         public SiteRepository()
         {
@@ -81,6 +91,7 @@ namespace KinsailMVC.Models
             setup();
         }
 
+        // retrieve some important key values, so we don't have to keep querying for them each time
         private void setup()
         {
             siteItemTypeId = db.ExecuteScalar<long>("SELECT ItemTypeID from ItemTypes WHERE Name = 'Recreation Site'");
@@ -108,13 +119,15 @@ namespace KinsailMVC.Models
                 .Append(whereOrderSites, siteItemTypeId, locationItemTypeId);
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
-            var fSql = NPoco.Sql.Builder.Append(selectFeatures, siteItemTypeId);
-
-            // get features for each site
             foreach (SiteDetail site in sites)
             {
-                List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(fSql.Append("AND ixf.ItemID = @0", site.siteId));
+                // get features for each site
+                List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, site.siteId);
                 site.features = features.ToArray();
+
+                // get cost periods for each site
+                List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, site.siteId);
+                site.cost = new CostStructure(costPeriods.ToArray());
             }
             return sites;
         }
@@ -136,7 +149,17 @@ namespace KinsailMVC.Models
                 .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
                 .Append(whereOrderSiteById, siteItemTypeId, locationItemTypeId, siteId);
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
-            return sites.ElementAtOrDefault(0);
+            SiteDetail site = sites.ElementAtOrDefault(0);
+
+            // get features for site
+            List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, siteId);
+            site.features = features.ToArray();
+
+            // get cost periods for site
+            List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, siteId);
+            site.cost = new CostStructure(costPeriods.ToArray());
+                        
+            return site;
         }
         
 /*

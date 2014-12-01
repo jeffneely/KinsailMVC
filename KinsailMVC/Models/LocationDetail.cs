@@ -20,11 +20,11 @@ namespace KinsailMVC.Models
         public int availabilityEndDay { get; set; }                // calendar day (within respective calendar month) which defines the last day in which reservations can be made (example: 31 - Last day of December)
         public int priceMin { get; set; }                          // defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay
         public int priceMax { get; set; }                          // defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay
-        public FeatureAttribute<Boolean>[] features { get; set; }  // collection of Feature/Attributes for the location
+        public FeatureAttribute<object>[] features { get; set; }   // collection of Feature/Attributes for the location
 
         // non-queryable attributes
         public string mapTilesBaseURL { get; set; }                // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
-        public GalleryImage banner { get; set; }                   // banner image to use in branding
+        public BannerImage banner { get; set; }                    // banner image to use in branding
 
         // TODO - add more gallery images, reviews
 

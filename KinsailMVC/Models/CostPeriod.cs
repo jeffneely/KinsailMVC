@@ -11,7 +11,11 @@ namespace KinsailMVC.Models
      */
     public class CostPeriod
     {
-        // ctor
+        // ctors
+        public CostPeriod()
+        {
+        }
+
         public CostPeriod(int startMonth, int startDay, int endMonth, int endDay, int minDur, float weekdayRate, float weekendRate, Boolean notAvailable)
         {
             this.startMonth = startMonth;

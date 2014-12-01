@@ -19,8 +19,6 @@ namespace KinsailMVC.Models
         public FeatureAttribute<object>[] features { get; set; } // list of features associated with this site.
 
         // non-queryable attributes 
-        //public CostStructure cost;                             // costs associated with the site - TODO add support for this
-
-        public float cost { get; set; }                          // TEMP - simple cost associated with the site
+        public CostStructure cost { get; set; }                  // costs associated with the site
     }
 }
