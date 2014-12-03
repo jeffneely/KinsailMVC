@@ -68,7 +68,7 @@ INSERT INTO [dbo].[ItemsXFeatures]
      VALUES
            ((SELECT ItemID FROM Items WHERE Name = 'Gastonia Cabin')
            ,(SELECT FeatureID FROM Features WHERE Name = 'Horse Accomodation')
-           ,0
+           ,1
            ,1)
 GO
 
@@ -80,7 +80,7 @@ INSERT INTO [dbo].[ItemsXFeatures]
      VALUES
            ((SELECT ItemID FROM Items WHERE Name = 'Gastonia Cabin')
            ,(SELECT FeatureID FROM Features WHERE Name = 'Pets Allowed')
-           ,0
+           ,2
            ,1)
 GO
 
@@ -92,6 +92,6 @@ INSERT INTO [dbo].[ItemsXFeatures]
      VALUES
            ((SELECT ItemID FROM Items WHERE Name = 'Ichabod Campsite')
            ,(SELECT FeatureID FROM Features WHERE Name = 'Boat Accessible')
-           ,0
+           ,1
            ,1) -- 1=tentSite
 GO

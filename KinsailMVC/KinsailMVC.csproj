@@ -260,6 +260,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="DB\001_CREATE_TABLES.sql" />
+    <Content Include="DB\002_CONSTRAINTS.sql" />
+    <Content Include="DB\003_VIEWS.sql" />
     <Content Include="DB\010_REF_DATA_ItemTypes.sql" />
     <Content Include="DB\011_REF_DATA_FeatureTypes.sql" />
     <Content Include="DB\012_REF_DATA_Features.sql" />
@@ -268,8 +270,11 @@
     <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
     <Content Include="DB\210_SAMPLE_DATA_Locations.sql" />
     <Content Include="DB\230_SAMPLE_DATA_Maps.sql" />
+    <Content Include="DB\235_SAMPLE_DATA_Images.sql" />
     <Content Include="DB\240_SAMPLE_DATA_Features.sql" />
     <Content Include="DB\250_SAMPLE_DATA_Availability.sql" />
+    <Content Include="DB\260_SAMPLE_DATA_Addresses.sql" />
+    <Content Include="DB\270_SAMPLE_DATA_Organizations.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="DataAccess\DataClasses.dbml">

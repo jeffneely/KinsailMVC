@@ -25,10 +25,10 @@ namespace KinsailMVC.Models
         private static string selectLocationBasic =
             "SELECT l.ItemID, l.Name, " +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone, " +
-            "       COALESCE(agg.Count, 0) AS TotalReservableSites, " +
-            "       la.LocationID AS AddressId, la.LocationName AS Name, la.StreetAddress AS Street, la.StreetAddress2 AS Street2, " +
-            "       la.City, la.State, la.ZipCode AS Zip, la.Country, la.Longitude, la.Latitude, " +
-            "       ig.ImageID, ig.IconURL, ig.FullURL";
+            "       COALESCE(agg.SiteCount, 0) AS TotalReservableSites, " +
+            "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2, " +
+            "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude, " +
+            "       g.ImageID, g.IconURL, g.FullURL";
 
         private static string selectLocationDetail =
             "SELECT l.ItemID, l.Name, " +
@@ -37,59 +37,32 @@ namespace KinsailMVC.Models
             "       a.Policies AS reservationPolicies, a.CancelBeforeDays AS CancellationDaysBeforeReservation, " +
             "       a.AvailStartMonth AS AvailabilityStartMonth, a.AvailStartDay AS AvailabilityStartDay, " +
             "       a.AvailEndMonth AS AvailabilityEndMonth, a.AvailEndDay AS AvailabilityEndDay, " +
-            "       CASE WHEN agg.MinWeekday < agg.MinWeekend THEN agg.MinWeekday ELSE agg.MinWeekend END AS PriceMin, " +
-            "       CASE WHEN agg.MaxWeekday > agg.MaxWeekend THEN agg.MaxWeekday ELSE agg.MaxWeekend END AS PriceMax, " +
-            "       COALESCE(agg.Count, 0) AS TotalReservableSites, " +
+            "       CASE WHEN agg.MinWeekdayRate < agg.MinWeekendRate THEN agg.MinWeekdayRate ELSE agg.MinWeekendRate END AS PriceMin, " +
+            "       CASE WHEN agg.MaxWeekdayRate > agg.MaxWeekendRate THEN agg.MaxWeekdayRate ELSE agg.MaxWeekendRate END AS PriceMax, " +
+            "       COALESCE(agg.SiteCount, 0) AS TotalReservableSites, " +
             "       la.LocationID AS AddressId, la.LocationName AS Name, la.StreetAddress AS Street, la.StreetAddress2 AS Street2, " +
             "       la.City, la.State, la.ZipCode AS Zip, la.Country, la.Longitude, la.Latitude, " +
-            "       ig.ImageID, ig.IconURL, ig.FullURL, " +
-            "       ib.ImageID, ib.IconURL, ib.FullURL";
+            "       g.ImageID, g.IconURL, g.FullURL, " +
+            "       b.ImageID, b.IconURL, b.FullURL";
 
         private static string fromJoinLocationBasic =
             "  FROM Items l " +
-            "  LEFT OUTER JOIN ItemsXOrganizations ixo on l.ItemID = ixo.ItemID " +  // organization
+            "  LEFT OUTER JOIN ItemsXOrganizations ixo on l.ItemID = ixo.ItemID " +     // organization
             "  LEFT OUTER JOIN Organizations o ON ixo.OrgID = o.OrgID " +
-            "  LEFT OUTER JOIN (SELECT i.ItemID AS LocationID, MIN(mmc.MinWeekday) AS MinWeekday, " + // child site aggregate info by location
-            "                          MIN(mmc.MinWeekend) AS MinWeekend, MAX(mmc.MaxWeekday) AS MaxWeekday, " +
-            "                          MAX(mmc.MaxWeekend) AS MaxWeekend, COUNT(*) AS Count " +
-            "                     FROM Items i " +
-            "                     LEFT OUTER JOIN ItemsXItems ixi ON i.ItemID = ixi.ParentItemID " +  // child sites
-            "                     LEFT OUTER JOIN Items s ON ixi.ItemID = s.ItemID " +
-            "                          INNER JOIN (SELECT ixa.ItemID, " +            // min/max site costs (for any number of associated availability rows)
-            "                                             MIN(ixa.WeekdayRate) AS MinWeekday, MIN(ixa.WeekendRate) AS MinWeekend, " +
-            "                                             MAX(ixa.WeekdayRate) AS MaxWeekday, MAX(ixa.WeekendRate) AS MaxWeekend " +
-            "                                        FROM ItemsXAvailability ixa " +
-            "                                       GROUP BY ixa.ItemID) mmc ON s.ItemID = mmc.ItemID " +
-            "                    WHERE i.ItemTypeID = @0 " +
-            "                      AND s.ItemTypeID = @1 " +
-            "                    GROUP BY i.ItemID) agg ON l.ItemID = agg.LocationID " +
-            "  LEFT OUTER JOIN ItemsXLocations ixl on l.ItemID = ixl.ItemID " +      // address
-            "  LEFT OUTER JOIN Locations la ON ixl.LocationID = la.LocationID " +
-            "  LEFT OUTER JOIN ItemsXImages ixgg ON l.ItemID = ixgg.ItemID " +       // gallery image
-            "  LEFT OUTER JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder " + // only include the first gallery image
-            "                     FROM ItemsXImages x " +
-            "                     JOIN (SELECT i.ImageID " +
-            "                             FROM Images i " +
-            "                            WHERE i.ImageTypeID = @2) gi ON x.ImageID = gi.ImageID " +
-            "                    GROUP BY x.ItemID) gi1 ON l.ItemID = gi1.ItemID " +
-            "              AND ixgg.DisplayOrder = gi1.DisplayOrder " +
-            "  LEFT OUTER JOIN Images ig ON ig.ImageID = ixgg.ImageID ";
+            "  LEFT OUTER JOIN LocationsSitesRates agg ON l.ItemID = agg.LocationID " + // child site aggregate info by location
+            "  LEFT OUTER JOIN ItemsXLocations ixl on l.ItemID = ixl.ItemID " +         // address
+            "  LEFT OUTER JOIN Locations a ON ixl.LocationID = a.LocationID " +
+            "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" +  // first gallery image
+            "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID ";
 
 
         private static string fromJoinLocationDetail = fromJoinLocationBasic + 
-            "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID " +           // maps
+            "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID " +              // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID " +
-            "  LEFT OUTER JOIN ItemsXAvailability ixa ON l.ItemID = ixa.ItemID " +   // availability info
+            "  LEFT OUTER JOIN ItemsXAvailability ixa ON l.ItemID = ixa.ItemID " +      // availability info
             "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID " +
-            "  LEFT OUTER JOIN ItemsXImages ixgb ON l.ItemID = ixgb.ItemID " +       // banner image
-            "  LEFT OUTER JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder " + // only include the first image 
-            "                     FROM ItemsXImages x " +
-            "                     JOIN (SELECT i.ImageID " +
-            "                             FROM Images i " +
-            "                            WHERE i.ImageTypeID = @3) bi ON x.ImageID = bi.ImageID " +
-            "                    GROUP BY x.ItemID) bi1 ON l.ItemID = bi1.ItemID " +
-            "              AND ixgb.DisplayOrder = bi1.DisplayOrder " +
-            "  LEFT OUTER JOIN Images ib ON ib.ImageID = ixgb.ImageID";
+            "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID " +  // first banner image 
+            "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID";
 
         private static string whereOrderLocations =
             " WHERE l.ItemTypeID = @0" +
@@ -132,7 +105,7 @@ namespace KinsailMVC.Models
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationBasic)
-                .Append(fromJoinLocationBasic, locationItemTypeId, siteItemTypeId, galleryImageTypeId)
+                .Append(fromJoinLocationBasic) 
                 .Append(whereOrderLocations, locationItemTypeId);
             List<LocationBasic> locations = db.Fetch<LocationBasic, Address, GalleryImage>(sql);
             return locations;
@@ -143,7 +116,7 @@ namespace KinsailMVC.Models
             // get locations
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationDetail)
-                .Append(fromJoinLocationDetail, locationItemTypeId, siteItemTypeId, galleryImageTypeId, bannerImageTypeId)
+                .Append(fromJoinLocationDetail) 
                 .Append(whereOrderLocations, locationItemTypeId);
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
 
@@ -162,7 +135,7 @@ namespace KinsailMVC.Models
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationBasic)
-                .Append(fromJoinLocationBasic, locationItemTypeId, siteItemTypeId, galleryImageTypeId)
+                .Append(fromJoinLocationBasic) 
                 .Append(whereOrderLocationById, locationItemTypeId, locationId);
             List<LocationBasic> locations = db.Fetch<LocationBasic, Address, GalleryImage>(sql);
             Debug.Print("Result set (locations) has {0} elements", locations.Count);
@@ -173,7 +146,7 @@ namespace KinsailMVC.Models
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationDetail)
-                .Append(fromJoinLocationDetail, locationItemTypeId, siteItemTypeId, galleryImageTypeId, bannerImageTypeId)
+                .Append(fromJoinLocationDetail) 
                 .Append(whereOrderLocationById, locationItemTypeId, locationId);
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
             Debug.Print("Result set (locations) has {0} elements", locations.Count);
