@@ -34,14 +34,14 @@ namespace KinsailMVC.Models
             "SELECT l.ItemID, l.Name, " +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone, " +
             "       m.TilesURL AS MapTilesURL, " +
-            "       a.Policies AS reservationPolicies, a.CancelBeforeDays AS CancellationDaysBeforeReservation, " +
-            "       a.AvailStartMonth AS AvailabilityStartMonth, a.AvailStartDay AS AvailabilityStartDay, " +
-            "       a.AvailEndMonth AS AvailabilityEndMonth, a.AvailEndDay AS AvailabilityEndDay, " +
+            "       av.Policies AS reservationPolicies, av.CancelBeforeDays AS CancellationDaysBeforeReservation, " +
+            "       av.AvailStartMonth AS AvailabilityStartMonth, av.AvailStartDay AS AvailabilityStartDay, " +
+            "       av.AvailEndMonth AS AvailabilityEndMonth, av.AvailEndDay AS AvailabilityEndDay, " +
             "       CASE WHEN agg.MinWeekdayRate < agg.MinWeekendRate THEN agg.MinWeekdayRate ELSE agg.MinWeekendRate END AS PriceMin, " +
             "       CASE WHEN agg.MaxWeekdayRate > agg.MaxWeekendRate THEN agg.MaxWeekdayRate ELSE agg.MaxWeekendRate END AS PriceMax, " +
             "       COALESCE(agg.SiteCount, 0) AS TotalReservableSites, " +
-            "       la.LocationID AS AddressId, la.LocationName AS Name, la.StreetAddress AS Street, la.StreetAddress2 AS Street2, " +
-            "       la.City, la.State, la.ZipCode AS Zip, la.Country, la.Longitude, la.Latitude, " +
+            "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2, " +
+            "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude, " +
             "       g.ImageID, g.IconURL, g.FullURL, " +
             "       b.ImageID, b.IconURL, b.FullURL";
 
@@ -60,7 +60,7 @@ namespace KinsailMVC.Models
             "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID " +              // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID " +
             "  LEFT OUTER JOIN ItemsXAvailability ixa ON l.ItemID = ixa.ItemID " +      // availability info
-            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID " +
+            "  LEFT OUTER JOIN Availability av ON ixa.AvailID = av.AvailID " +
             "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID " +  // first banner image 
             "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID";
 
@@ -73,12 +73,25 @@ namespace KinsailMVC.Models
             "   AND l.ItemID = @1" +
             " ORDER BY l.Name";
 
+        // return list of features
         private static string selectFeatures =
             "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value " +
             "  FROM ItemsXFeatures ixf " +
             "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID " +
             " WHERE ixf.ItemID = @0";
 
+        // return list of gallery images, excluding the first
+        private static string selectPhotos =
+            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active " +
+            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum " +
+            "          FROM Images i " +
+            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID " +
+            "         WHERE ixi.ItemID = @0 " +
+            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img " +
+            " WHERE RowNum > 1 " +
+            " ORDER BY RowNum";
+
+        
         public LocationRepository()
         {
             db = new Database("DB1/Kinsail_JNeely");
@@ -127,6 +140,12 @@ namespace KinsailMVC.Models
                 // nested and one-to-many properties in a single automatic mapping
                 List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, location.locationId);
                 location.features = features.ToArray();
+
+                // get gallery images for each location, excluding the first one
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
+                List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, location.locationId);
+                location.photos = photos.ToArray();
             }
             return locations;
         }
@@ -157,6 +176,12 @@ namespace KinsailMVC.Models
             // nested and one-to-many properties in a single automatic mapping
             List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, location.locationId);
             location.features = features.ToArray();
+
+            // get gallery images for each location, excluding the first one
+            // can't automatically include this in the primary query since NPoco can't do both 
+            // nested and one-to-many properties in a single automatic mapping
+            List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, location.locationId);
+            location.photos = photos.ToArray();
 
             return location;
         }

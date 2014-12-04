@@ -82,6 +82,36 @@ INSERT INTO [dbo].[Locations]
            )
 GO
 
+INSERT INTO [dbo].[Locations]
+           ([LocationName]
+           ,[StreetAddress]
+           ,[StreetAddress2]
+           ,[City]
+           ,[State]
+           ,[ZipCode]
+           ,[Country]
+           ,[Directions]
+           ,[Parking]
+           ,[Active]
+           ,[Latitude]
+           ,[Longitude]
+           ,[Audit_ContactID])
+     VALUES
+           ('Raven Ridge Park Entrance' --LocationName
+           ,'21045 Highway 67 South' --StreetAddress
+           ,'' --StreetAddress2
+           ,'Divide' --City
+           ,'CO' --State
+           ,'80814' --ZipCode
+           ,'US' --Country
+           ,'DIRECTIONS: Lorem ipsum dolor sit amet...' --Directions
+           ,'PARKING: Lorem ipsum dolor sit amet...' --Parking
+           ,1 --Active
+           ,38.886 --Latitude
+           ,-105.159 --Longitude
+           ,NULL --Audit_ContactID
+           )
+GO
 
 -- ItemsXLocations (for Rec Locations)
 INSERT INTO [dbo].[ItemsXLocations]
@@ -105,6 +135,19 @@ INSERT INTO [dbo].[ItemsXLocations]
      VALUES
            ((SELECT ItemID FROM Items WHERE Name = 'Sleepy Hollow') --ItemID
            ,(SELECT LocationID FROM Locations WHERE LocationName = 'Sleepy Hollow Park Entrance') --LocationID
+           ,0 --DisplayOrder
+           ,'Main Visitor Entrance' --Description
+           )
+GO
+
+INSERT INTO [dbo].[ItemsXLocations]
+           ([ItemID]
+           ,[LocationID]
+           ,[DisplayOrder]
+           ,[Description])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park') --ItemID
+           ,(SELECT LocationID FROM Locations WHERE LocationName = 'Raven Ridge Park Entrance') --LocationID
            ,0 --DisplayOrder
            ,'Main Visitor Entrance' --Description
            )

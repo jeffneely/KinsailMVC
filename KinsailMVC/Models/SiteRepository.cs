@@ -79,6 +79,17 @@ namespace KinsailMVC.Models
             "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID " +
             " WHERE i.ItemID = @0";
 
+        // return list of gallery images, excluding the first
+        private static string selectPhotos =
+            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active " +
+            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum " +
+            "          FROM Images i " +
+            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID " +
+            "         WHERE ixi.ItemID = @0 " +
+            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img " +
+            " WHERE RowNum > 1 " +
+            " ORDER BY RowNum";
+
         public SiteRepository()
         {
             db = new Database("DB1/Kinsail_JNeely");
@@ -122,12 +133,22 @@ namespace KinsailMVC.Models
             foreach (SiteDetail site in sites)
             {
                 // get features for each site
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
                 List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, site.siteId);
                 site.features = features.ToArray();
 
                 // get cost periods for each site
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
                 List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, site.siteId);
                 site.cost = new CostStructure(costPeriods.ToArray());
+
+                // get gallery images for each location, excluding the first one
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
+                List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
+                site.photos = photos.ToArray();
             }
             return sites;
         }
@@ -152,13 +173,23 @@ namespace KinsailMVC.Models
             SiteDetail site = sites.ElementAtOrDefault(0);
 
             // get features for site
+            // can't automatically include this in the primary query since NPoco can't do both 
+            // nested and one-to-many properties in a single automatic mapping
             List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, siteId);
             site.features = features.ToArray();
 
             // get cost periods for site
+            // can't automatically include this in the primary query since NPoco can't do both 
+            // nested and one-to-many properties in a single automatic mapping
             List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, siteId);
             site.cost = new CostStructure(costPeriods.ToArray());
-                        
+
+            // get gallery images for each location, excluding the first one
+            // can't automatically include this in the primary query since NPoco can't do both 
+            // nested and one-to-many properties in a single automatic mapping
+            List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
+            site.photos = photos.ToArray();
+
             return site;
         }
         

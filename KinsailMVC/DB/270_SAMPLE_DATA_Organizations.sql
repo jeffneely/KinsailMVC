@@ -78,6 +78,35 @@ INSERT INTO [dbo].[Organizations]
            )
 GO
 
+INSERT INTO [dbo].[Organizations]
+           ([Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Phone]
+           ,[PhoneLabel]
+           ,[Phone2]
+           ,[Phone2Label]
+           ,[Email]
+           ,[EmailLabel]
+           ,[URL]
+           ,[URLLabel]
+           ,[Active])
+     VALUES
+           ('Colorado Parks & Wildlife' --Name
+           ,'CPW' --Abbreviation
+           ,'DESCRIPTION: Lorem ipsum dolor sit amet...' --Description
+           ,'303-291-7482' --Phone
+           ,'Phone' --PhoneLabel
+           ,'303-470-1144' --Phone2
+           ,'Reservations' --Phone2Label
+           ,'Dnr.crsparks@state.co.us' --Email
+           ,'Email' --EmailLabel
+           ,'http://cpw.state.co.us/' --URL
+           ,'Website' --URLLabel
+           ,1 --Active
+           )
+GO
+
 -- ItemsXOrganizations
 INSERT INTO [dbo].[ItemsXOrganizations]
            ([ItemID]
@@ -100,6 +129,19 @@ INSERT INTO [dbo].[ItemsXOrganizations]
      VALUES
            ((SELECT ItemID FROM Items WHERE Name = 'Sleepy Hollow') --ItemID
            ,(SELECT OrgID FROM Organizations WHERE Abbreviation = 'NY State Parks') --OrgID
+           ,0 --DisplayOrder
+           ,'Operator' --Description
+           )
+GO
+
+INSERT INTO [dbo].[ItemsXOrganizations]
+           ([ItemID]
+           ,[OrgID]
+           ,[DisplayOrder]
+           ,[Description])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park') --ItemID
+           ,(SELECT OrgID FROM Organizations WHERE Abbreviation = 'CPW') --OrgID
            ,0 --DisplayOrder
            ,'Operator' --Description
            )

@@ -255,3 +255,33 @@ INSERT INTO [dbo].[ItemsXImages]
            ,(SELECT ImageID FROM Images WHERE Caption = 'Banner 1')
            ,2)
 GO
+
+INSERT INTO [dbo].[ItemsXImages]
+           ([ItemID]
+           ,[ImageID]
+           ,[DisplayOrder])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park')
+           ,(SELECT ImageID FROM Images WHERE Caption = 'Photo 1')
+           ,0)
+GO
+
+INSERT INTO [dbo].[ItemsXImages]
+           ([ItemID]
+           ,[ImageID]
+           ,[DisplayOrder])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park')
+           ,(SELECT ImageID FROM Images WHERE Caption = 'Photo 2')
+           ,1)
+GO
+
+INSERT INTO [dbo].[ItemsXImages]
+           ([ItemID]
+           ,[ImageID]
+           ,[DisplayOrder])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park')
+           ,(SELECT ImageID FROM Images WHERE Caption = 'Banner 1')
+           ,10)
+GO

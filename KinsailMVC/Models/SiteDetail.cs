@@ -20,5 +20,6 @@ namespace KinsailMVC.Models
 
         // non-queryable attributes 
         public CostStructure cost { get; set; }                  // costs associated with the site
+        public GalleryImage[] photos { get; set; }               // more photos of the site
     }
 }

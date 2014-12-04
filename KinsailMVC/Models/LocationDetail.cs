@@ -25,13 +25,8 @@ namespace KinsailMVC.Models
         // non-queryable attributes
         public string mapTilesBaseURL { get; set; }                // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
         public BannerImage banner { get; set; }                    // banner image to use in branding
+        public GalleryImage[] photos { get; set; }                 // more photos of the location
 
         // TODO - add more gallery images, reviews
-
-        //
-        // DB MAPPING NOTES
-        //
-        // LocationDetails is not currently mapped to DB columns
-        //
     }
 }
