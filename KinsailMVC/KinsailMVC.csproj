@@ -174,7 +174,6 @@
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\FeatureAttribute.cs" />
     <Compile Include="Models\GalleryImage.cs" />
-    <Compile Include="Models\IRepository.cs" />
     <Compile Include="Models\ItineraryBasic.cs" />
     <Compile Include="Models\ItineraryCart.cs" />
     <Compile Include="Models\ItineraryDetail.cs" />
@@ -266,6 +265,7 @@
     <Content Include="DB\011_REF_DATA_FeatureTypes.sql" />
     <Content Include="DB\012_REF_DATA_Features.sql" />
     <Content Include="DB\013_REF_DATA_ImageTypes.sql" />
+    <Content Include="DB\014_REF_DATA_ResourceTypes.sql" />
     <Content Include="DB\220_SAMPLE_DATA_Sites.sql" />
     <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
     <Content Include="DB\210_SAMPLE_DATA_Locations.sql" />

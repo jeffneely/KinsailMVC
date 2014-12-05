@@ -11,6 +11,6 @@ namespace KinsailMVC.Models
     public class SiteAvailability : SiteBasic
     {
         public DateRange[] bookedRanges { get; set; }     // dates which are already booked
-        public DateRange[] availableRanges { get; set; }  // dates which are available for booking
+        //public DateRange[] availableRanges { get; set; }  // dates which are available for booking
     }
 }

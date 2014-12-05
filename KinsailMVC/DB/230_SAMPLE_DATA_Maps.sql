@@ -32,7 +32,52 @@ INSERT INTO [dbo].[Maps]
            ,1)
 GO
 
+INSERT INTO [dbo].[Maps]
+           ([Name]
+           ,[Description]
+           ,[TilesURL]
+           ,[Active])
+     VALUES
+           ('Raven Ridge Site Map' --Name
+           ,'Stylized overhead map. showing the surrounding park and camping sites ...' --Description
+           ,'/maptiles' --TilesURL
+           ,1 --Active
+           )
+GO
+
 -- ItemsXMaps
+-- for Locations
+INSERT INTO [dbo].[ItemsXMaps]
+           ([ItemID]
+           ,[MapID]
+           ,[DisplayOrder]
+           ,[CoordinateX]
+           ,[CoordinateY])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Sleepy Hollow') --ItemID
+           ,(SELECT MapID FROM Maps WHERE Name = 'Sleepy Hollow Site Map') --MapID
+           ,0 --DisplayOrder
+           ,0.0 --CoordinateX
+           ,0.0 --CoordinateY
+		   )
+GO
+
+INSERT INTO [dbo].[ItemsXMaps]
+           ([ItemID]
+           ,[MapID]
+           ,[DisplayOrder]
+           ,[CoordinateX]
+           ,[CoordinateY])
+     VALUES
+           ((SELECT ItemID FROM Items WHERE Name = 'Raven Ridge Park') --ItemID
+           ,(SELECT MapID FROM Maps WHERE Name = 'Raven Ridge Site Map') --MapID
+           ,0 --DisplayOrder
+           ,0.0 --CoordinateX
+           ,0.0 --CoordinateY
+		   )
+GO
+
+-- for sites
 INSERT INTO [dbo].[ItemsXMaps]
            ([ItemID]
            ,[MapID]
@@ -74,3 +119,4 @@ INSERT INTO [dbo].[ItemsXMaps]
            ,2.0
            ,6.0)
 GO
+
