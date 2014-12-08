@@ -165,7 +165,15 @@ ELSE
 		[Name]			[nvarchar](1000) NOT NULL,
 		[Description]	[nvarchar](1000) NOT NULL,
 		[TilesURL]		[nvarchar](1000) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_Maps_Active] DEFAULT ((1)),
+		[Width]			[float] NULL,
+		[Height]		[float] NULL,
+		[CenterX]		[float] NULL,
+		[CenterY]		[float] NULL,
+		[ZoomMin]		[int] NULL,
+		[ZoomMax]		[int] NULL,
+		[Latitude]		[float] NULL,
+		[Longitude]		[float] NULL,
+		[Active]		[bit] NOT NULL CONSTRAINT [DF_Maps_Active] DEFAULT (1),
 		CONSTRAINT [PK_Maps] PRIMARY KEY CLUSTERED ([MapID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
@@ -264,6 +272,7 @@ ELSE
 		[Name]				[nvarchar](200) NOT NULL,
 		[Description]		[nvarchar](1000) NULL,
 		[Policies]			[nvarchar](1000) NULL,
+		[Available]			[bit] NOT NULL CONSTRAINT [DF_Availability_Available] DEFAULT ((1)),
 		[AvailStartYear]	[int] NULL,
 		[AvailStartMonth]	[int] NULL,
 		[AvailStartDay]		[int] NULL,

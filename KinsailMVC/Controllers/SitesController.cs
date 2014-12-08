@@ -34,6 +34,20 @@ namespace KinsailMVC.Controllers
             return results;
         }
 
+        [GET("locations/{idLocation}/sites")]
+        public List<SiteBasic> GetSitesForLocation(long idLocation)
+        {
+            var results = repository.GetAllForLocation(idLocation);
+            return results;
+        }
+
+        [GET("locations/{idLocation}/sites/details")]
+        public List<SiteDetail> GetSitesDetailsForLocation(long idLocation)
+        {
+            var results = repository.GetAllDetailsForLocation(idLocation);
+            return results;
+        }
+
         [GET("sites/{idSite}")]
         public SiteBasic GetSite(long idSite)
         {
@@ -41,8 +55,22 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
+        [GET("locations/{idLocation}/sites/{idSite}")]
+        public SiteBasic GetSiteForLocation(long idSite)
+        {
+            var result = repository.GetbyId(idSite);
+            return result;
+        }
+
         [GET("sites/{idSite}/details")]
         public SiteBasic GetSiteDetail(long idSite)
+        {
+            var result = repository.GetDetailbyId(idSite);
+            return result;
+        }
+
+        [GET("locations/{idLocation}/sites/{idSite}/details")]
+        public SiteBasic GetSiteDetailForLocation(long idSite)
         {
             var result = repository.GetDetailbyId(idSite);
             return result;

@@ -7,6 +7,7 @@ using System.Web;
 namespace KinsailMVC.Models
 {
     // TODO refactor db connection as a factory?
+    // TODO refactor this class to eliminate duplication of code
     // TODO account for multiples on JOINs to ItemsXItems
     // TODO account for multiples on JOINs to ItemsXMaps/Maps
     // TODO account for multiples on JOINs to ItemsXAvailability/Availability
@@ -57,6 +58,12 @@ namespace KinsailMVC.Models
             "   AND l.ItemTypeID = @1" + 
             " ORDER BY i.Name";
 
+        private static string whereOrderSitesForLocation =
+            " WHERE i.ItemTypeID = @0" +
+            "   AND l.ItemTypeID = @1" +
+            "   AND l.ItemID = @2" +
+            " ORDER BY i.Name";
+        
         private static string whereOrderSiteById =
             " WHERE i.ItemTypeID = @0" +
             "   AND l.ItemTypeID = @1" +
@@ -120,7 +127,17 @@ namespace KinsailMVC.Models
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites;
         }
- 
+
+        public List<SiteBasic> GetAllForLocation(long locationId)
+        {
+            var sql = NPoco.Sql.Builder
+                .Append(selectSiteBasic)
+                .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
+                .Append(whereOrderSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
+            List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
+            return sites;
+        }
+        
         public List<SiteDetail> GetAllDetails()
         {
             // get sites
@@ -128,6 +145,38 @@ namespace KinsailMVC.Models
                 .Append(selectSiteDetail)
                 .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
                 .Append(whereOrderSites, siteItemTypeId, locationItemTypeId);
+            List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
+
+            foreach (SiteDetail site in sites)
+            {
+                // get features for each site
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
+                List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, site.siteId);
+                site.features = features.ToArray();
+
+                // get cost periods for each site
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
+                List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, site.siteId);
+                site.cost = new CostStructure(costPeriods.ToArray());
+
+                // get gallery images for each location, excluding the first one
+                // can't automatically include this in the primary query since NPoco can't do both 
+                // nested and one-to-many properties in a single automatic mapping
+                List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
+                site.photos = photos.ToArray();
+            }
+            return sites;
+        }
+
+        public List<SiteDetail> GetAllDetailsForLocation(long locationId)
+        {
+            // get sites
+            var sql = NPoco.Sql.Builder
+                .Append(selectSiteDetail)
+                .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
+                .Append(whereOrderSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
             foreach (SiteDetail site in sites)

@@ -32,18 +32,6 @@ INSERT INTO [dbo].[Maps]
            ,1)
 GO
 
-INSERT INTO [dbo].[Maps]
-           ([Name]
-           ,[Description]
-           ,[TilesURL]
-           ,[Active])
-     VALUES
-           ('Raven Ridge Site Map' --Name
-           ,'Stylized overhead map. showing the surrounding park and camping sites ...' --Description
-           ,'/maptiles' --TilesURL
-           ,1 --Active
-           )
-GO
 
 -- ItemsXMaps
 -- for Locations
@@ -119,4 +107,53 @@ INSERT INTO [dbo].[ItemsXMaps]
            ,2.0
            ,6.0)
 GO
+
+
+--
+-- Raven Ridge Sample Maps Data
+--
+
+-- Maps
+INSERT INTO [dbo].[Maps]
+           ([Name]
+           ,[Description]
+           ,[TilesURL]
+		   ,[Width]
+		   ,[Height]
+		   ,[CenterX]
+		   ,[CenterY]
+		   ,[ZoomMin]
+		   ,[ZoomMax]
+		   ,[Latitude]
+		   ,[Longitude]
+           ,[Active])
+     VALUES
+           ('Raven Ridge Site Map' --Name
+           ,'Stylized overhead map. showing the surrounding park and camping sites ...' --Description
+           ,'/maptiles' --TilesURL
+		   ,3200 --Width
+		   ,2400 --Height
+		   ,0 --CenterX
+		   ,0 --CenterY
+		   ,2 --ZoomMin
+		   ,4 --ZoomMax
+		   ,38.998 --Latitude
+		   ,-105.551 --Longitude
+           ,1 --Active
+           )
+GO
+
+-- ItemsXMaps
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-08'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 41, -161)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-11'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 27, -122)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-14'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 30, -140)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-16'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 42, -128)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-19'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 46, -151)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Dock-P1-03'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, -3, 53)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Dock-P1-05'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 73, 2)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Dock-P2-02'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 78, -21)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Dock-P2-04'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 80, -46)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Dock-P3-01'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 66, 7)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Trailer-02'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 72, -128)
+INSERT INTO [dbo].[ItemsXMaps] ([ItemID], [MapID], [DisplayOrder], [CoordinateX], [CoordinateY]) VALUES((SELECT ItemID FROM Items WHERE Name='Group-03'), (SELECT MapID FROM Maps WHERE Name='Raven Ridge Site Map'), 1, 68, 21)
 

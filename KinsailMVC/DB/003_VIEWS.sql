@@ -64,6 +64,8 @@ SELECT l.ItemID AS LocationID,
                           MIN(ixa.WeekdayRate) AS MinWeekdayRate, MAX(ixa.WeekdayRate) AS MaxWeekdayRate, 
                           MIN(ixa.WeekendRate) AS MinWeekendRate, MAX(ixa.WeekendRate) AS MaxWeekendRate
                      FROM ItemsXAvailability ixa 
+					 JOIN Availability a ON ixa.AvailID = a.AvailID
+					WHERE a.Available = 1
                     GROUP BY ixa.ItemID) mmc ON s.ItemID = mmc.ItemID 
  WHERE l.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location') 
    AND s.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site') 

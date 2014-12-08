@@ -33,7 +33,7 @@ namespace KinsailMVC.Models
         private static string selectLocationDetail =
             "SELECT l.ItemID, l.Name, " +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone, " +
-            "       m.TilesURL AS MapTilesURL, " +
+            "       m.TilesURL AS MapTilesBaseURL, " +
             "       av.Policies AS reservationPolicies, av.CancelBeforeDays AS CancellationDaysBeforeReservation, " +
             "       av.AvailStartMonth AS AvailabilityStartMonth, av.AvailStartDay AS AvailabilityStartDay, " +
             "       av.AvailEndMonth AS AvailabilityEndMonth, av.AvailEndDay AS AvailabilityEndDay, " +

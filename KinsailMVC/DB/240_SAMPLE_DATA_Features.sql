@@ -221,3 +221,21 @@ INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Valu
 INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Cabin-19'), (SELECT FeatureID FROM Features WHERE Abbreviation='petsAllowed'), 5, '1')
 INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Group-03'), (SELECT FeatureID FROM Features WHERE Abbreviation='parkingLevel'), 5, '1')
 
+
+-------------------------------------------------------------------------------
+-- Raven Ridge Location Features
+-------------------------------------------------------------------------------
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='tentSites'), 1, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='groupTenting'), 2, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='rvSites'), 3, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='cabinLodging'), 4, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='boatLaunch'), 5, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='hikingTrails'), 6, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='mountainBikeTrails'), 7, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='restrooms'), 8, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='showers'), 9, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='hotWater'), 10, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='picnicShelters'), 11, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='fishing'), 12, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='kayakCanoeRental'), 13, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Raven Ridge Park'), (SELECT FeatureID FROM Features WHERE Abbreviation='playground'), 14, '1')
