@@ -14,38 +14,32 @@ namespace KinsailMVC.Controllers
     {
         static readonly SiteRepository repository = new SiteRepository();
 
-        // GET api/values
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
         [GET("sites")]
-        public List<SiteBasic> GetSites()
+        public QueryResults<SiteBasic> GetSites()
         {
-            var results = repository.GetAll();
-            return results;
+            List<SiteBasic> results = repository.GetAll();
+            return new QueryResults<SiteBasic>(results.ToArray(), 0, results.Count);
         }
 
         [GET("sites/details")]
-        public List<SiteDetail> GetSitesDetails()
+        public QueryResults<SiteDetail> GetSitesDetails()
         {
             var results = repository.GetAllDetails();
-            return results;
+            return new QueryResults<SiteDetail>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/{idLocation}/sites")]
-        public List<SiteBasic> GetSitesForLocation(long idLocation)
+        public QueryResults<SiteBasic> GetSitesForLocation(long idLocation)
         {
             var results = repository.GetAllForLocation(idLocation);
-            return results;
+            return new QueryResults<SiteBasic>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/{idLocation}/sites/details")]
-        public List<SiteDetail> GetSitesDetailsForLocation(long idLocation)
+        public QueryResults<SiteDetail> GetSitesDetailsForLocation(long idLocation)
         {
             var results = repository.GetAllDetailsForLocation(idLocation);
-            return results;
+            return new QueryResults<SiteDetail>(results.ToArray(), 0, results.Count);
         }
 
         [GET("sites/{idSite}")]
@@ -63,14 +57,14 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("sites/{idSite}/details")]
-        public SiteBasic GetSiteDetail(long idSite)
+        public SiteDetail GetSiteDetail(long idSite)
         {
             var result = repository.GetDetailbyId(idSite);
             return result;
         }
 
         [GET("locations/{idLocation}/sites/{idSite}/details")]
-        public SiteBasic GetSiteDetailForLocation(long idSite)
+        public SiteDetail GetSiteDetailForLocation(long idSite)
         {
             var result = repository.GetDetailbyId(idSite);
             return result;

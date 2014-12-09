@@ -14,28 +14,28 @@ namespace KinsailMVC.Controllers
         static readonly LocationRepository repository = new LocationRepository();
 
         [GET("locations")]
-        public List<LocationBasic> GetSites()
+        public QueryResults<LocationBasic> GetLocations()
         {
             var results = repository.GetAll();
-            return results;
+            return new QueryResults<LocationBasic>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/details")]
-        public List<LocationDetail> GetSitesDetails()
+        public QueryResults<LocationDetail> GetLocationsDetails()
         {
             var results = repository.GetAllDetails();
-            return results;
+            return new QueryResults<LocationDetail>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/{idLocation}")]
-        public LocationBasic GetSite(long idLocation)
+        public LocationBasic GetLocation(long idLocation)
         {
             var result = repository.GetbyId(idLocation);
             return result;
         }
 
         [GET("locations/{idLocation}/details")]
-        public LocationBasic GetSiteDetail(long idLocation)
+        public LocationBasic GetLocationDetail(long idLocation)
         {
             var result = repository.GetDetailbyId(idLocation);
             return result;
