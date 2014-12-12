@@ -10,6 +10,9 @@ namespace KinsailMVC.Controllers
 {
     using KinsailMVC.Models;
 
+    //using System.Web.Http.Cors;
+    //[EnableCors("*", "*", "*")]  // EnableCors(OriginDomainAllowed, RequireHeader, AcceptVerbs)
+    
     public class SitesController : ApiController
     {
         static readonly SiteRepository repository = new SiteRepository();
