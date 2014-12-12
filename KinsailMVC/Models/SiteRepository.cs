@@ -97,6 +97,14 @@ namespace KinsailMVC.Models
             " WHERE RowNum > 1 " +
             " ORDER BY RowNum";
 
+        // return list of reserved data ranges for site
+        private static string selectReservedRanges =
+            "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" +
+            "  FROM ReservationResources rr " +
+            " WHERE rr.ItemID = @0 " +
+            "   AND rr.EndDateTime > getDate() " +
+            " ORDER BY StartDateTime";
+
         public SiteRepository()
         {
             db = new Database("DB1/Kinsail_JNeely");
@@ -239,6 +247,22 @@ namespace KinsailMVC.Models
             List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
             site.photos = photos.ToArray();
 
+            return site;
+        }
+
+        public SiteAvailability GetAvailabilitybyId(long siteId)
+        {
+            var sql = NPoco.Sql.Builder
+                .Append(selectSiteBasic)
+                .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
+                .Append(whereOrderSiteById, siteItemTypeId, locationItemTypeId, siteId);
+            List<SiteAvailability> sites = db.Fetch<SiteAvailability, MapCoordinates, GalleryImage>(sql);
+            SiteAvailability site = sites.ElementAtOrDefault(0);
+
+            // Get Availability
+            List<DateRange> dates = db.Fetch<DateRange>(selectReservedRanges, site.siteId);
+            site.bookedRanges = dates.ToArray();
+            
             return site;
         }
         

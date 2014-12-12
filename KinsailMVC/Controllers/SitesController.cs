@@ -56,6 +56,13 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
+        [GET("sites/{idSite}/availability")]
+        public SiteAvailability GetSiteAvailability(long idSite)
+        {
+            var result = repository.GetAvailabilitybyId(idSite);
+            return result;
+        }
+
         [GET("sites/{idSite}/details")]
         public SiteDetail GetSiteDetail(long idSite)
         {
@@ -63,9 +70,18 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
+        [GET("locations/{idLocation}/sites/{idSite}/availability")]
+        public SiteAvailability GetSiteAvailabilityForLocation(long idSite)
+        {
+            // TODO: don't ignore locationId
+            var result = repository.GetAvailabilitybyId(idSite);
+            return result;
+        }
+
         [GET("locations/{idLocation}/sites/{idSite}/details")]
         public SiteDetail GetSiteDetailForLocation(long idSite)
         {
+            // TODO: don't ignore locationId
             var result = repository.GetDetailbyId(idSite);
             return result;
         }
