@@ -642,7 +642,7 @@ INSERT INTO [dbo].[Features]
            ,[Description]
            ,[Active])
      VALUES
-           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'SurfaceType'),
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Surface Type'),
 		    'Parking Surface',
             'parkingSurface',
             'Parking surface type',
@@ -712,7 +712,7 @@ INSERT INTO [dbo].[Features]
            ,[Description]
            ,[Active])
      VALUES
-           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'ShadeType'),
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Shade Type'),
 		    'Shade',
             'shade',
             'Type of shade available',
@@ -740,7 +740,7 @@ INSERT INTO [dbo].[Features]
            ,[Description]
            ,[Active])
      VALUES
-           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'SiteType'),
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Site Type'),
 		    'Site Type',
             'siteType',
             'The type of recreation site',

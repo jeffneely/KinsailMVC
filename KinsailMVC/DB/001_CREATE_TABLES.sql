@@ -78,6 +78,26 @@ ELSE
 	) ON [PRIMARY]
 GO
 
+-- Lookup values for multi-valued Feature Types
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'FeatureTypeValues')
+	PRINT 'Table dbo.FeatureTypeValues already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[FeatureTypeValues](
+		[FeatureTypeValueID]  [bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[FeatureTypeID]	[bigint] NOT NULL CONSTRAINT [FK_FeatureTypeValues_FeatureTypeID] REFERENCES [FeatureTypes]([FeatureTypeID]) NOT FOR REPLICATION,
+		[Name]			[nvarchar](100) NULL,
+		[Value]			[nvarchar](40) NOT NULL,
+		[Description]	[nvarchar](1000) NULL,
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_FeatureTypeValues_DisplayOrder]  DEFAULT ((0)),
+		[Active]		[bit] NOT NULL CONSTRAINT [DF_FeatureTypeValues_Active] DEFAULT ((1)),
+		CONSTRAINT [PK_FeatureTypeValues] PRIMARY KEY CLUSTERED ([FeatureTypeValueID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
 -- Association of a Feature with an Item, including the value and display order
 IF EXISTS (SELECT 1
 		     FROM information_schema.Tables
