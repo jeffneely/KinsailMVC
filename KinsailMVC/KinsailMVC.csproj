@@ -285,7 +285,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Docs\Rec Campsite POC Data Model Changes.vsd" />
-    <Content Include="Docs\Kinsail DB Diagram v2.vsd" />
     <Content Include="Docs\Rec POC Sample Data.xlsx" />
     <None Include="Properties\PublishProfiles\Web Deploy Zip.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
