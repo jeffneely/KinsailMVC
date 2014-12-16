@@ -98,6 +98,16 @@ GO
 
 
 -------------------------------------------------------------------------------
+-- Sleepy Hollow Location Features
+-------------------------------------------------------------------------------
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Sleepy Hollow'), (SELECT FeatureID FROM Features WHERE Abbreviation='tentSites'), 1, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Sleepy Hollow'), (SELECT FeatureID FROM Features WHERE Abbreviation='cabinLodging'), 4, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Sleepy Hollow'), (SELECT FeatureID FROM Features WHERE Abbreviation='hikingTrails'), 6, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Sleepy Hollow'), (SELECT FeatureID FROM Features WHERE Abbreviation='restrooms'), 8, '1')
+INSERT INTO [dbo].[ItemsXFeatures] ([ItemID], [FeatureID], [DisplayOrder] ,[Value]) VALUES((SELECT ItemID FROM Items WHERE Name='Sleepy Hollow'), (SELECT FeatureID FROM Features WHERE Abbreviation='fishing'), 12, '1')
+
+
+-------------------------------------------------------------------------------
 -- Raven Ridge Site Features
 -------------------------------------------------------------------------------
 
