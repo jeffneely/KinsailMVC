@@ -201,6 +201,7 @@
     <Compile Include="Models\SiteRepository.cs" />
     <Compile Include="Models\SiteReview.cs" />
     <Compile Include="Models\SiteType.cs" />
+    <Compile Include="Models\SqlCriteria.cs" />
     <Compile Include="Models\SurfaceType.cs" />
     <Compile Include="Models\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

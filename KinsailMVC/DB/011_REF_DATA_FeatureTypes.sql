@@ -22,11 +22,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('Boolean',
             'Boolean',
+			'NUMBER',
             'Yes/no flag',
             1)
 GO
@@ -34,11 +36,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('String',
             'String',
+			'TEXT',
             'Character data',
             1)
 GO
@@ -46,11 +50,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('Integer',
             'Integer',
+			'NUMBER',
             'Integer number',
             1)
 GO
@@ -58,11 +64,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('Surface Type',
             'SurfaceType',
+			'ENUM',
             'Enumerated type, describing the surface characteristics',
             1)
 GO
@@ -70,11 +78,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('Shade Type',
             'ShadeType',
+			'ENUM',
             'Enumerated type, describing the shade characteristics',
             1)
 GO
@@ -82,11 +92,13 @@ GO
 INSERT INTO [dbo].[FeatureTypes]
            ([Name]
            ,[Abbreviation]
+           ,[Category]
            ,[Description]
            ,[Active])
      VALUES
            ('Site Type',
             'SiteType',
+			'ENUM',
             'Enumerated type, describing the kind of site',
             1)
 GO
