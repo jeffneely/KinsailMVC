@@ -8,6 +8,8 @@ namespace KinsailMVC.Models
     /**
      * Details about a location, including features, availability, policies, map tiles, etc...
      * Locations represent campgrounds or other recreation facilities or spaces
+     * 
+     * TODO: add more- reviews, events, activities, ...
      */
     public class LocationDetail : LocationBasic
     {
@@ -26,7 +28,5 @@ namespace KinsailMVC.Models
         public string mapTilesBaseURL { get; set; }                // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
         public BannerImage banner { get; set; }                    // banner image to use in branding
         public GalleryImage[] photos { get; set; }                 // more photos of the location
-
-        // TODO - add more gallery images, reviews
     }
 }

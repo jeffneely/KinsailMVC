@@ -20,28 +20,32 @@ namespace KinsailMVC.Controllers
         [GET("sites")]
         public QueryResults<SiteBasic> GetSites()
         {
-            List<SiteBasic> results = repository.GetAll();
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            List<SiteBasic> results = repository.GetAll(queryParams);
             return new QueryResults<SiteBasic>(results.ToArray(), 0, results.Count);
         }
 
         [GET("sites/details")]
         public QueryResults<SiteDetail> GetSitesDetails()
         {
-            var results = repository.GetAllDetails();
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var results = repository.GetAllDetails(queryParams);
             return new QueryResults<SiteDetail>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/{idLocation}/sites")]
         public QueryResults<SiteBasic> GetSitesForLocation(long idLocation)
         {
-            var results = repository.GetAllForLocation(idLocation);
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var results = repository.GetAllForLocation(idLocation, queryParams);
             return new QueryResults<SiteBasic>(results.ToArray(), 0, results.Count);
         }
 
         [GET("locations/{idLocation}/sites/details")]
         public QueryResults<SiteDetail> GetSitesDetailsForLocation(long idLocation)
         {
-            var results = repository.GetAllDetailsForLocation(idLocation);
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var results = repository.GetAllDetailsForLocation(idLocation, queryParams);
             return new QueryResults<SiteDetail>(results.ToArray(), 0, results.Count);
         }
 

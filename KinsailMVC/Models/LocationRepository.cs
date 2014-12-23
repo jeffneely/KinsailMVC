@@ -11,16 +11,9 @@ using System.Globalization;
 
 namespace KinsailMVC.Models
 {
-    //TODO: refactor db connection as a factory?
-    //TODO: handle multiple itemsxlocations/addresses per location
-    //TODO: handle multiple itemsxorgs/orgs per location
-    //TODO: handle multiple itemsxavail/availability rows per location
-    //TODO: handle multiple itemsxmaps/maps rows per location
-    //TODO: UKs to constrain intersections??
+    // Database repository handler for locations
     //
-    //TODO: handle query string for locations/details calls
-    //TODO: copy all handling to sites calls
-    //
+    // TODO: refactor db connection as a factory?
     public class LocationRepository
     {
         private IDatabase db;
@@ -31,6 +24,7 @@ namespace KinsailMVC.Models
         private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
         private static string br = Environment.NewLine;
 
+        // SQL SELECT fragment for LocationBasic
         private static string selectLocationBasic =
             "SELECT l.ItemID, l.Name," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
@@ -39,6 +33,7 @@ namespace KinsailMVC.Models
             "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude," + br +
             "       g.ImageID, g.IconURL, g.FullURL";
 
+        // SQL SELECT fragment for LocationDetail
         private static string selectLocationDetail =
             "SELECT l.ItemID, l.Name," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
@@ -54,6 +49,7 @@ namespace KinsailMVC.Models
             "       g.ImageID, g.IconURL, g.FullURL," + br +
             "       b.ImageID, b.IconURL, b.FullURL";
 
+        // SQL FROM/JOIN fragment for LocationBasic
         private static string fromJoinLocationBasic =
             "  FROM Items l" + br +
             "  LEFT OUTER JOIN ItemsXOrganizations ixo on l.ItemID = ixo.ItemID" + br +     // organization
@@ -64,7 +60,7 @@ namespace KinsailMVC.Models
             "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image
             "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
 
-
+        // SQL FROM/JOIN fragment for LocationDetail
         private static string fromJoinLocationDetail = fromJoinLocationBasic + br +
             "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID" + br +             // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
@@ -73,47 +69,52 @@ namespace KinsailMVC.Models
             "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br + // first banner image 
             "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID";
 
+        // SQL WHERE fragment for Locations
         private static string whereLocations =
             " WHERE l.ItemTypeID = @0";
 
+        // SQL WHERE fragment for Locations (by ID)
         private static string whereLocationById =
             " WHERE l.ItemTypeID = @0" + br +
             "   AND l.ItemID = @1";
 
+        // SQL WHERE fragment for Location Features (prefix)
         private static string andWhereLocationHasFeatures_pre =
             "   AND l.ItemID IN (SELECT i.ItemID" + br +
             "                      FROM Items i" + br +
             "                      JOIN ItemsXFeatures ixf ON i.ItemID = ixf.ItemID" + br +
             "                      JOIN Features f ON f.FeatureID = ixf.FeatureID" + br +
-            "                     WHERE ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            "                     WHERE ItemTypeID = {0}" + br +
             "                       AND ( " + br;
 
+        // SQL WHERE fragment for Location Features
         private static string andWhereLocationFeature =
-            "                             (ixf.FeatureID = {0} AND ixf.Value = {1})" + br;
+            "                             (ixf.FeatureID = {0} AND ixf.Value {1})" + br;
 
+        // SQL WHERE fragment for Location Features (suffix)
         private static string andWhereLocationHasFeatures_post =
             "                           )" + br +
             "                     GROUP BY i.ItemID" + br +
             "                    HAVING COUNT(f.FeatureID) >= {0})";
 
+        // SQL ORDER fragment for Locations
         private static string orderLocations =
             " ORDER BY l.Name";
 
-        // return list of features
+        // SQL query for list of features (by ID)
         private static string queryFeatures =
             "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
             "  FROM ItemsXFeatures ixf" + br +
             "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
             " WHERE ixf.ItemID = @0";
 
-        // return list of all defined features (to cache)
+        // SQL query for list of all features
         private static string queryAllFeatures =
             "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
             "  FROM Features f" + br +
             "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
-
         
-        // return list of gallery images, excluding the first
+        // SQL query for list of gallery images, excluding the first
         private static string queryPhotos =
             "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
             "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
@@ -124,32 +125,40 @@ namespace KinsailMVC.Models
             " WHERE RowNum > 1" + br +
             " ORDER BY RowNum" + br;
 
-        // map the LocationDetail properties to WHERE clause conditions to be used in the query
-        // this includes aliases/columns and default comparison operators
-        public static Dictionary<string, SqlCriteria> mapLocationProps = new Dictionary<string, SqlCriteria>()
-        {
-            {"locationid",                 new SqlCriteria("   AND l.ItemID = {0}" + br, CriteriaType.NUMBER)},
-            {"title",                      new SqlCriteria("   AND l.Name LIKE N'%{0}%'" + br, CriteriaType.TEXT)},
-            {"street",                     new SqlCriteria("   AND a.StreetAddress = N'{0}'" + br, CriteriaType.TEXT)},
-            {"street2",                    new SqlCriteria("   AND a.StreetAddress2 = N'{0}'" + br, CriteriaType.TEXT)},
-            {"city",                       new SqlCriteria("   AND a.City = N'{0}'" + br, CriteriaType.TEXT)},
-            {"state",                      new SqlCriteria("   AND a.State = N'{0}'" + br, CriteriaType.TEXT)},
-            {"zip",                        new SqlCriteria("   AND a.ZipCode = N'{0}'" + br, CriteriaType.TEXT)},
-            {"country",                    new SqlCriteria("   AND a.Country = N'{0}'" + br, CriteriaType.TEXT)},
-            {"longitude",                  new SqlCriteria("   AND a.Longitude = {0}" + br, CriteriaType.NUMBER)},
-            {"latitude"            ,       new SqlCriteria("   AND a.Latitude = {0}" + br, CriteriaType.NUMBER)},
-            {"operatingorganization",      new SqlCriteria("   AND o.Name LIKE N'%{0}%'" + br, CriteriaType.TEXT)},
-            {"operatingorganizationphone", new SqlCriteria("   AND o.Phone = N'{0}'" + br, CriteriaType.TEXT)},
-            {"reservationphone",           new SqlCriteria("   AND o.Phone2 = N'{0}'" + br, CriteriaType.TEXT)},
-            {"totalreservablesites",       new SqlCriteria("   AND agg.SiteCount = {0}" + br, CriteriaType.NUMBER)},
-            {"reservationpolicies",        new SqlCriteria("   AND av.Policies LIKE N'%{0}%'" + br, CriteriaType.TEXT)},  // find policies containing VALUE
-            {"availabilitystartmonth",     new SqlCriteria("   AND av.AvailStartMonth = {0}" + br, CriteriaType.NUMBER)},
-            {"availabilitystartday",       new SqlCriteria("   AND av.AvailStartDay = {0}" + br, CriteriaType.NUMBER)},
-            {"availabilityendmonth",       new SqlCriteria("   AND av.AvailEndMonth = {0}" + br, CriteriaType.NUMBER)},
-            {"availabilityendday",         new SqlCriteria("   AND av.AvailEndDay = {0}" + br, CriteriaType.NUMBER)},
-            {"pricemin",                   new SqlCriteria("   AND PriceMin >= {0}" + br, CriteriaType.NUMBER)},           // find PriceMin >= VALUE
-            {"pricemax",                   new SqlCriteria("   AND PriceMax <= {0}" + br, CriteriaType.NUMBER)},           // find PriceMax <= VALUE
-            {"cancellationdaysbeforereservation", new SqlCriteria("   AND av.CancelBeforeDays = {0}" + br, CriteriaType.NUMBER)},
+
+        // map the LocationBasic properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapLocationBasicProps = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                                      column                 data type            default operator
+            {"locationid",                 new SqlCriteria("l.ItemID",            CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"title",                      new SqlCriteria("l.Name",              CriteriaType.TEXT,   SqlOperator.CONTAINS)},  // find location names containing VALUE
+            {"street",                     new SqlCriteria("a.StreetAddress",     CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"street2",                    new SqlCriteria("a.StreetAddress2",    CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"city",                       new SqlCriteria("a.City",              CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"state",                      new SqlCriteria("a.State",             CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"zip",                        new SqlCriteria("a.ZipCode",           CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"country",                    new SqlCriteria("a.Country",           CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"longitude",                  new SqlCriteria("a.Longitude",         CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"latitude"            ,       new SqlCriteria("a.Latitude",          CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"operatingorganization",      new SqlCriteria("o.Name",              CriteriaType.TEXT,   SqlOperator.CONTAINS)},  // find org names containing VALUE
+            {"operatingorganizationphone", new SqlCriteria("o.Phone",             CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"reservationphone",           new SqlCriteria("o.Phone2",            CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"totalreservablesites",       new SqlCriteria("agg.SiteCount",       CriteriaType.NUMBER, SqlOperator.EQUAL)}
+        };
+
+        // map LocationDetail properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapLocationDetailProps = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                                      column                 data type            default operator
+            {"reservationpolicies",        new SqlCriteria("av.Policies",         CriteriaType.TEXT,   SqlOperator.CONTAINS)},  // find policies containing VALUE
+            {"availabilitystartmonth",     new SqlCriteria("av.AvailStartMonth",  CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"availabilitystartday",       new SqlCriteria("av.AvailStartDay",    CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"availabilityendmonth",       new SqlCriteria("av.AvailEndMonth",    CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"availabilityendday",         new SqlCriteria("av.AvailEndDay",      CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"pricemin",                   new SqlCriteria("agg.MinWeekdayRate",  CriteriaType.NUMBER, SqlOperator.GREATEREQUAL)},  // find PriceMin >= VALUE
+            {"pricemax",                   new SqlCriteria("agg.MaxWeekendRate",  CriteriaType.NUMBER, SqlOperator.LESSEQUAL)},  // find PriceMax <= VALUE
+            {"cancellationdaysbeforereservation", 
+                                           new SqlCriteria("av.CancelBeforeDays", CriteriaType.NUMBER, SqlOperator.EQUAL)},
         };
 
 
@@ -192,11 +201,12 @@ namespace KinsailMVC.Models
                         t = CriteriaType.TEXT;
                         break;
                 }
-                allFeatures.Add((string)row[0], new SqlCriteria("", t, (long)row[1]));
+                allFeatures.Add((string)row[0], new SqlCriteria((string)row[0], t, SqlOperator.NONE, (long)row[1]));
             }
         }
 
 
+        // return list of LocationBasic objects
         public List<LocationBasic> GetAll(Dictionary<string, string> queryParams = null)
         {
             var sql = NPoco.Sql.Builder
@@ -207,7 +217,7 @@ namespace KinsailMVC.Models
             // any URI filter parameters to add to the query?
             if (queryParams != null)
             {
-                sql = sql.Append(generateFilterClauses(queryParams));
+                sql = sql.Append(generateFilterClauses(queryParams, false, false));
             }
             
             sql = sql.Append(orderLocations);
@@ -216,14 +226,24 @@ namespace KinsailMVC.Models
             return locations;
         }
 
-        public List<LocationDetail> GetAllDetails()
+
+        // return list of LocationDetail objects
+        public List<LocationDetail> GetAllDetails(Dictionary<string, string> queryParams = null)
         {
             // get locations
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationDetail)
                 .Append(fromJoinLocationDetail)
-                .Append(whereLocations, locationItemTypeId)
-                .Append(orderLocations);
+                .Append(whereLocations, locationItemTypeId);
+
+            // any URI filter parameters to add to the query?
+            if (queryParams != null)
+            {
+                sql = sql.Append(generateFilterClauses(queryParams, true, true));
+            }
+            
+            sql = sql.Append(orderLocations);
+
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
 
             foreach (LocationDetail location in locations)
@@ -243,6 +263,8 @@ namespace KinsailMVC.Models
             return locations;
         }
 
+
+        // return LocationBasic by ID
         public LocationBasic GetbyId(long locationId)
         {
             var sql = NPoco.Sql.Builder
@@ -255,6 +277,8 @@ namespace KinsailMVC.Models
             return locations.ElementAtOrDefault(0);
         }
 
+
+        // return LocationDetail by ID
         public LocationDetail GetDetailbyId(long locationId)
         {
             var sql = NPoco.Sql.Builder
@@ -281,43 +305,85 @@ namespace KinsailMVC.Models
             return location;
         }
 
+
         // generate additional WHERE clauses based on the passed in URI querystring parameters
         // handles:
-        // - unknown params (skip them in the SQL)
+        // - unknown params (skip them in the SQL, for now)
         // - params for object properties (including a default operator that makes sense)
-        // - params for feature children
-        // - params for multiple feature children
-        // - params for mixed sets of object properties anbd feature children
+        // - params for feature children, including multiples
+        // - params for mixed sets of object properties and feature children
         // - params with mixed case
         // - empty params (e.g., restrooms=)
-        // - quoting for string-valued params
-        // - prevents sql injection for types other than strings
-        private string generateFilterClauses(Dictionary<string, string> queryParams)
+        // - quoting for string-valued params (prevents sql injection)
+        // - parsing for all criteria values (prevents sql injection for types other than strings)
+        // - support for operators, including mixed case
+        private string generateFilterClauses(Dictionary<string, string> queryParams, bool detailsFlag, bool featuresFlag)
         {
-            Dictionary<string, string> filterProperties = new Dictionary<string, string>();
-            Dictionary<string, string> filterFeatures = new Dictionary<string, string>();
-            Dictionary<string, string> filterOther = new Dictionary<string, string>();
+            Dictionary<string, SqlCriteria> filterProperties = new Dictionary<string, SqlCriteria>();
+            Dictionary<string, SqlCriteria> filterFeatures = new Dictionary<string, SqlCriteria>();
+            Dictionary<string, SqlCriteria> filterOther = new Dictionary<string, SqlCriteria>();
             StringBuilder s = new StringBuilder();
+
+            string columnPart;
+            string operatorPart;
             
             // parse the query params into separate groups (properties, features, other)
             foreach (var item in queryParams)
             {
-                if (mapLocationProps.ContainsKey(item.Key))  // is the parameter name a property of LocationDetail object?
+                columnPart = SqlCriteria.getColumnPart(item.Key);
+                operatorPart = SqlCriteria.getOperatorPart(item.Key);
+                SqlOperator op;
+
+                if (mapLocationBasicProps.ContainsKey(columnPart) |                  // is the parameter name a property of LocationBasic object?
+                    (detailsFlag & mapLocationDetailProps.ContainsKey(columnPart)))  // is the parameter name a property of LocationDetail object?
                 {
-                    Debug.Print("Find locations WHERE: " + mapLocationProps[item.Key]);
-                    filterProperties.Add(item.Key, item.Value);
+                    // copy the criteria object from the lookup map
+                    if (mapLocationBasicProps.ContainsKey(columnPart))
+                    {
+                        filterProperties.Add(columnPart, mapLocationBasicProps[columnPart].clone());
+                    }
+                    else
+                    {
+                        filterProperties.Add(columnPart, mapLocationDetailProps[columnPart].clone());
+                    }
+
+                    // override the default operator, if the user has specified one
+                    op = SqlCriteria.getOperator(operatorPart);
+                    if (op != SqlOperator.NONE)
+                    {
+                        filterProperties[columnPart].oper = op;
+                    }
+
+                    // inject the user-supplied data value(s) into the copied criteria
+                    filterProperties[columnPart].value = item.Value;
+
+                    Debug.Print("Find locations WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
                 }
                 else  
                 {
-                    if (allFeatures.ContainsKey(item.Key))  // is the parameter name a Feature associated with the LocationDetail object?
+                    if (featuresFlag & allFeatures.ContainsKey(item.Key))  // is the parameter name a Feature associated with the LocationDetail object?
                     {
-                        Debug.Print("Find locations WHERE feature [FeatureID=" + allFeatures[item.Key].id + "]: " + item.Key + " = " + item.Value);
-                        filterFeatures.Add(item.Key, item.Value);
+                        // copy the criteria object from the feature lookup map
+                        filterFeatures.Add(columnPart, allFeatures[columnPart].clone());
+
+                        // override the default operator, if the user has specified one
+                        op = SqlCriteria.getOperator(operatorPart);
+                        if (op != SqlOperator.NONE)
+                        {
+                            filterFeatures[columnPart].oper = op;
+                        }
+
+                        // inject the user-supplied data value(s) into the copied criteria
+                        filterFeatures[columnPart].value = item.Value;
+
+                        Debug.Print("Find locations WHERE feature [FeatureID=" + allFeatures[item.Key].id + "]: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
                     }
                     else  // parameter does not match a property or feature
                     {
-                        Debug.Print("Unknown param: " + item.Key + " = " + item.Value);
-                        filterOther.Add(item.Key, item.Value);
+                        op = SqlCriteria.getOperator(operatorPart);
+                        filterOther.Add(columnPart, new SqlCriteria(columnPart, CriteriaType.TEXT, SqlCriteria.getOperator(operatorPart), item.Value));
+
+                        Debug.Print("Ignoring unknown parameter: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
                     }
                 }
             }
@@ -325,16 +391,16 @@ namespace KinsailMVC.Models
             // generate WHERE clauses for properties
             foreach (var criteria in filterProperties)
             {
-                s.AppendFormat(mapLocationProps[criteria.Key].clause, escapeFilterValue(criteria.Value, mapLocationProps[criteria.Key].type));
+                s.AppendFormat("   AND " + criteria.Value.getSql());
             }
 
             // generate WHERE clauses for features
             if (filterFeatures.Count > 0)
             {
-                s.Append(andWhereLocationHasFeatures_pre);
+                s.AppendFormat(andWhereLocationHasFeatures_pre, locationItemTypeId);
                 foreach (var criteria in filterFeatures)
                 {
-                    s.AppendFormat(andWhereLocationFeature, allFeatures[criteria.Key].id, escapeFilterValue(criteria.Value, mapLocationProps[criteria.Key].type));
+                    s.AppendFormat(andWhereLocationFeature, allFeatures[criteria.Key].id, criteria.Value.getSql(false));
                     if (filterFeatures.Last().Key != criteria.Key)
                     {
                         s.Append(" OR ");
@@ -346,34 +412,16 @@ namespace KinsailMVC.Models
             return s.ToString();
         }
 
-        // escape values and account for empty values
-        // TBD: should these throw HTTP exceptions when a value fails to parse??
-        private string escapeFilterValue(string value, CriteriaType type)
-        {
-            switch (type)
-            {
-                case CriteriaType.TEXT:
-                    return value.Replace("'", "''");
-
-                case CriteriaType.NUMBER:
-                    float num;
-                    if (Single.TryParse(value, NumberStyles.Number, CultureInfo.CurrentCulture, out num))
-                        return value;
-                    else
-                        return "0";
-                case CriteriaType.DATE:
-                    DateTime date;
-                    if (DateTime.TryParseExact(value, "D", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
-                        return "N'" + value + "'";
-                    else
-                        return "GETDATE()";
-                default:
-                    break;
-            }
-            return "''";
-        }
+        
     }   
 }
+
+
+
+
+
+
+
 
 /*
 UnsupportedQueryParameter

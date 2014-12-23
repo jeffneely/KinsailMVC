@@ -24,7 +24,8 @@ namespace KinsailMVC.Controllers
         [GET("locations/details")]
         public QueryResults<LocationDetail> GetLocationsDetails()
         {
-            var results = repository.GetAllDetails();
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var results = repository.GetAllDetails(queryParams);
             return new QueryResults<LocationDetail>(results.ToArray(), 0, results.Count);
         }
 

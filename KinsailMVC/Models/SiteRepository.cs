@@ -1,17 +1,16 @@
 ﻿using NPoco;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace KinsailMVC.Models
 {
-    // TODO refactor db connection as a factory?
-    // TODO refactor this class to eliminate duplication of code
-    // TODO account for multiples on JOINs to ItemsXItems
-    // TODO account for multiples on JOINs to ItemsXMaps/Maps
-    // TODO account for multiples on JOINs to ItemsXAvailability/Availability
-    // TODO Apply DB unique constraints to limit some of the above??
+    // Database repository handler for sites
+    //
+    // TODO: refactor db connection as a factory?
     public class SiteRepository
     {
         private IDatabase db;
@@ -19,91 +18,162 @@ namespace KinsailMVC.Models
         private long locationItemTypeId = 0;
         private long galleryImageTypeId = 0;
         private long siteTypeFeatureId = 0;
-        
-        private static string selectSiteBasic = 
-            "SELECT i.ItemID, i.Name, l.ItemID AS LocationID, f0.Value AS Type, " +
-                   "ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
+        private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
+        private static string br = Environment.NewLine;
 
+        // SQL SELECT fragment for SiteBasic
+        private static string selectSiteBasic =
+            "SELECT i.ItemID, i.Name, l.ItemID AS LocationID, f0.Value AS Type," + br +
+            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
+
+        // SQL SELECT fragment for SiteDetail
         private static string selectSiteDetail =
-            "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type, " +
-                   "ixa.MaxUnits AS MaxAccomodatingUnits, " +
-                   "a.MinDurationDays AS MinDuration, a.MaxDurationDays AS MaxDuration, a.AvailBeforeDays AS AdvancedReservationPeriod, " +
-                   "ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
+            "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type," + br +
+            "       av.MaxAccommodatingUnits, av.MinDuration, av.MaxDuration, av.AdvancedReservationPeriod," + br +
+            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
 
-        private static string fromJoinSiteBasic = 
-            "  FROM Items i " +
-            "  LEFT OUTER JOIN ItemsXItems ixi ON i.ItemID = ixi.ItemID " +          // location
-            "  LEFT OUTER JOIN Items l ON ixi.ParentItemID = l.ItemID " +
-            "  LEFT OUTER JOIN (SELECT ItemID, Value " +                             // site type
-            "                     FROM ItemsXFeatures " +
-            "                    WHERE FeatureID = @0) f0 ON i.ItemID = f0.ItemID " + 
-            "  LEFT OUTER JOIN ItemsXMaps ixm ON i.ItemID = ixm.ItemID " +           // maps
-            "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID " + 
-            "  LEFT OUTER JOIN ItemsXImages ixg ON i.ItemID = ixg.ItemID " +         // images
-            "  LEFT OUTER JOIN (SELECT i.ImageID, i.IconURL, i.FullURL " +           // only gallery images
-            "                     FROM Images i " +
-            "                     JOIN ImageTypes it ON i.ImageTypeID = it.ImageTypeID " +
-            "                    WHERE it.ImageTypeID = @1) g ON ixg.ImageID = g.ImageID " +
-            "             JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder " + // only the first image
-            "                     FROM ItemsXImages " +
-            "                    GROUP BY ItemID) g1 ON ixg.ItemID = g1.ItemID " +
-            "                      AND ixg.DisplayOrder = g1.DisplayOrder ";
+        // SQL FROM/JOIN fragment for SiteBasic
+        private static string fromJoinSiteBasic =
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXItems ixi ON i.ItemID = ixi.ItemID" + br +             // location
+            "  LEFT OUTER JOIN Items l ON ixi.ParentItemID = l.ItemID" + br +
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // site type
+            "                     FROM ItemsXFeatures" + br +
+            "                    WHERE FeatureID = @0) f0 ON i.ItemID = f0.ItemID" + br +
+            "  LEFT OUTER JOIN ItemsXMaps ixm ON i.ItemID = ixm.ItemID" + br +              // maps
+            "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
+            "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image 
+            "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
 
-        private static string fromJoinSiteDetail = fromJoinSiteBasic +
-            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID " +   // availability info
-            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID"; 
+//          "  LEFT OUTER JOIN ItemsXImages ixg ON i.ItemID = ixg.ItemID" + br +            // images
+//          "  LEFT OUTER JOIN (SELECT i.ImageID, i.IconURL, i.FullURL" + br +              // only gallery images
+//          "                     FROM Images i" + br +
+//          "                     JOIN ImageTypes it ON i.ImageTypeID = it.ImageTypeID" + br +
+//          "                    WHERE it.ImageTypeID = @1) g ON ixg.ImageID = g.ImageID" + br +
+//          "             JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder" + br +    // only the first image
+//          "                     FROM ItemsXImages" + br +
+//          "                    GROUP BY ItemID) g1 ON ixg.ItemID = g1.ItemID" + br +
+//          "                      AND ixg.DisplayOrder = g1.DisplayOrder";
 
-        private static string whereOrderSites = 
-            " WHERE i.ItemTypeID = @0" + 
-            "   AND l.ItemTypeID = @1" + 
+        // SQL FROM/JOIN fragment for SiteDetail
+        private static string fromJoinSiteDetail = fromJoinSiteBasic + br +
+            "  LEFT OUTER JOIN (SELECT ixa.ItemID, MIN(ixa.MaxUnits) AS MaxAccommodatingUnits," + br +  // availability info
+            "                          MIN(a.MinDurationDays) AS MinDuration, MAX(MaxDurationDays) AS MaxDuration," + br +
+            "                          MIN(a.AvailBeforeDays) AS AdvancedReservationPeriod" + br +
+            "                     FROM ItemsXAvailability ixa" + br +
+            "                     LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
+            "                    GROUP BY ixa.ItemID" + br +
+            "                   ) av ON i.ItemID = av.ItemID";
+
+//          "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +      // availability info
+//          "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID";
+
+        // SQL WHERE fragment for Site Features (prefix)
+        private static string andWhereSiteHasFeatures_pre =
+            "   AND i.ItemID IN (SELECT i.ItemID" + br +
+            "                      FROM Items i" + br +
+            "                      JOIN ItemsXFeatures ixf ON i.ItemID = ixf.ItemID" + br +
+            "                      JOIN Features f ON f.FeatureID = ixf.FeatureID" + br +
+            "                     WHERE ItemTypeID = {0}" + br +
+            "                       AND ( " + br;
+
+        // SQL WHERE fragment for Site Features
+        private static string andWhereSiteFeature =
+            "                             (ixf.FeatureID = {0} AND ixf.Value {1})" + br;
+
+        // SQL WHERE fragment for Site Features (suffix)
+        private static string andWhereSiteHasFeatures_post =
+            "                           )" + br +
+            "                     GROUP BY i.ItemID" + br +
+            "                    HAVING COUNT(f.FeatureID) >= {0})";
+
+        // SQL WHERE fragment for Sites
+        private static string whereSites =
+            " WHERE i.ItemTypeID = @0" + br +
+            "   AND l.ItemTypeID = @1";
+
+        // SQL WHERE/ORDER fragment for Sites (by location)
+        private static string whereSitesForLocation =
+            " WHERE i.ItemTypeID = @0" + br +
+            "   AND l.ItemTypeID = @1" + br +
+            "   AND l.ItemID = @2";
+
+        // SQL WHERE fragment for Sites (by ID)
+        private static string whereSiteById =
+            " WHERE i.ItemTypeID = @0" + br +
+            "   AND l.ItemTypeID = @1" + br +
+            "   AND i.ItemID = @2";
+
+        // SQL ORDER fragment for Sites
+        private static string orderSites =
             " ORDER BY i.Name";
 
-        private static string whereOrderSitesForLocation =
-            " WHERE i.ItemTypeID = @0" +
-            "   AND l.ItemTypeID = @1" +
-            "   AND l.ItemID = @2" +
-            " ORDER BY i.Name";
-        
-        private static string whereOrderSiteById =
-            " WHERE i.ItemTypeID = @0" +
-            "   AND l.ItemTypeID = @1" +
-            "   AND i.ItemID = @2" +
-            " ORDER BY i.Name";
 
         private static string selectFeatures =
-            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value " +
-            "  FROM ItemsXFeatures ixf " +
-            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID " +
-            " WHERE f.FeatureID <> @0 " +
+            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
+            "  FROM ItemsXFeatures ixf" + br +
+            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            " WHERE f.FeatureID <> @0" + br +
             "   AND ixf.ItemID = @1";
 
+        // SQL query for list of all features
+        private static string queryAllFeatures =
+            "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
+            "  FROM Features f" + br +
+            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
+
         private static string selectCostPeriods =
-            "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth, " +
-            "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate, " +
-            "       0 AS NotAvailable " +
-            "  FROM Items i " +
-            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID " +
-            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID " +
+            "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth," + br +
+            "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate," + br +
+            "       0 AS NotAvailable" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +
+            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
             " WHERE i.ItemID = @0";
 
         // return list of gallery images, excluding the first
         private static string selectPhotos =
-            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active " +
-            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum " +
-            "          FROM Images i " +
-            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID " +
-            "         WHERE ixi.ItemID = @0 " +
-            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img " +
-            " WHERE RowNum > 1 " +
+            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
+            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
+            "          FROM Images i" + br +
+            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID" + br +
+            "         WHERE ixi.ItemID = @0" + br +
+            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img" + br +
+            " WHERE RowNum > 1" + br +
             " ORDER BY RowNum";
 
-        // return list of reserved data ranges for site
+        // return list of reserved data ranges for site (> today)
         private static string selectReservedRanges =
-            "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" +
-            "  FROM ReservationResources rr " +
-            " WHERE rr.ItemID = @0 " +
-            "   AND rr.EndDateTime > getDate() " +
+            "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" + br +
+            "  FROM ReservationResources rr" + br +
+            " WHERE rr.ItemID = @0" + br +
+            "   AND rr.EndDateTime > getDate()" + br +
             " ORDER BY StartDateTime";
+
+
+        // map the SiteBasic properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapSiteBasicProps = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                                     column             data type            default operator
+            {"siteid",                    new SqlCriteria("i.ItemID",        CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"locationid",                new SqlCriteria("l.ItemID",        CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"type",                      new SqlCriteria("f0.Value",        CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"siteidentifier",            new SqlCriteria("i.Name",          CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"x",                         new SqlCriteria("ixm.CoordinateX", CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"y",                         new SqlCriteria("ixm.CoordinateY", CriteriaType.NUMBER, SqlOperator.EQUAL)},
+        };
+
+        // map SiteDetail properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapSiteDetailProps = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                                     column                          data type            default operator
+            {"description",               new SqlCriteria("i.Description",                CriteriaType.TEXT,   SqlOperator.CONTAINS)},  // find descriptions containing VALUE
+            {"maxaccommodatingunits",     new SqlCriteria("av.MaxAccommodatingUnits",     CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"minduration",               new SqlCriteria("av.MinDuration",               CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"maxduration",               new SqlCriteria("av.MaxDuration",               CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"advancedreservationperiod", new SqlCriteria("av.AdvancedReservationPeriod", CriteriaType.NUMBER, SqlOperator.EQUAL)},
+        };
+
 
         public SiteRepository()
         {
@@ -124,35 +194,88 @@ namespace KinsailMVC.Models
             locationItemTypeId = db.ExecuteScalar<long>("SELECT ItemTypeID from ItemTypes WHERE Name = 'Recreation Location'");
             galleryImageTypeId = db.ExecuteScalar<long>("SELECT ImageTypeID from ImageTypes WHERE Name = 'Gallery Image'");
             siteTypeFeatureId = db.ExecuteScalar<long>("SELECT FeatureID FROM Features WHERE Name = 'Site Type'");
+
+            // load the complete list of all features that are defined in the database
+            List<object[]> features = db.Fetch<object[]>(queryAllFeatures);
+            foreach (object[] row in features)
+            {
+                CriteriaType t;
+                switch ((string)row[2])
+                {
+                    case "NUMBER":
+                    case "ENUM":
+                        t = CriteriaType.NUMBER;
+                        break;
+                    case "DATE":
+                        t = CriteriaType.DATE;
+                        break;
+                    case "TEXT":
+                    default:
+                        t = CriteriaType.TEXT;
+                        break;
+                }
+                allFeatures.Add((string)row[0], new SqlCriteria((string)row[0], t, SqlOperator.NONE, (long)row[1]));
+            }
         }
 
-        public List<SiteBasic> GetAll()
+
+        // return list of SiteBasic objects
+        public List<SiteBasic> GetAll(Dictionary<string, string> queryParams = null)
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteBasic)
                 .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSites, siteItemTypeId, locationItemTypeId);
+                .Append(whereSites, siteItemTypeId, locationItemTypeId);
+
+            // any URI filter parameters to add to the query?
+            if (queryParams != null)
+            {
+                sql = sql.Append(generateFilterClauses(queryParams, false, false));
+            }
+
+            sql = sql.Append(orderSites);
+
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites;
         }
 
-        public List<SiteBasic> GetAllForLocation(long locationId)
+        // return list of SiteBasic objects for a Location
+        public List<SiteBasic> GetAllForLocation(long locationId, Dictionary<string, string> queryParams = null)
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteBasic)
                 .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
+                .Append(whereSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
+
+            // any URI filter parameters to add to the query?
+            if (queryParams != null)
+            {
+                sql = sql.Append(generateFilterClauses(queryParams, false, false));
+            }
+
+            sql = sql.Append(orderSites);
+
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites;
         }
-        
-        public List<SiteDetail> GetAllDetails()
+
+        public List<SiteDetail> GetAllDetails(Dictionary<string, string> queryParams = null)
         {
             // get sites
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
                 .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSites, siteItemTypeId, locationItemTypeId);
+                .Append(whereSites, siteItemTypeId, locationItemTypeId);
+
+            // any URI filter parameters to add to the query?
+            if (queryParams != null)
+            {
+                sql = sql.Append(generateFilterClauses(queryParams, true, true));
+            }
+
+            sql = sql.Append(orderSites);
+            Debug.Print(sql.SQL);
+
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
             foreach (SiteDetail site in sites)
@@ -178,13 +301,22 @@ namespace KinsailMVC.Models
             return sites;
         }
 
-        public List<SiteDetail> GetAllDetailsForLocation(long locationId)
+        public List<SiteDetail> GetAllDetailsForLocation(long locationId, Dictionary<string, string> queryParams = null)
         {
             // get sites
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
                 .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
+                .Append(whereSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
+
+            // any URI filter parameters to add to the query?
+            if (queryParams != null)
+            {
+                sql = sql.Append(generateFilterClauses(queryParams, true, true));
+            }
+
+            sql = sql.Append(orderSites);
+            
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
             foreach (SiteDetail site in sites)
@@ -209,13 +341,15 @@ namespace KinsailMVC.Models
             }
             return sites;
         }
-        
+
         public SiteBasic GetbyId(long siteId)
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteBasic)
                 .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSiteById, siteItemTypeId, locationItemTypeId, siteId);
+                .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
+                .Append(orderSites);
+
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites.ElementAtOrDefault(0);
         }
@@ -225,7 +359,9 @@ namespace KinsailMVC.Models
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
                 .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSiteById, siteItemTypeId, locationItemTypeId, siteId);
+                .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
+                .Append(orderSites);
+
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
             SiteDetail site = sites.ElementAtOrDefault(0);
 
@@ -255,75 +391,125 @@ namespace KinsailMVC.Models
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteBasic)
                 .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
-                .Append(whereOrderSiteById, siteItemTypeId, locationItemTypeId, siteId);
+                .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
+                .Append(orderSites);
+
             List<SiteAvailability> sites = db.Fetch<SiteAvailability, MapCoordinates, GalleryImage>(sql);
             SiteAvailability site = sites.ElementAtOrDefault(0);
 
             // Get Availability
             List<DateRange> dates = db.Fetch<DateRange>(selectReservedRanges, site.siteId);
             site.bookedRanges = dates.ToArray();
-            
+
             return site;
         }
-        
-/*
- * example of fetching one to many:
- * 
-var sql = "select a.*, b.* from tablea a " +
-              "inner join tableb b on a.id = b.id " +
-              "where EffectiveDate = @0";
 
-List<TableA> results = 
-    db.FetchOneToMany<TableA,TableB>(x=>x.Id, sql, new DateTime(2012,10,18));
-*/
-
-
-/*
-        public IEnumerable<DataAccess.Partner> GetbyId(int IdPartner)
+        // generate additional WHERE clauses based on the passed in URI querystring parameters
+        // handles:
+        // - unknown params (skip them in the SQL, for now)
+        // - params for object properties (including a default operator that makes sense)
+        // - params for feature children, including multiples
+        // - params for mixed sets of object properties and feature children
+        // - params with mixed case
+        // - empty params (e.g., restrooms=)
+        // - quoting for string-valued params (prevents sql injection)
+        // - parsing for all criteria values (prevents sql injection for types other than strings)
+        // - support for operators, including mixed case
+        private string generateFilterClauses(Dictionary<string, string> queryParams, bool detailsFlag, bool featuresFlag)
         {
-            DataAccess.DataClassesDataContext objData = new DataAccess.DataClassesDataContext();
-            IQueryable<DataAccess.Partner> objTest = objData.GetTable<DataAccess.Partner>().Where<DataAccess.Partner>(t => t.PartnerID == IdPartner);
-            return objTest.AsEnumerable<DataAccess.Partner>();
+            Dictionary<string, SqlCriteria> filterProperties = new Dictionary<string, SqlCriteria>();
+            Dictionary<string, SqlCriteria> filterFeatures = new Dictionary<string, SqlCriteria>();
+            Dictionary<string, SqlCriteria> filterOther = new Dictionary<string, SqlCriteria>();
+            StringBuilder s = new StringBuilder();
 
-        }
+            string columnPart;
+            string operatorPart;
 
-
-        public Location Get(int id)
-        {
-            return locations.Find(p => p.LocationID == id);
-        }
-
-        public Location Add(Location item)
-        {
-            if (item == null)
+            // parse the query params into separate groups (properties, features, other)
+            foreach (var item in queryParams)
             {
-                throw new ArgumentNullException("item");
+                columnPart = SqlCriteria.getColumnPart(item.Key);
+                operatorPart = SqlCriteria.getOperatorPart(item.Key);
+                SqlOperator op;
+
+                if (mapSiteBasicProps.ContainsKey(columnPart) |                  // is the parameter name a property of SiteBasic object?
+                    (detailsFlag & mapSiteDetailProps.ContainsKey(columnPart)))  // is the parameter name a property of SiteDetail object?
+                {
+                    // copy the criteria object from the lookup map
+                    if (mapSiteBasicProps.ContainsKey(columnPart))
+                    {
+                        filterProperties.Add(columnPart, mapSiteBasicProps[columnPart].clone());
+                    }
+                    else
+                    {
+                        filterProperties.Add(columnPart, mapSiteDetailProps[columnPart].clone());
+                    }
+
+                    // override the default operator, if the user has specified one
+                    op = SqlCriteria.getOperator(operatorPart);
+                    if (op != SqlOperator.NONE)
+                    {
+                        filterProperties[columnPart].oper = op;
+                    }
+
+                    // inject the user-supplied data value(s) into the copied criteria
+                    filterProperties[columnPart].value = item.Value;
+
+                    Debug.Print("Find sites WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                }
+                else
+                {
+                    if (featuresFlag & allFeatures.ContainsKey(item.Key))  // is the parameter name a Feature associated with the LocationDetail object?
+                    {
+                        // copy the criteria object from the feature lookup map
+                        filterFeatures.Add(columnPart, allFeatures[columnPart].clone());
+
+                        // override the default operator, if the user has specified one
+                        op = SqlCriteria.getOperator(operatorPart);
+                        if (op != SqlOperator.NONE)
+                        {
+                            filterFeatures[columnPart].oper = op;
+                        }
+
+                        // inject the user-supplied data value(s) into the copied criteria
+                        filterFeatures[columnPart].value = item.Value;
+
+                        Debug.Print("Find sites WHERE feature [FeatureID=" + allFeatures[item.Key].id + "]: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                    }
+                    else  // parameter does not match a property or feature
+                    {
+                        op = SqlCriteria.getOperator(operatorPart);
+                        filterOther.Add(columnPart, new SqlCriteria(columnPart, CriteriaType.TEXT, SqlCriteria.getOperator(operatorPart), item.Value));
+
+                        Debug.Print("Ignoring unknown parameter: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                    }
+                }
             }
-            item.LocationID = _nextId++;
-            locations.Add(item);
-            return item;
+
+            // generate WHERE clauses for properties
+            foreach (var criteria in filterProperties)
+            {
+                s.AppendFormat("   AND " + criteria.Value.getSql());
+            }
+
+            // generate WHERE clauses for features
+            if (filterFeatures.Count > 0)
+            {
+                s.AppendFormat(andWhereSiteHasFeatures_pre, siteItemTypeId);
+                foreach (var criteria in filterFeatures)
+                {
+                    s.AppendFormat(andWhereSiteFeature, allFeatures[criteria.Key].id, criteria.Value.getSql(false));
+                    if (filterFeatures.Last().Key != criteria.Key)
+                    {
+                        s.Append(" OR ");
+                    }
+                }
+                s.AppendFormat(andWhereSiteHasFeatures_post, filterFeatures.Count);
+            }
+
+            //Debug.Print(s.ToString());
+            return s.ToString();
         }
 
-        public void Remove(int id)
-        {
-            locations.RemoveAll(p => p.LocationID == id);
-        }
-
-        public bool Update(Location item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
-            int index = locations.FindIndex(p => p.LocationID == item.LocationID);
-            if (index == -1)
-            {
-                return false;
-            }
-            locations.RemoveAt(index);
-            locations.Add(item);
-            return true;
-        }
-     * */
     }
 }
