@@ -93,8 +93,8 @@ namespace KinsailMVC.Models
             {SqlOperator.LESSEQUAL,     "<= {0}"},
             {SqlOperator.BETWEEN,       "BETWEEN {0} AND {1}"},     // supports multiple values (2)
             {SqlOperator.NOTBETWEEN,    "NOT BETWEEN {0} AND {1}"}, // supports multiple values (2)
-            {SqlOperator.IN,            "IN [{0}]"},                // supports multiple values (1-n)
-            {SqlOperator.NOTIN,         "NOT IN [{0}]"},            // supports multiple values (1-n)
+            {SqlOperator.IN,            "IN ({0})"},                // supports multiple values (1-n)
+            {SqlOperator.NOTIN,         "NOT IN ({0})"},            // supports multiple values (1-n)
             {SqlOperator.LIKE,          "LIKE {0}"},
             {SqlOperator.NOTLIKE,       "NOT LIKE {0}"},
             {SqlOperator.CONTAINS,      "LIKE {0}"},                // "%" char will be inserted in the generation logic
@@ -329,8 +329,9 @@ namespace KinsailMVC.Models
                 }
             }
 
-            // Re-join all of the values as a comma-delimited list for the IN operator (ONLY)
-            if (oper == SqlOperator.IN)
+            // Re-join all of the values as a comma-delimited list for the IN and NOTIN operators (ONLY)
+            // doing this after the above quoting prevents sql injection within mult-valued lists of strings
+            if ((oper == SqlOperator.IN) | (oper == SqlOperator.NOTIN))
             {
                 values[0] = string.Join(", ", values);
                 values.RemoveRange(1, values.Count - 1);
