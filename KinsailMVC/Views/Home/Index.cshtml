@@ -2,52 +2,199 @@
     <div class="content-wrapper">
         <div class="float-left">
             <p class="site-title">
-                <a href="~/">ASP.NET Web API</a></p>
+                <a href="~/">Recreation Server</a></p>
         </div>
     </div>
 </header>
-<div id="body">
+<div id="body" class="container-fluid">
     <section class="featured">
         <div class="content-wrapper">
             <hgroup class="title">
-                <h1>Welcome to ASP.NET Web API!</h1>
-                <h2>Modify the code in this template to jump-start your ASP.NET Web API development.</h2>
+                <h1>Proof-of-concept</h1>
+                <h2>REST API</h2>
             </hgroup>
-            <p>
-                ASP.NET Web API allows you to expose your applications, data and services to the
-                web directly over HTTP.
-            </p>
-            <p>
-                To learn more about ASP.NET Web API visit
-                <a href="http://go.microsoft.com/fwlink/?LinkID=238195" title="ASP.NET Web API Website">http://asp.net/web-api</a>.
-                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET Web API.
-                If you have any questions about ASP.NET Web API, visit
-                <a href="http://go.microsoft.com/fwlink/?LinkID=238196" title="ASP.NET Web API Forum">our forums</a>.
-            </p>
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix">
-        <h3>We suggest the following steps:</h3>
-        <ol class="round">
-            <li class="one">
-                <h5>Getting Started</h5>
-                ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-                a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-                is an ideal platform for building RESTful applications on the .NET Framework.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245160">Learn more…</a>
-            </li>
+        @Html.Raw(ViewBag.Message)
+        <h2>Supported REST API URIs:</h2>
+        The following URIs return information about recreation sites and locations:
+        <table>
+            <tr><td><a href="/locations">/locations</a></td><td class="apinote">List of Locations (LocationBasic)</td></tr>
+            <tr><td><a href="/locations/details">/locations/details</a></td><td class="apinote">List of Locations (LocationDetail)</td></tr>
+            <tr><td><a href="/locations/712689">/locations/712689</a></td><td class="apinote">Location 712689 (LocationBasic)</td></tr>
+            <tr><td><a href="/locations/712689/details">/locations/712689/details</a></td><td class="apinote">Location 712689 (LocationDetail)</td></tr>
+            <tr><td><a href="/locations/712689/sites">/locations/712689/sites</a></td><td class="apinote">List of Sites for Location 712689 (SiteBasic)</td></tr>
+            <tr><td><a href="/locations/712689/sites/details">/locations/712689/sites/details</a></td><td class="apinote">List of Sites for Location 712689 (SiteDetail)</td></tr>
+            <tr><td><a href="/locations/712689/sites/713989">/locations/712689/sites/713989</a></td><td class="apinote">Site 713989 (SiteBasic)</td></tr>
+            <tr><td><a href="/locations/712689/sites/713989/availability">/locations/712689/sites/713989/availability</a></td><td class="apinote">Availability info for Site 713989 (SiteAvailability)</td></tr>
+            <tr><td><a href="/locations/712689/sites/713989/details">/locations/712689/sites/713989/details</a></td><td class="apinote">Site 713989 (SiteDetail)</td></tr>
+            <tr><td><a href="/sites">/sites</a></td><td class="apinote">List of Sites (SiteBasic)</td></tr>
+            <tr><td><a href="/sites/details">/sites/details</a></td><td class="apinote">List of Sites (SiteDetail)</td></tr>
+            <tr><td><a href="/sites/713989">/sites/713989</a></td><td class="apinote">Site 713989 (SiteBasic)</td></tr>
+            <tr><td><a href="/sites/713989/availability">/sites/713989/availability</a></td><td class="apinote">Availability info for Site 713989 (SiteAvailability)</td></tr>
+            <tr><td><a href="/sites/713989/details">/sites/713989/details</a></td><td class="apinote">Site 713989 (SiteDetail)</td></tr>
+        </table>
 
-            <li class="two">
-                <h5>Add NuGet packages and jump-start your coding</h5>
-                NuGet makes it easy to install and update free libraries and tools.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245161">Learn more…</a>
-            </li>
-            <li class="three">
-                <h5>Find Web Hosting</h5>
-                You can easily find a web hosting company that offers the right mix of features
-                and price for your applications.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245164">Learn more…</a>
-            </li>
-        </ol>
+        <h2>Supported Querystring Parameters:</h2>
+        The following properties can be used to filter the results returned by the above by adding them to the querystring as parameters.<br />
+        <table>
+            <tr>
+                <th>LocationBasic</th>
+                <th>LocationDetail</th>
+                <th>SiteBasic</th>
+                <th>SiteDetail</th>
+            </tr>
+            <tr style="vertical-align:top;">
+                <td class="apiprop">
+                    LocationId<br />
+                    Title<br />
+                    Street<br />
+                    Street2<br />
+                    City<br />
+                    State<br />
+                    Zip<br />
+                    Country<br />
+                    Longitude<br />
+                    Latitude<br />
+                    OperatingOrganization<br />
+                    OperatingOrganizationPhone<br />
+                    ReservationPhone<br />
+                    TotalReservableSites<br />
+                </td>
+                <td class="apiprop">
+                    ReservationPolocies<br />
+                    AvailabilityStartMonth<br />
+                    AvailabilityStartDay<br />
+                    AvailabilityEndMonth<br />
+                    AvailabilityEndDay<br />
+                    PriceMin<br />
+                    PriceMax<br />
+                    CancellationDaysBeforeReservation<br />
+                </td>
+                <td class="apiprop">
+                    SiteId<br />
+                    LocationId<br />
+                    Type<br />
+                    SiteIdentifier<br />
+                    X<br />
+                    Y<br />
+                </td>
+                <td class="apiprop">
+                    Description<br />
+                    MaxAccomodatingUnits<br />
+                    MinDuration<br />
+                    MaxDuration<br />
+                    AdvancedReservationPeriod<br />
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>Feature Attributes</th>
+            </tr>
+            <tr style="vertical-align:top;">
+                <td class="apiprop">
+                    Equestrian<br />
+                    EquestrianRental<br />
+                    GolfCourse<br />
+                    DiscCourse<br />
+                    Fishing<br />
+                    MiniGolf<br />
+                    BoatLaunch<br />
+                    BoatRentals<br />
+                    MotorBoatsPermitted<br />
+                    WaterSkiing<br />
+                    Skiing<br />
+                </td>
+                <td class="apiprop">
+                    Snowboarding<br />
+                    Marina<br />
+                    KayakCanoeRental<br />
+                    SwimmingPool<br />
+                    SwimmingBeach<br />
+                    PicnicShelters<br />
+                    Playground<br />
+                    MeetingRoom<br />
+                    Campstore<br />
+                    PlayingFields<br />
+                    Tennis<br />
+                </td>
+                <td class="apiprop">
+                    Hiking Trails<br />
+                    MountainBikeTrails<br />
+                    ATVTrails<br />
+                    Restrooms<br />
+                    Showers<br />
+                    HotWater<br />
+                    GuidedPrograms<br />
+                    Restaurant<br />
+                    Amphitheatre<br />
+                    GroupTenting<br />
+                    TentSites<br />
+                </td>
+                <td class="apiprop">
+                    CabinLodging<br />
+                    HotelLodging<br />
+                    PicnicShelterRentals<br />
+                    RVSites<br />
+                    HandicapAccessible<br />
+                    ElectricHookup<br />
+                    SepticHookup<br />
+                    GeneratorsAllowed<br />
+                    GeneratorRules<br />
+                    MaxOccupants<br />
+                    MinOccupants<br />
+                </td>
+                <td class="apiprop">
+                    ParkingSurface<br />
+                    ParkingLevel<br />
+                    ParkingLength<br />
+                    BoatAccessible<br />
+                    HorseAccomodation<br />
+                    Shade<br />
+                    PetsAllowed<br />
+                    SiteType<br />
+                </td>
+            </tr>
+        </table>
+        
+        <h2>Supported Operators:</h2>
+        If no operator is specified, all of the above filter parameters assume an Equality comparison operator.
+        Any of the following operators can be specified by including an operator mnemonic as a suffix to the parameter name, separated by a colon (i.e., parameter:operator=value).<br />
+        <table>
+            <tr>
+                <th>Mnemonic</th>
+                <th>Description</th>
+            </tr>
+            <tr><td>EQ</td>   <td>Equal X</td></tr>
+            <tr><td>EQU</td>  <td>Equal X (alias for EQ)</td></tr>
+            <tr><td>NEQ</td>  <td>Not Equal X</td></tr>
+            <tr><td>GT</td>   <td>Greater Than X</td></tr>
+            <tr><td>NGT</td>  <td>Not Greater Than X (alias for LTE)</td></tr>
+            <tr><td>LT</td>   <td>Less Than X</td></tr>
+            <tr><td>NLT</td>  <td>Not Less Than X (alias for GTE)</td></tr>
+            <tr><td>GTE</td>  <td>Greater Than or Equal X</td></tr>
+            <tr><td>NGTE</td> <td>Not Greater Than or Equal X (alias for LT)</td></tr>
+            <tr><td>LTE</td>  <td>Less Than or Equal X</td></tr>
+            <tr><td>NLTE</td> <td>Not Less Than or Equal X (alias for GT)</td></tr>
+            <tr><td>BTW</td>  <td>Between X, Y</td></tr>
+            <tr><td>NBTW</td> <td>Not Between X, Y</td></tr>
+            <tr><td>IN</td>   <td>In (X, Y, ...)</td></tr>
+            <tr><td>NIN</td>  <td>Not In (X, Y, ...)</td></tr>
+            <tr><td>LIK</td>  <td>Like X (Strings ONLY)</td></tr>
+            <tr><td>NLIK</td> <td>Not Like X (Strings ONLY)</td></tr>
+            <tr><td>CON</td>  <td>Contains X -- Like %X% (Strings ONLY)</td></tr>
+            <tr><td>NCON</td> <td>Not Contains X -- Not Like %X% (Strings ONLY)</td></tr>
+            <tr><td>STA</td>  <td>Starts With X -- Like X% (Strings ONLY)</td></tr>
+            <tr><td>NSTA</td> <td>Not Starts With X -- Not Like X% (Strings ONLY)</td></tr>
+            <tr><td>END</td>  <td>Ends With X -- Like %X (Strings ONLY)</td></tr>
+            <tr><td>NEND</td> <td>Not Ends With X -- Not Like %X (Strings ONLY)</td></tr>
+            <tr><td>NOT</td>  <td>Bit-wise NOT -- & X = 0 (Numbers ONLY)</td></tr>
+            <tr><td>AND</td>  <td>Bit-wise AND -- & X = X (Numbers ONLY)</td></tr>
+            <tr><td>OR</td>   <td>Bit-wise OR -- & X > 0 (Numbers ONLY)</td></tr>
+        </table>
+
+
     </section>
 </div>

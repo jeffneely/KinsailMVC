@@ -27,7 +27,10 @@ namespace KinsailMVC.Models
         STARTSWITH = 15,    // LIKE 'X%'      (Strings ONLY)
         NOTSTARTSWITH = 16, // NOT LIKE 'X%'  (Strings ONLY)
         ENDSWITH = 17,      // LIKE '%X'      (Strings ONLY)
-        NOTENDSWITH = 18    // NOT LIKE '%X'  (Strings ONLY)
+        NOTENDSWITH = 18,   // NOT LIKE '%X'  (Strings ONLY)
+        BITNOT = 19,        // & X = 0        (Numbers ONLY, bit-wise operator, matches if no 1 bits from X are matched)
+        BITAND = 20,        // & X = X        (Numbers ONLY, bit-wise operator, matches if all 1 bits from X are matched)
+        BITOR = 21          // & X > 0        (Numbers ONLY, bit-wise operator, matches if any 1 bits from X are matched)
     }
 
     // classifies data type, so that user input can be validated appropriately
@@ -78,7 +81,10 @@ namespace KinsailMVC.Models
             {"STA",  SqlOperator.STARTSWITH},
             {"NSTA", SqlOperator.NOTSTARTSWITH},
             {"END",  SqlOperator.ENDSWITH},
-            {"NEND", SqlOperator.NOTENDSWITH}
+            {"NEND", SqlOperator.NOTENDSWITH},
+            {"NOT",  SqlOperator.BITNOT},
+            {"AND",  SqlOperator.BITAND},
+            {"OR",   SqlOperator.BITOR}
         };
 
         // map operators to template SQL
@@ -102,7 +108,10 @@ namespace KinsailMVC.Models
             {SqlOperator.STARTSWITH,    "LIKE {0}"},                // "%" char will be inserted in the generation logic
             {SqlOperator.NOTSTARTSWITH, "NOT LIKE {0}"},            // "%" char will be inserted in the generation logic
             {SqlOperator.ENDSWITH,      "LIKE {0}"},                // "%" char will be inserted in the generation logic
-            {SqlOperator.NOTENDSWITH,   "NOT LIKE {0}"}             // "%" char will be inserted in the generation logic
+            {SqlOperator.NOTENDSWITH,   "NOT LIKE {0}"},            // "%" char will be inserted in the generation logic
+            {SqlOperator.BITNOT,        "& {0} = 0"},               // 
+            {SqlOperator.BITAND,        "& {0} = {0}"},             // 
+            {SqlOperator.BITOR,         "& {0} > 0"}                // 
         };
 
         // Ctors
@@ -211,6 +220,9 @@ namespace KinsailMVC.Models
                 case SqlOperator.NOTSTARTSWITH:
                 case SqlOperator.ENDSWITH:
                 case SqlOperator.NOTENDSWITH:
+                case SqlOperator.BITNOT:
+                case SqlOperator.BITAND:
+                case SqlOperator.BITOR:
                     values.Add(value);
                     break;
 

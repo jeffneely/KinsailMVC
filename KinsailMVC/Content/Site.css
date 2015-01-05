@@ -754,3 +754,12 @@ tr.pager td {
             margin: 0;
         }
 }
+
+.apinote {
+    color: #990000;
+    font-style: italic;
+}
+
+.apiprop {
+    padding-left: 10px;
+}
