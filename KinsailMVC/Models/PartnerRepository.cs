@@ -69,5 +69,4 @@ namespace KinsailMVC.Models
             return true;
         }
     }
-
 }

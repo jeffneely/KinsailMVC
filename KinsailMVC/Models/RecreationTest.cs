@@ -1,5 +1,4 @@
-﻿using ExpressionEvaluator;
-using Microsoft.CSharp;
+﻿using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -13,44 +12,44 @@ namespace KinsailMVC.Models
 
 class RecreationServerTestHarness :  RecreationServer {
     
-     FeatureAttribute<Boolean>[] locationAttributes  = new FeatureAttribute<Boolean>[] {
-        new FeatureAttribute<Boolean> ("Equestrian", false),
-        new FeatureAttribute<Boolean>("equestrianRental", false),
-        new FeatureAttribute<Boolean>("golfCourse",false), //Has a golf course
-        new FeatureAttribute<Boolean>("discCourse",false), //Has a disc golf course
-        new FeatureAttribute<Boolean>("fishing",false), //Has opportunities to fish
-        new FeatureAttribute<Boolean>("miniGolf",false), //Has a minigolf course
-        new FeatureAttribute<Boolean>("boatLaunch",false), //Has a boat launch
-        new FeatureAttribute<Boolean>("boatRentals",false), //Has boat rentals
-        new FeatureAttribute<Boolean>("motorBoatsPermitted",false), //Boats with gasoline engines are permitted
-        new FeatureAttribute<Boolean>("waterSkiing",false), //Water feature supports water skiing.
-        new FeatureAttribute<Boolean>("skiing",false), //Has skiing slope. 
-        new FeatureAttribute<Boolean>("snowboarding",false), //Has snowboarding slope
-        new FeatureAttribute<Boolean>("marina",false),  //Has a Marina
-        new FeatureAttribute<Boolean>("kayakOrCanoeRentals",false), //Rents Kayaks or Canoes
-        new FeatureAttribute<Boolean>("swimmingPool",false), //Has a swimming pool
-        new FeatureAttribute<Boolean>("swimmingBeach",false), //Has a beach and swimming in a natural water feature
-        new FeatureAttribute<Boolean>("picnicShelters",false), //Has picnic shelters
-        new FeatureAttribute<Boolean>("playground",false), //Has a playgound
-        new FeatureAttribute<Boolean>("meetingRoom",false), //Has a common/shared meeting room
-        new FeatureAttribute<Boolean>("campStore",false), //Has a camp store
-        new FeatureAttribute<Boolean>("playingFields",false), //has large fields for baseball/football/soccer
-        new FeatureAttribute<Boolean>("tennis",false), //Has tennis courts
-        new FeatureAttribute<Boolean>("hikingTrails",false), //Has hiking trails
-        new FeatureAttribute<Boolean>("mountainBikeTrails",false), //Has mountain biking trails
-        new FeatureAttribute<Boolean>("atvTrail",false), //Has ATV Trail riding
-        new FeatureAttribute<Boolean>("restrooms",false), //Location supports enclosed restrooms
-        new FeatureAttribute<Boolean>("showers",false), //Location has showers
-        new FeatureAttribute<Boolean>("hotwater",false), //Location supports hot water of some sort
-        new FeatureAttribute<Boolean>("guidedPrograms",false), //location has programs guided by someone. Eg guided hikes, wildlife programs, etc
-        new FeatureAttribute<Boolean>("resturant",false), //The location has a resturant/cafe with prepared foods
-        new FeatureAttribute<Boolean>("ampitheatre",false), //The location has a ampitheatre
-        new FeatureAttribute<Boolean>("groupTenting",false), //Has group camping sites
-        new FeatureAttribute<Boolean>("tentSites",false), //Has sites for tents
-        new FeatureAttribute<Boolean>("cabinLodging",false), //Has cabins for rent
-        new FeatureAttribute<Boolean>("hotelLodging",false), //Has lodging in a hotel type of facility
-        new FeatureAttribute<Boolean>("picnicShelterRentals",false), // can rent picnic shelters
-        new FeatureAttribute<Boolean>("recreationalVehicleSites",false) //location has sites for RVs
+     FeatureAttribute<object>[] locationAttributes  = new FeatureAttribute<object>[] {
+        new FeatureAttribute<object> ("Equestrian", false),
+        new FeatureAttribute<object>("equestrianRental", false),
+        new FeatureAttribute<object>("golfCourse",false), //Has a golf course
+        new FeatureAttribute<object>("discCourse",false), //Has a disc golf course
+        new FeatureAttribute<object>("fishing",false), //Has opportunities to fish
+        new FeatureAttribute<object>("miniGolf",false), //Has a minigolf course
+        new FeatureAttribute<object>("boatLaunch",false), //Has a boat launch
+        new FeatureAttribute<object>("boatRentals",false), //Has boat rentals
+        new FeatureAttribute<object>("motorBoatsPermitted",false), //Boats with gasoline engines are permitted
+        new FeatureAttribute<object>("waterSkiing",false), //Water feature supports water skiing.
+        new FeatureAttribute<object>("skiing",false), //Has skiing slope. 
+        new FeatureAttribute<object>("snowboarding",false), //Has snowboarding slope
+        new FeatureAttribute<object>("marina",false),  //Has a Marina
+        new FeatureAttribute<object>("kayakOrCanoeRentals",false), //Rents Kayaks or Canoes
+        new FeatureAttribute<object>("swimmingPool",false), //Has a swimming pool
+        new FeatureAttribute<object>("swimmingBeach",false), //Has a beach and swimming in a natural water feature
+        new FeatureAttribute<object>("picnicShelters",false), //Has picnic shelters
+        new FeatureAttribute<object>("playground",false), //Has a playgound
+        new FeatureAttribute<object>("meetingRoom",false), //Has a common/shared meeting room
+        new FeatureAttribute<object>("campStore",false), //Has a camp store
+        new FeatureAttribute<object>("playingFields",false), //has large fields for baseball/football/soccer
+        new FeatureAttribute<object>("tennis",false), //Has tennis courts
+        new FeatureAttribute<object>("hikingTrails",false), //Has hiking trails
+        new FeatureAttribute<object>("mountainBikeTrails",false), //Has mountain biking trails
+        new FeatureAttribute<object>("atvTrail",false), //Has ATV Trail riding
+        new FeatureAttribute<object>("restrooms",false), //Location supports enclosed restrooms
+        new FeatureAttribute<object>("showers",false), //Location has showers
+        new FeatureAttribute<object>("hotwater",false), //Location supports hot water of some sort
+        new FeatureAttribute<object>("guidedPrograms",false), //location has programs guided by someone. Eg guided hikes, wildlife programs, etc
+        new FeatureAttribute<object>("resturant",false), //The location has a resturant/cafe with prepared foods
+        new FeatureAttribute<object>("ampitheatre",false), //The location has a ampitheatre
+        new FeatureAttribute<object>("groupTenting",false), //Has group camping sites
+        new FeatureAttribute<object>("tentSites",false), //Has sites for tents
+        new FeatureAttribute<object>("cabinLodging",false), //Has cabins for rent
+        new FeatureAttribute<object>("hotelLodging",false), //Has lodging in a hotel type of facility
+        new FeatureAttribute<object>("picnicShelterRentals",false), // can rent picnic shelters
+        new FeatureAttribute<object>("recreationalVehicleSites",false) //location has sites for RVs
      };
 
     
@@ -99,7 +98,10 @@ class RecreationServerTestHarness :  RecreationServer {
 
     SiteDetail[] sites;
 
-    public RecreationServerTestHarness () {
+    Random random = new Random();
+    
+    public RecreationServerTestHarness()
+    {
         this.location = this.getRandomLocation();
         this.activities = this.getRandomActivities();
         this.reviews = this.getRandomReviews();
@@ -110,7 +112,8 @@ class RecreationServerTestHarness :  RecreationServer {
         }
     }
     
-    public void getSiteAvailability(Query<SiteAvailabilityCriteria> query, ASyncReply<QueryResults<SiteAvailability>> results) {
+
+   public void getSiteAvailability(Query<SiteAvailabilityCriteria> query, QueryResults<SiteAvailability> results) {
         DateTime  sdate = query.criteria.startDate;
         if (sdate == null) {
             sdate = DateTime.Now;
@@ -123,32 +126,29 @@ class RecreationServerTestHarness :  RecreationServer {
 
         QueryResults<SiteAvailability> res = new QueryResults<SiteAvailability>();
 
-        if (query.criteria.siteObjectId != null) {
+        if (query.criteria.siteId != null) {
             res.startRow = 0;
-            res.totalRecords = 1;
-            res.results[0] = this.genSiteAvailability(query.criteria.locationObjectId,query.criteria.siteObjectId, sdate, edate);
+            res.totalRows = 1;
+            res.results[0] = this.genSiteAvailability(query.criteria.locationId,query.criteria.siteId, sdate, edate);
         } else {
             res.startRow = query.startRow;
             res.results = new SiteAvailability[query.rowCount + 1];
             for (int i = 0; i < query.rowCount; i++) {
                 SiteDetail objSite = (SiteDetail)getRandomArrayValue(this.sites);
-                res.results[i] = this.genSiteAvailability(query.criteria.locationObjectId, objSite.objectId, sdate, edate) ;
+                res.results[i] = this.genSiteAvailability(query.criteria.locationId, objSite.siteId, sdate, edate) ;
             }
-            res.totalRecords = this.sites.Length;
+            res.totalRows = this.sites.Length;
         }
-
-        results.success = res;
-
     }
 
     /**
      * Searches the Sites collection for a matching SiteID and returns the corresponding SiteDetail record
      */
-    private SiteDetail findSite(Int64 siteId){
+    private SiteDetail findSite(long siteId){
 
         for (int i= 0; i < this.sites.Length; i++) {
             SiteDetail s = this.sites[i];
-            if (s.objectId == siteId) {
+            if (s.siteId == siteId) {
                 return s;
             }
         }
@@ -159,11 +159,11 @@ class RecreationServerTestHarness :  RecreationServer {
     /**
      * Generates a random SiteAvailabiltiy object
      */
-    public SiteAvailability genSiteAvailability(Int64 locationObjectId, Int64 siteObjectId, DateTime startDate, DateTime endDate) {
+    public SiteAvailability genSiteAvailability(long locationId, long siteId, DateTime startDate, DateTime endDate) {
          SiteAvailability sa = new SiteAvailability();
-        SiteDetail detail = this.findSite(siteObjectId);
-        sa.locationObjectId = locationObjectId;
-        sa.objectId = siteObjectId;
+        SiteDetail detail = this.findSite(siteId);
+        sa.locationId = locationId;
+        sa.siteId = siteId;
         sa.coords = detail.coords;
         sa.siteIdentifier = detail.siteIdentifier;
         sa.type = detail.type;
@@ -192,7 +192,8 @@ class RecreationServerTestHarness :  RecreationServer {
         return notAvail;
     }
 
-    public void getLocationGallery( Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback) {
+
+    public void getLocationGallery(Query<long> query, QueryResults<GalleryImage> callback) {
         int total= getRandom(0, this.locationImages.Length);
         GalleryImage[] imgs  = new GalleryImage[total + 1];
         for (int  i= 0; i < total; i++) {
@@ -200,18 +201,16 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<GalleryImage> qr = new QueryResults<GalleryImage>();
         qr.startRow = query.startRow;
-        qr.totalRecords = imgs.Length;
+        qr.totalRows = imgs.Length;
         qr.results = imgs;
-
-        callback.success = qr;
     }
 
     
-    public void getSiteGallary(Query<Int64> query, ASyncReply<QueryResults<GalleryImage>> callback) {
+    public void getSiteGallery(Query<Int64> query, QueryResults<GalleryImage> callback) {
         this.getLocationGallery(query, callback);
     }
 
-    public void filterSitesByExample(Query<SiteDetail> query, DateTime reservationStart, DateTime reservationEnd,  ASyncReply<QueryResults<SiteDetail>> callback){
+    public void filterSitesByExample(Query<SiteDetail> query, DateTime reservationStart, DateTime reservationEnd,  QueryResults<SiteDetail> callback){
         
         int rnd = getRandom(0, this.sites.Length);
         SiteDetail[]  filtered = new SiteDetail[rnd + 1];
@@ -223,21 +222,18 @@ class RecreationServerTestHarness :  RecreationServer {
          QueryResults<SiteDetail> qr = new QueryResults<SiteDetail>();
         qr.results = filtered;
         qr.startRow = 0;
-        qr.totalRecords = filtered.Length;
-        callback.success = qr;
-
+        qr.totalRows = filtered.Length;
     }
 
     /**
-     * Returns SiteDetail object which contains much more information about a given site
+    * Returns SiteDetail object which contains much more information about a given site
     */
-    public void getSiteDetail(Int64 siteObjectId, ASyncReply<SiteDetail> callback)
+    public void getSiteDetail(Int64 siteObjectId, SiteDetail site)
     {
-        callback.success = (SiteDetail)getRandomArrayValue(this.sites);
+        //callback.success = (SiteDetail)getRandomArrayValue(this.sites);
     }
 
-
-    public void getActivities(Query<Activity> query,  ASyncReply<QueryResults<Activity>> callback) {
+    public void getActivities(Query<Activity> query, QueryResults<Activity> callback) {
         Activity[] page = new Activity[query.startRow + query.rowCount + 1];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -245,12 +241,11 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<Activity> qr = new QueryResults<Activity>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void getReviews(Query<Review> query, ASyncReply<QueryResults<Review>> callback) {
+    public void getReviews(Query<Review> query, QueryResults<Review> callback) {
         Review[] page = new Review[query.startRow + query.rowCount + 1];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -258,12 +253,11 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<Review> qr = new QueryResults<Review>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void getEvents(Query<EventDetail> query, ASyncReply<QueryResults<EventDetail>> callback) {
+    public void getEvents(Query<EventDetail> query, QueryResults<EventDetail> callback) {
         EventDetail[] page = new EventDetail[query.startRow + query.rowCount];
         int idx = 0;
         for (int i = query.startRow; i < (query.startRow + query.rowCount); i++) {
@@ -271,20 +265,17 @@ class RecreationServerTestHarness :  RecreationServer {
         }
         QueryResults<EventDetail> qr = new QueryResults<EventDetail>();
         qr.startRow = query.startRow;
-        qr.totalRecords = this.activities.Length;
+        qr.totalRows = this.activities.Length;
         qr.results = page;
-        callback.success = qr;
     }
 
-    public void makeReservation(ItineraryCart intinerary, ASyncReply<ReservationResults> callback) {
-        ReservationResults rr = new ReservationResults();
+    public void makeReservation(ItineraryCart intinerary, ReservationResult callback) {
+        ReservationResult rr = new ReservationResult();
         rr.paymentUrl = "http://www.kinsail.com";
         rr.success = true;
-
-        callback.success = rr;
     }
 
-    private  EventDetail[] getRandomEvents() {
+    private EventDetail[] getRandomEvents() {
         EventDetail[] evts   = new EventDetail[500];
         for (int i = 0; i < 500; i++) {
             evts[i] = this.genEvent();
@@ -328,7 +319,7 @@ class RecreationServerTestHarness :  RecreationServer {
         RecUser r = new RecUser();
         r.firstName = getRandomArrayValue(names).ToString();
         r.lastName = getRandomArrayValue(names).ToString();
-        r.objectId = genNumber(1, 1000);
+        r.userId = genNumber(1, 1000);
         r.profilePicture = new GalleryImage();
         r.profilePicture = (GalleryImage)getRandomArrayValue(this.locationImages);
         r.userName = getRandomArrayValue(names).ToString();
@@ -358,6 +349,7 @@ class RecreationServerTestHarness :  RecreationServer {
     public LocationDetail getRandomLocation()  {
 
         LocationDetail  loc = new LocationDetail();
+
         Address addr  = new Address();
         addr.city = genString(50);
         addr.latitude = float.Parse(genNumber(0, 99) + "." + genNumber(1000000, 9999999));
@@ -367,19 +359,26 @@ class RecreationServerTestHarness :  RecreationServer {
         String zip = ("0000" + genNumber(0, 99999));
         addr.zip = zip.Substring(zip.Length - 5);
         loc.address = addr;
+
         loc.availabilityEndDay = 31;
         loc.availabilityEndMonth = 12;
         loc.availabilityStartDay = 1;
         loc.availabilityStartMonth = 1;
-        loc.banner = new GalleryImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
         loc.cancellationDaysBeforeReservation = 5;
+
         loc.features = this.getRandomLocationAttributes();
+
+        loc.banner = new BannerImage("http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg", "http://upload.wikimedia.org/wikipedia/commons/e/ed/1956_LK_Campsite_on_George_River_%28pano%29.jpg");
         loc.image = new GalleryImage("http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg", "http://1.bp.blogspot.com/-xBnfvrtsZLE/TcANtMhh-sI/AAAAAAAAC2Y/VHuBcpZcN90/s640/P1100300+sign.jpg");
+
         loc.mapTilesBaseURL = "";//TODO:
+
         loc.operatingOrganization = genString(35);
         loc.operatingOrganizationPhone = genNumber(100, 999) + "-" + genNumber(100, 999) + "-" + genNumber(1000, 9999);
+
         loc.priceMin = genNumber(5, 10);
         loc.priceMax = genNumber(loc.priceMin, 35);
+
         loc.reservationPhone = genNumber(100, 999) + "-" + genNumber(100, 999) + "-" + genNumber(1000, 9999);
         loc.reservationPolicies = genString(1000);
         loc.title = genString(35);
@@ -392,7 +391,7 @@ class RecreationServerTestHarness :  RecreationServer {
          SiteDetail detail = new SiteDetail();
         
 
-        detail.objectId = this.sites.Length;
+        detail.siteId = this.sites.Length;
 
         //detail.objectId = getRandom(1, 100);
         detail.advancedReservationPeriod = getRandom(2, 15);
@@ -404,19 +403,19 @@ class RecreationServerTestHarness :  RecreationServer {
         detail.minDuration = getRandom(1, 3);
         detail.maxDuration = getRandom(detail.minDuration, detail.minDuration + 10);
         detail.siteIdentifier = genString(3) + getRandom(100, 999);
-        detail.type = this.getRandomSiteType();
+        detail.type = (int)this.getRandomSiteType();  // TEMP - converted property to int
         detail.features = this.getRandomSiteAttributes();
 
         return detail;
     }
 
-    private FeatureAttribute<Boolean>[] getRandomLocationAttributes() {
+    private FeatureAttribute<object>[] getRandomLocationAttributes() {
 
         int rnd = getRandom(0, this.locationAttributes.Length);
-        FeatureAttribute<Boolean>[] attrs = new FeatureAttribute<Boolean>[rnd];
+        FeatureAttribute<object>[] attrs = new FeatureAttribute<object>[rnd];
       
         for (int  i= 0; i < rnd; i++) {
-            attrs[i] = (FeatureAttribute<Boolean>)getRandomArrayValue(this.locationAttributes);
+            attrs[i] = (FeatureAttribute<object>)getRandomArrayValue(this.locationAttributes);
 
             //if (attrs[i].value.GetType() ==  typeof( Boolean)) {
                 attrs[i].value = genBool().ToString();
@@ -677,8 +676,7 @@ String fillString(string input){
  */
 public int getRandom(int min, int max){
 
-    Random objRandom = new Random();
-    return objRandom.Next(min, max);
+    return random.Next(min, max);
     //return Math.Floor(Math.random() * (max - min + 1)) + min;
 }
 

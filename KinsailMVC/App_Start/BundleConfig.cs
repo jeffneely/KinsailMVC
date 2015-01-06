@@ -38,6 +38,14 @@ namespace KinsailMVC
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+        
+        bundles.Add(new StyleBundle("~/bundles/BootstrapCss").Include(
+                   "~/Content/bootstrap.css"
+                   , "~/Content/bootstrap-theme.css"
+                   ));
+
+
+
         }
     }
 }

@@ -1,0 +1,65 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KinsailMVC.master.cs" Inherits="KinsailMVC.KinsailMVC" %>
+
+<%@ Import Namespace="System.Web.Optimization" %>
+<!DOCTYPE html>
+<html lang="en">
+<head id="Head1" runat="server">
+    <title>::Kinsail MVC Administrator::</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kinsail MVC Project">
+    
+    <%-- Style Section --%>
+    <%: Styles.Render("~/bundles/BootstrapCss")  %>
+    <asp:ContentPlaceHolder ID="StyleSection" runat="server" />
+</head>
+<body>
+    <%--<form id="form1" runat="server">--%>
+    <div class="container">
+        <!-- Static navbar -->
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Kinsail MVC</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <span class="caret">
+                            </span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Site Basic</a></li>
+                                <li><a href="#">Site Detail</a></li>
+                                
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="./">Default</a></li>
+                        
+                        <li><a href="../navbar-fixed-top/">Log Out</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!--/.container-fluid -->
+        </div>
+        <!-- Content Page Section -->
+    </div>
+ 
+                   <asp:ContentPlaceHolder ID="ContentSection" runat="server">
+            </asp:ContentPlaceHolder>
+        
+    <!-- /container -->
+    
+    <asp:ContentPlaceHolder ID="ScriptSection" runat="server" />
+    <%--</form>--%>
+</body>
+</html>
