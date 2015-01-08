@@ -5,11 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Http;
 using AttributeRouting.Web.Http;
+using KinsailMVC.Models;
 
 namespace KinsailMVC.Controllers
 {
-    using KinsailMVC.Models;
-
+    
     //using System.Web.Http.Cors;
     //[EnableCors("*", "*", "*")]  // EnableCors(OriginDomainAllowed, RequireHeader, AcceptVerbs)
     
@@ -93,31 +93,31 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
-        [POST("sites")]
+        [POST("Addsites")]
         public void AddSite([FromBody]string value)
         {
             //TODO: add method to SiteRepository for adding a SiteBasic
         }
 
-        [POST("sites/details")]
+        [POST("Addsites/details")]
         public void AddSiteDetail([FromBody]string value)
         {
             //TODO: add method to SiteRepository for adding a SiteDetail
         }
 
-        [PUT("sites")]
+        [PUT("Updsites")]
         public void UpdateSite(long idSite, [FromBody]string value)
         {
             //TODO: add method to SiteRepository for updating a SiteBasic
         }
 
-        [PUT("sites")]
+        [PUT("UpdsitesDet")]
         public void UpdateSiteDetail(long idSite, [FromBody]string value)
         {
             //TODO: add method to SiteRepository for updating a SiteDetail
         }
 
-        [DELETE("sites")]
+        [DELETE("Delsites")]
         public void Delete(long siteId)
         {
             //TODO: add method to SiteRepository for deleting a site

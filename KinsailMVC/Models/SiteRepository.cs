@@ -511,5 +511,18 @@ namespace KinsailMVC.Models
             return s.ToString();
         }
 
+        
+        /// <summary>
+        /// Insert a basic Site in database
+        /// </summary>
+        /// <param name="objSite"></param>
+        public void AddSite(SiteBasic objSite)
+        {
+            var sql = NPoco.Sql.Builder
+                .Append(selectSiteBasic)
+                .Append(fromJoinSiteBasic, siteTypeFeatureId, galleryImageTypeId)
+                .Append(whereSites, siteItemTypeId, locationItemTypeId);
+        }
+
     }
 }

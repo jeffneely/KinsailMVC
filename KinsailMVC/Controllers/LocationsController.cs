@@ -4,11 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using AttributeRouting.Web.Http;
+using KinsailMVC.Models;
+
 
 namespace KinsailMVC.Controllers
 {
-    using KinsailMVC.Models;
-
+    
     public class LocationsController : ApiController
     {
         static readonly LocationRepository repository = new LocationRepository();
