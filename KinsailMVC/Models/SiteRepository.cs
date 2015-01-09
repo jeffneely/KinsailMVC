@@ -248,7 +248,7 @@ namespace KinsailMVC.Models
             // any URI filter parameters to add to the query?
             if (queryParams != null)
             {
-                sql = sql.Append(generateFilterClauses(queryParams, false, false));
+                sql = sql.Append(generateFilterClauses(queryParams, false, true));
             }
 
             sql = sql.Append(orderSites);
@@ -268,7 +268,7 @@ namespace KinsailMVC.Models
             // any URI filter parameters to add to the query?
             if (queryParams != null)
             {
-                sql = sql.Append(generateFilterClauses(queryParams, false, false));
+                sql = sql.Append(generateFilterClauses(queryParams, false, true));
             }
 
             sql = sql.Append(orderSites);

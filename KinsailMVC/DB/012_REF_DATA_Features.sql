@@ -746,3 +746,199 @@ INSERT INTO [dbo].[Features]
             'The type of recreation site',
             1)
 GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Drinking Water Fountains',
+            'drinkingWaterFountains',
+            'Drinking water fountains are available',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Drinking Water Fountains',
+            'chemicalToilets',
+            'Chemical toilet facilities are available',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Trash Dumpsters',
+            'trashDumpsters',
+            'Trash dumpsters are available for the disposal of refuse',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'String'),
+		    'Animal Warning',
+            'animalsWarning',
+            'Warning, animals may be present at this location',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Trash Dumpsters',
+            'publicTelephones',
+            'Publicly-accessible telephones are available',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Visitor Parking',
+            'visitorParking',
+            'Visitor parking is available at this location',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Sanitary Dump Station',
+            'sanitaryDumpStation',
+            'A sanitary dump station is available for the disposal of sewage and other effluent',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Integer'),
+		    'Parking Capacity',
+            'parkingCapcity',
+            'Number of vehicles that may park at this site',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Electricity',
+            'electricity',
+            'Electrical outlets are available',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Shelter',
+            'shelter',
+            'A shelter is available at this site',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Table',
+            'table',
+            'One or more tables are available at this site',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Fire Ring/Grate',
+            'fireRingGrate',
+            'A fire ring or grate is available at this site',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Section',
+            'section',
+            'Section, area or neighborhood within the location',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
+		    'Reservable',
+            'reservable',
+            'This site is reservable in advance',
+            1)
+GO
