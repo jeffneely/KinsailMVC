@@ -109,9 +109,9 @@ namespace KinsailMVC.Models
             {SqlOperator.NOTSTARTSWITH, "NOT LIKE {0}"},            // "%" char will be inserted in the generation logic
             {SqlOperator.ENDSWITH,      "LIKE {0}"},                // "%" char will be inserted in the generation logic
             {SqlOperator.NOTENDSWITH,   "NOT LIKE {0}"},            // "%" char will be inserted in the generation logic
-            {SqlOperator.BITNOT,        "& {0} = 0"},               // 
-            {SqlOperator.BITAND,        "& {0} = {0}"},             // 
-            {SqlOperator.BITOR,         "& {0} > 0"}                // 
+            {SqlOperator.BITNOT,        "& {0} = 0"},               
+            {SqlOperator.BITAND,        "& {0} = {0}"},             
+            {SqlOperator.BITOR,         "& {0} > 0"}                
         };
 
         // Ctors
@@ -268,12 +268,24 @@ namespace KinsailMVC.Models
 
                 case CriteriaType.DATE:  // need to parse the value string to see if it can be converted to a date
                     DateTime date;
-                    foreach (string v in values)
+                    for (int i = 0; i < values.Count; i++)
+                        //foreach (string v in values)
                     {
-                        if (v == "")
+                        if (values[i] == "")
                             throw new ArgumentException("Missing criteria data value.");
-                        if (!DateTime.TryParseExact(v, "D", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
-                            throw new ArgumentException("Invalid data value: " + v + ". Could not be interpretted as a date.");
+                        // The "d" short-date format specifier supposedly accepts dates in any of the following formats:
+                        //   M/d/yyyy 
+                        //   M/d/yy 
+                        //   MM/dd/yy 
+                        //   MM/dd/yyyy 
+                        //   yy/MM/dd 
+                        //   yyyy-MM-dd <-- but can't seem to parse this, so adding a separate check to the logic below
+                        //   dd-MMM-yy
+                        if (!DateTime.TryParseExact(values[i], "d", CultureInfo.CurrentCulture, DateTimeStyles.None, out date) &
+                            !DateTime.TryParseExact(values[i], "yyyy-MM-dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
+                            throw new ArgumentException("Invalid data value: " + values[i] + ". Could not be interpretted as a date.");
+
+                        values[i] = "'" + values[i] + "'";  // surround date values with quotes
                     }
                     break;
 
@@ -300,6 +312,9 @@ namespace KinsailMVC.Models
                     case SqlOperator.NOTIN:
                     case SqlOperator.LIKE:
                     case SqlOperator.NOTLIKE:
+                    case SqlOperator.BITNOT:
+                    case SqlOperator.BITAND:
+                    case SqlOperator.BITOR:
                         break;
                         
                     case SqlOperator.CONTAINS:

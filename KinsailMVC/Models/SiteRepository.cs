@@ -85,7 +85,18 @@ namespace KinsailMVC.Models
         private static string andWhereSiteHasFeatures_post =
             "                           )" + br +
             "                     GROUP BY i.ItemID" + br +
-            "                    HAVING COUNT(f.FeatureID) >= {0})";
+            "                    HAVING COUNT(f.FeatureID) >= {0})" + br;
+
+        // SQL WHERE fragment for Site Reservations (prefix)
+        private static string andWhereSiteReserved_pre =
+            "   AND i.ItemID NOT IN (SELECT i.ItemID" + br +
+            "                          FROM Items i" + br +
+            "                          JOIN ReservationResources rr ON i.ItemID = rr.ItemID" + br +
+            "                         WHERE i.ItemTypeID = {0}" + br;
+
+        // SQL WHERE fragment for Site Reservations (suffix)
+        private static string andWhereSiteReserved_post =
+            "                         GROUP BY i.ItemID, i.Name)" + br;
 
         // SQL WHERE fragment for Sites
         private static string whereSites =
@@ -174,6 +185,13 @@ namespace KinsailMVC.Models
             {"advancedreservationperiod", new SqlCriteria("av.AdvancedReservationPeriod", CriteriaType.NUMBER, SqlOperator.EQUAL)},
         };
 
+        // map Reservation properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapSiteReservationProps = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                                     column              data type          default operator
+            {"availablestartdate",        new SqlCriteria("rr.StartDateTime", CriteriaType.DATE, SqlOperator.GREATER)},  // find start dates greater than VALUE
+            {"availableenddate",          new SqlCriteria("rr.EndDateTime",   CriteriaType.DATE, SqlOperator.LESSEQUAL)} // find end dates less than or equal to value
+        };
 
         public SiteRepository()
         {
@@ -274,7 +292,7 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
-            Debug.Print(sql.SQL);
+            //Debug.Print(sql.SQL);
 
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
@@ -419,6 +437,7 @@ namespace KinsailMVC.Models
         {
             Dictionary<string, SqlCriteria> filterProperties = new Dictionary<string, SqlCriteria>();
             Dictionary<string, SqlCriteria> filterFeatures = new Dictionary<string, SqlCriteria>();
+            Dictionary<string, SqlCriteria> filterReserved = new Dictionary<string, SqlCriteria>();
             Dictionary<string, SqlCriteria> filterOther = new Dictionary<string, SqlCriteria>();
             StringBuilder s = new StringBuilder();
 
@@ -455,7 +474,7 @@ namespace KinsailMVC.Models
                     // inject the user-supplied data value(s) into the copied criteria
                     filterProperties[columnPart].value = item.Value;
 
-                    Debug.Print("Find sites WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                    //Debug.Print("Find sites WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
                 }
                 else
                 {
@@ -474,14 +493,33 @@ namespace KinsailMVC.Models
                         // inject the user-supplied data value(s) into the copied criteria
                         filterFeatures[columnPart].value = item.Value;
 
-                        Debug.Print("Find sites WHERE feature [FeatureID=" + allFeatures[item.Key].id + "]: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                        //Debug.Print("Find sites WHERE feature [FeatureID=" + allFeatures[item.Key].id + "]: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
                     }
-                    else  // parameter does not match a property or feature
+                    else 
                     {
-                        op = SqlCriteria.getOperator(operatorPart);
-                        filterOther.Add(columnPart, new SqlCriteria(columnPart, CriteriaType.TEXT, SqlCriteria.getOperator(operatorPart), item.Value));
+                        if (mapSiteReservationProps.ContainsKey(columnPart))  // is the parameter name a property of a Reservation object?
+                        {
+                            filterReserved.Add(columnPart, mapSiteReservationProps[columnPart].clone());
 
-                        Debug.Print("Ignoring unknown parameter: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                            // override the default operator, if the user has specified one
+                            op = SqlCriteria.getOperator(operatorPart);
+                            if (op != SqlOperator.NONE)
+                            {
+                                filterReserved[columnPart].oper = op;
+                            }
+
+                            // inject the user-supplied data value(s) into the copied criteria
+                            filterReserved[columnPart].value = item.Value;
+
+                            //Debug.Print("Find sites WHERE not reserved: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                        }
+                        else // parameter does not match a property or feature
+                        {
+                            op = SqlCriteria.getOperator(operatorPart);
+                            filterOther.Add(columnPart, new SqlCriteria(columnPart, CriteriaType.TEXT, SqlCriteria.getOperator(operatorPart), item.Value));
+
+                            //Debug.Print("Ignoring unknown parameter: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                        }
                     }
                 }
             }
@@ -489,7 +527,7 @@ namespace KinsailMVC.Models
             // generate WHERE clauses for properties
             foreach (var criteria in filterProperties)
             {
-                s.AppendFormat("   AND " + criteria.Value.getSql());
+                s.AppendFormat("   AND " + criteria.Value.getSql() + br);
             }
 
             // generate WHERE clauses for features
@@ -505,6 +543,17 @@ namespace KinsailMVC.Models
                     }
                 }
                 s.AppendFormat(andWhereSiteHasFeatures_post, filterFeatures.Count);
+            }
+
+            // generate WHERE clauses for reservation properties
+            if (filterReserved.Count > 0)
+            {
+                s.AppendFormat(andWhereSiteReserved_pre, siteItemTypeId);
+                foreach (var criteria in filterReserved)
+                {
+                    s.AppendFormat("                           AND " + criteria.Value.getSql() + br);
+                }
+                s.AppendFormat(andWhereSiteReserved_post);
             }
 
             //Debug.Print(s.ToString());
