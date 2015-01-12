@@ -20,6 +20,13 @@
 
         $(document).ready(function () {
 
+            $("#form1").submit(function () {
+                $.post("/sites/AddSite", $("#form1").serialize(), function (msg) {
+                    alert(msg);
+                });
+            });
+            
+
             $('#btnAdd').click(function (e) {
                 e.preventDefault();
                 ShowModal();
@@ -30,6 +37,13 @@
             });
 
         });
+
+
+
+
+        
+ 
+        
 
         function CloseModal(msg) {
             $('#myModal').modal('hide');
@@ -48,6 +62,10 @@
     
 </head>
 <body>
+
+
+
+    <form id="form1" runat="server" method="post" >
 
 
         <div class="container">
@@ -83,6 +101,8 @@
 
     </ul>
   </div><!-- /.navbar-collapse -->
+                <asp:ScriptManager ID="ScriptManager1" runat="server">
+                </asp:ScriptManager>
   </nav>
 
             
@@ -91,7 +111,6 @@
 
 
 
-    <form id="form1" runat="server">
 <!-- Button to trigger modal -->
 <div>
         <div>
@@ -110,9 +129,26 @@
                <asp:Label ID="lblError" runat="server" Text="" CssClass="error"></asp:Label>
 
                             <asp:GridView ID="dgSites" runat="server" EmptyDataText="No Record"
-                                         class="table table-striped table-bordered table-condensed" AllowPaging="True" OnPageIndexChanged="dgSites_PageIndexChanged" OnPageIndexChanging="dgSites_PageIndexChanging">
+                                         class="table table-striped table-bordered table-condensed" AllowPaging="True" OnPageIndexChanged="dgSites_PageIndexChanged" OnPageIndexChanging="dgSites_PageIndexChanging" OnRowCommand="dgSites_RowCommand">
+                                <Columns>
+                                    <asp:ButtonField CommandName="detail" ControlStyle-CssClass="btn btn-info"    ButtonType="Button" Text="Detail" HeaderText="Detailed View">
+                                    </asp:ButtonField>
+
+                                    <asp:ButtonField CommandName="editRecord" ControlStyle-CssClass="btn btn-info" ButtonType="Button" Text="Edit" HeaderText="Edit Record">
+
+                                    </asp:ButtonField>
+
+                                    <asp:ButtonField CommandName="deleteRecord" ControlStyle-CssClass="btn btn-info" ButtonType="Button" Text="Delete" HeaderText="Delete Record">
+
+                                    </asp:ButtonField>
+
+
+
+                                </Columns>
                                 
                             </asp:GridView>
+
+                            
 
                             </div>
                          </div>
@@ -160,7 +196,7 @@
           <tr>
               <td>Image:</td>
               <td>
-                  <asp:DropDownList ID="ddlImage" runat="server"></asp:DropDownList>
+                  <asp:DropDownList ID="ddlImage" runat="server" DataTextField="title" DataValueField="locationId"></asp:DropDownList>
 
               </td>
           </tr>
@@ -168,15 +204,19 @@
           <tr>
               <td>Display Order:</td>
               <td>
-                  <asp:DropDownList ID="ddlDisplayOrder" runat="server"></asp:DropDownList>
-
+                  
+                  <asp:DropDownList ID="ddlDisplayOrder" runat="server">
+            <asp:ListItem>0</asp:ListItem>
+            <asp:ListItem>1</asp:ListItem>
+            <asp:ListItem>2</asp:ListItem>
+        </asp:DropDownList>
               </td>
           </tr>
 
           
           <tr>
               <td>Relation Description:</td>
-              <td><asp:TextBox ID="TextBox1" runat="server"></asp:TextBox></td>
+              <td><asp:TextBox ID="txtDescription" runat="server"></asp:TextBox></td>
           </tr>
 
           <tr>
@@ -199,15 +239,18 @@
      
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <asp:Button ID="btnSave"  ClientIDMode="Static" runat="server" Text="Save changes" class="btn btn-primary" OnClick="btnSave_Click"  />
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+ 
       </div>
     </div>
   </div>
 </div>
 
 
-
+                 
+        
 
     </form>
 

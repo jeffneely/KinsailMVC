@@ -412,6 +412,17 @@ namespace KinsailMVC.Models
             return s.ToString();
         }
 
+        // return list of LocationBasic objects
+        public List<LocationBasicInfo> GetBasicInfo()
+        {
+
+          
+            String strSQL = String.Format("select ItemID,  Name from Items where ItemTypeID = {0}", locationItemTypeId) ;
+
+            List<LocationBasicInfo> locations = db.Fetch<LocationBasicInfo>(strSQL);
+            return locations;
+        }
+
         
     }   
 }
