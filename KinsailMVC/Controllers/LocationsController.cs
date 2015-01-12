@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net;
 using System.Web.Http;
 using AttributeRouting.Web.Http;
+using KinsailMVC.Models;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 
 namespace KinsailMVC.Controllers
 {
-    using KinsailMVC.Models;
-
+    
     public class LocationsController : ApiController
     {
         static readonly LocationRepository repository = new LocationRepository();
 
-        [GET("locations")]
+        [HttpGet]
+        [Route("locations")]
         public QueryResults<LocationBasic> GetLocations()
         {
             Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
@@ -21,7 +25,18 @@ namespace KinsailMVC.Controllers
             return new QueryResults<LocationBasic>(results.ToArray(), 0, results.Count);
         }
 
-        [GET("locations/details")]
+        [HttpGet]
+        [Route("locationsBasicInfo")]
+        public QueryResults<LocationBasicInfo> GetLocationsBasicInfo()
+        {
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var results = repository.GetBasicInfo();
+            return new QueryResults<LocationBasicInfo>(results.ToArray(), 0, results.Count);
+        }
+
+
+        [HttpGet]
+        [Route("locations/details")]
         public QueryResults<LocationDetail> GetLocationsDetails()
         {
             Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
@@ -42,5 +57,7 @@ namespace KinsailMVC.Controllers
             var result = repository.GetDetailbyId(idLocation);
             return result;
         }
+
+
     }
 }

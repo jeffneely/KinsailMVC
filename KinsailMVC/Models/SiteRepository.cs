@@ -560,5 +560,105 @@ namespace KinsailMVC.Models
             return s.ToString();
         }
 
+        
+        /// <summary>
+        /// Insert a basic Site in database
+        /// </summary>
+        /// <param name="objSite"></param>
+        public Boolean AddSite(SiteBasic objSite)
+        {
+            String strinsertItemsxItems = String.Format("insert into ItemsXItems (ItemId, ParentItemId, RelationDesc) values ({0}, {1}, '{2}')", objSite.siteId, objSite.locationId, objSite.siteIdentifier);
+
+            var sql = strinsertItemsxItems;
+
+
+                try
+                {
+                    db.BeginTransaction();
+                    // Do transacted updates here
+                    db.Execute(strinsertItemsxItems);
+                    // Commit
+                    db.CompleteTransaction();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    db.AbortTransaction();
+                    return false;
+                }
+
+            
+
+                
+        
+        }
+
+
+        /// <summary>
+        /// Insert a basic Site in database
+        /// </summary>
+        /// <param name="objSite"></param>
+        public Boolean DeleteSite(long siteId, long locationID)
+        {
+            String strDeleteItemsxItems = String.Format("DELETE FROM ItemsXItems Where ItemID = {0} and ParentItemID = {1})", siteId, locationID);
+
+            var sql = strDeleteItemsxItems;
+
+
+            try
+            {
+                db.BeginTransaction();
+                // Do transacted updates here
+                db.Execute(strDeleteItemsxItems);
+                // Commit
+                db.CompleteTransaction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.AbortTransaction();
+                return false;
+            }
+
+
+
+
+
+        }
+
+
+        // return list of Map objects
+        public List<Map> GetMaps()
+        {
+            String strSql = "select MapID, Name from maps";
+
+
+            List<Map> maps = db.Fetch<Map>(strSql);
+            return maps;
+        }
+
+        // return list of Sites objects
+        public List<SiteBasicInfo> GetSiteBasicInfo()
+        {
+
+
+            String strSQL = String.Format("select ItemID,  Name from Items where ItemTypeID = {0}", siteItemTypeId);
+
+            List<SiteBasicInfo> sites = db.Fetch<SiteBasicInfo>(strSQL);
+            return sites;
+        }
+
+                // return list of Images
+        public List<ImageBasic> GetImages()
+        {
+
+
+            String strSQL = String.Format("select ImageID, Caption from Images");
+
+            List<ImageBasic> images = db.Fetch<ImageBasic>(strSQL);
+            return images;
+        }
+
+       
     }
 }
