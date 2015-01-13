@@ -184,11 +184,11 @@ namespace KinsailMVC.Controllers
 
         [Route("Delsites")]
         [HttpDelete]
-        public HttpResponseMessage Delete(long siteId)
+        public HttpResponseMessage Delete([FromBody] SiteBasic objSiteBasic)
         {
             try
             {
-                //repository.AddSite(objSiteBasic);
+                repository.DeleteSite(objSiteBasic.siteId, objSiteBasic.locationId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
