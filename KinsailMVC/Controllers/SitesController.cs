@@ -182,13 +182,13 @@ namespace KinsailMVC.Controllers
             //TODO: add method to SiteRepository for updating a SiteDetail
         }
 
-        [Route("Delsites")]
+        [Route("Delsites/{idSite}/{idLocation}")]
         [HttpDelete]
-        public HttpResponseMessage Delete([FromBody] SiteBasic objSiteBasic)
+        public HttpResponseMessage Delete(long idSite, long idLocation)
         {
             try
             {
-                repository.DeleteSite(objSiteBasic.siteId, objSiteBasic.locationId);
+                repository.DeleteSite(idSite, idLocation);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)

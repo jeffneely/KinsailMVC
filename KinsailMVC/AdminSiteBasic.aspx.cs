@@ -232,7 +232,6 @@ namespace KinsailMVC
 
             int index = Convert.ToInt32(e.CommandArgument);
             GridViewRow gvrow = dgSites.Rows[index];
-            SiteBasic objSiteBasic = new SiteBasic();
             var client = new HttpClient();
             string url = HttpContext.Current.Request.Url.AbsoluteUri;
             url = url.Replace(HttpContext.Current.Request.Url.AbsolutePath, "");
@@ -272,8 +271,7 @@ namespace KinsailMVC
             if (e.CommandName.Equals("deleteRecord"))
                 {
 
-                    objSiteBasic.locationId = long.Parse(idLocation);
-                    objSiteBasic.siteId = long.Parse(idItem);
+                    String urlMethod = String.Format("Delsites/{0}/{1}", idItem, idLocation);
 
                     client.BaseAddress = new Uri(url);
                     client.DefaultRequestHeaders.Accept.Clear();
@@ -281,7 +279,7 @@ namespace KinsailMVC
 
 
 
-                    var result = client.DeleteAsync("Delsites");
+                    var result = client.DeleteAsync(urlMethod);
 
                 }
 
