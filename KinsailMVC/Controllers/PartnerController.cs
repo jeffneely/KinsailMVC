@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using AttributeRouting.Web.Http;
+using KinsailMVC.Models;
 
 namespace KinsailMVC.Controllers
 {
-    using KinsailMVC.Models;
-
+    
     public class PartnerController : ApiController
     {
 
