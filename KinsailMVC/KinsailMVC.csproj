@@ -215,6 +215,7 @@
     <Compile Include="Models\SiteBasic.cs" />
     <Compile Include="Models\SiteBasicInfo.cs" />
     <Compile Include="Models\SiteDetail.cs" />
+    <Compile Include="Models\SiteMap.cs" />
     <Compile Include="Models\SiteRepository.cs" />
     <Compile Include="Models\SiteReview.cs" />
     <Compile Include="Models\SiteType.cs" />

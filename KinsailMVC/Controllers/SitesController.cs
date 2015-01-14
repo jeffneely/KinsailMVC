@@ -151,6 +151,24 @@ namespace KinsailMVC.Controllers
         
         }
 
+        [Route("Addsites/Maps")]
+        [HttpPost]
+        public HttpResponseMessage AddSite([FromBody]Models.SiteMap objSite)
+        {
+            try
+            {
+
+
+                repository.AddSiteMap(objSite);
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+
         [Route("Addsites/details")]
         [HttpPost]
         public void AddSiteDetail([FromBody]string value)

@@ -535,7 +535,8 @@ namespace KinsailMVC.Models
                 catch (Exception ex)
                 {
                     db.AbortTransaction();
-                    return false;
+                    throw new Exception(ex.Message);
+                   
                 }
 
             
@@ -544,6 +545,38 @@ namespace KinsailMVC.Models
         
         }
 
+        /// <summary>
+        /// Insert a Site Map in database
+        /// </summary>
+        /// <param name="objSite"></param>
+        public Boolean AddSiteMap(SiteMap objSiteMap)
+        {
+            String sqlString = String.Format("insert into ItemsXMaps (ItemId, MapId, DisplayOrder, CoordinateX, CoordinateY) values ({0}, {1}, {2}, {3}, {4})", objSiteMap.ItemID, objSiteMap.MapId, objSiteMap.DisplayOrder, objSiteMap.CoordinateX, objSiteMap.CoordinateY);
+
+            var sql = sqlString;
+
+
+            try
+            {
+                db.BeginTransaction();
+                // Do transacted updates here
+                db.Execute(sqlString);
+                // Commit
+                db.CompleteTransaction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.AbortTransaction();
+                throw new Exception(ex.Message);
+                
+            }
+
+
+
+
+
+        }
 
         /// <summary>
         /// Insert a basic Site in database
@@ -551,7 +584,7 @@ namespace KinsailMVC.Models
         /// <param name="objSite"></param>
         public Boolean DeleteSite(long siteId, long locationID)
         {
-            String strDeleteItemsxItems = String.Format("DELETE FROM ItemsXItems Where ItemID = {0} and ParentItemID = {1})", siteId, locationID);
+            String strDeleteItemsxItems = String.Format("DELETE FROM ItemsXItems Where ItemID = {0} and ParentItemID = {1}", siteId, locationID);
 
             var sql = strDeleteItemsxItems;
 
@@ -568,7 +601,8 @@ namespace KinsailMVC.Models
             catch (Exception ex)
             {
                 db.AbortTransaction();
-                return false;
+                throw new Exception(ex.Message);
+                
             }
 
 

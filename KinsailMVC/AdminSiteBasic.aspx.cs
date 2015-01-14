@@ -290,6 +290,8 @@ namespace KinsailMVC
         protected void btnSave_Click(object sender, EventArgs e)
         {
             SiteBasic objSite = new SiteBasic();
+            Models.SiteMap objSiteMap = new Models.SiteMap();
+
             var client = new HttpClient();
             string url = HttpContext.Current.Request.Url.AbsoluteUri;
             url = url.Replace(HttpContext.Current.Request.Url.AbsolutePath, "");
@@ -328,6 +330,8 @@ namespace KinsailMVC
             objSite.siteIdentifier = txtDescription.Text;
 
 
+          
+
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -335,6 +339,27 @@ namespace KinsailMVC
 
 
             var result = client.PostAsJsonAsync("Addsites", objSite);
+            if (result.Result.IsSuccessStatusCode)
+            {
+                lblError.Text = "Site Basic created with success";
+                GetRESTData();
+            }
+            else
+            {
+                lblError.Text = "Error calling add sites method: " + result.Result.RequestMessage;
+                return;
+            }
+
+            
+            // Insert Map for relation
+            objSiteMap.ItemID = objSite.siteId;
+            objSiteMap.MapId = int.Parse(ddlMap.SelectedValue);
+            objSiteMap.DisplayOrder = int.Parse(ddlDisplayOrder.SelectedValue);
+            objSiteMap.CoordinateX = objSite.coords.X;
+            objSiteMap.CoordinateY = objSite.coords.Y;
+
+            
+            result = client.PostAsJsonAsync("Addsites/Maps", objSiteMap);
             if (result.Result.IsSuccessStatusCode)
             {
                 lblError.Text = "Site Basic created with success";
