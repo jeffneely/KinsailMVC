@@ -54,3 +54,14 @@ ADD CONSTRAINT UK_ItemsXMaps_ItemID_MapID UNIQUE (ItemID, MapID)
 ALTER TABLE ItemsXOrganizations
 ADD CONSTRAINT UK_ItemsXOrganizations_ItemID_DisplayOrder UNIQUE (ItemID, DisplayOrder)
 
+-- Items cannot be linked to the same Availability/Rate info more than once and each must have a unique DisplayOrder
+ALTER TABLE ItemsXAvailRates
+ADD CONSTRAINT UK_ItemsXAvailRates_ItemID_DisplayOrder UNIQUE (ItemID, DisplayOrder)
+ALTER TABLE ItemsXAvailRates
+ADD CONSTRAINT UK_ItemsXAvailRates_ItemID_AvailID_RateID UNIQUE (ItemID, AvailID, RateID)
+
+-- Maps cannot be linked to the same Feature more than once and each must have a unique DisplayOrder
+ALTER TABLE MapsXFeatures
+ADD CONSTRAINT UK_MapsXFeatures_MapID_DisplayOrder UNIQUE (MapID, DisplayOrder)
+ALTER TABLE MapsXFeatures
+ADD CONSTRAINT UK_MapsXFeatures_MapID_FeatureID UNIQUE (MapID, FeatureID)

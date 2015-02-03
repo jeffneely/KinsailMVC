@@ -292,7 +292,7 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
-            //Debug.Print(sql.SQL);
+            Debug.Print(sql.SQL);
 
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 

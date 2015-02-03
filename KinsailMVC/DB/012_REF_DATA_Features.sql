@@ -769,7 +769,7 @@ INSERT INTO [dbo].[Features]
            ,[Active])
      VALUES
            ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
-		    'Drinking Water Fountains',
+		    'Chemical Toilets',
             'chemicalToilets',
             'Chemical toilet facilities are available',
             1)
@@ -811,7 +811,7 @@ INSERT INTO [dbo].[Features]
            ,[Active])
      VALUES
            ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'Boolean'),
-		    'Trash Dumpsters',
+		    'Public Telephones',
             'publicTelephones',
             'Publicly-accessible telephones are available',
             1)
@@ -940,5 +940,19 @@ INSERT INTO [dbo].[Features]
 		    'Reservable',
             'reservable',
             'This site is reservable in advance',
+            1)
+GO
+
+INSERT INTO [dbo].[Features]
+           ([FeatureTypeID]
+		   ,[Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ((SELECT FeatureTypeID FROM FeatureTypes WHERE Name = 'String'),
+		    'Base URL',
+            'baseURL',
+            'Base URL for all other resources',
             1)
 GO

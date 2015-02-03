@@ -42,3 +42,27 @@ INSERT INTO [dbo].[ImageTypes]
             'Branding image, typically displayed in the header',
             1)
 GO
+
+INSERT INTO [dbo].[ImageTypes]
+           ([Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ('Logo',
+            'logo',
+            'Logo image',
+            1)
+GO
+
+INSERT INTO [dbo].[ImageTypes]
+           ([Name]
+           ,[Abbreviation]
+           ,[Description]
+           ,[Active])
+     VALUES
+           ('Background Image',
+            'backgroundImage',
+            'Background image, usually appears behind the foreground design elements',
+            1)
+GO

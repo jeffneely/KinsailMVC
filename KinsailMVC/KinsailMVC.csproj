@@ -166,6 +166,7 @@
     </Compile>
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\LogoImage.cs" />
     <Compile Include="Models\BannerImage.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\CostPeriod.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Models\DateRange.cs" />
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\FeatureAttribute.cs" />
+    <Compile Include="Models\Image.cs" />
     <Compile Include="Models\GalleryImage.cs" />
     <Compile Include="Models\HttpRequestMessageExtensions.cs" />
     <Compile Include="Models\ItineraryBasic.cs" />

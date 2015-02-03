@@ -6,18 +6,12 @@ using System.Web;
 namespace KinsailMVC.Models
 {
     /**
-     * A Gallery Image has an icon representation and a full-sized image
+     * A Gallery Image has an icon representation, along with the full-sized image
      */
-    [NPoco.PrimaryKey("ImageID")]
-    public class GalleryImage
+    public class GalleryImage : Image
     {
-        // identifiers
-        public long? imageId { get; set; }       // database identifier, never displayed to the user
-
         // attributes
         public string iconUrl { get; set; }      // URL to icon image
-        [NPoco.Column("FullURL")]
-        public string fullImageUrl { get; set; } // URL to full image
 
         // ctors
         public GalleryImage(string iconUrl, string fullImageUrl)

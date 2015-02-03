@@ -25,6 +25,7 @@ namespace KinsailMVC.Models
         public FeatureAttribute<object>[] features { get; set; }   // collection of Feature/Attributes for the location
 
         // non-queryable attributes
+        public string baseURL { get; set; }                        // base URL for all resources (example: "http://www.someurl.com/")
         public string mapTilesBaseURL { get; set; }                // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
         public BannerImage banner { get; set; }                    // banner image to use in branding
         public GalleryImage[] photos { get; set; }                 // more photos of the location

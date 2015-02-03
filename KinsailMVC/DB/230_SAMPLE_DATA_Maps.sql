@@ -124,8 +124,8 @@ INSERT INTO [dbo].[Maps]
 		   ,[CenterY]
 		   ,[ZoomMin]
 		   ,[ZoomMax]
-		   ,[Latitude]
-		   ,[Longitude]
+		   ,[LatitudeNorth]
+		   ,[LongitudeEast]
            ,[Active])
      VALUES
            ('Raven Ridge Site Map' --Name
@@ -137,8 +137,8 @@ INSERT INTO [dbo].[Maps]
 		   ,0 --CenterY
 		   ,2 --ZoomMin
 		   ,4 --ZoomMax
-		   ,38.998 --Latitude
-		   ,-105.551 --Longitude
+		   ,38.998 --LatitudeNorth
+		   ,-105.551 --LongitudeEast
            ,1 --Active
            )
 GO

@@ -21,6 +21,8 @@ namespace KinsailMVC.Models
         private long locationItemTypeId = 0;
         private long galleryImageTypeId = 0;
         private long bannerImageTypeId = 0;
+        private long baseURLFeatureId = 0;
+        
         private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
         private static string br = Environment.NewLine;
 
@@ -28,7 +30,7 @@ namespace KinsailMVC.Models
         private static string selectLocationBasic =
             "SELECT l.ItemID, l.Name," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
-            "       COALESCE(agg.SiteCount, 0) AS TotalReservableSites," + br +
+            "       COALESCE(r.SiteCount, 0) AS TotalReservableSites," + br +
             "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2," + br +
             "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude," + br +
             "       g.ImageID, g.IconURL, g.FullURL";
@@ -38,12 +40,13 @@ namespace KinsailMVC.Models
             "SELECT l.ItemID, l.Name," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
             "       m.TilesURL AS MapTilesBaseURL," + br +
+            "       f1.Value AS BaseURL," + br +
             "       av.Policies AS reservationPolicies, av.CancelBeforeDays AS CancellationDaysBeforeReservation," + br +
-            "       av.AvailStartMonth AS AvailabilityStartMonth, av.AvailStartDay AS AvailabilityStartDay," + br +
-            "       av.AvailEndMonth AS AvailabilityEndMonth, av.AvailEndDay AS AvailabilityEndDay," + br +
-            "       CASE WHEN agg.MinWeekdayRate < agg.MinWeekendRate THEN agg.MinWeekdayRate ELSE agg.MinWeekendRate END AS PriceMin," + br +
-            "       CASE WHEN agg.MaxWeekdayRate > agg.MaxWeekendRate THEN agg.MaxWeekdayRate ELSE agg.MaxWeekendRate END AS PriceMax," + br +
-            "       COALESCE(agg.SiteCount, 0) AS TotalReservableSites," + br +
+            "       MONTH(r.MinAvailStartDate) AS AvailabilityStartMonth, DAY(r.MinAvailStartDate) AS AvailabilityStartDay," + br +
+            "       MONTH(r.MaxAvailEndDate) AS AvailabilityEndMonth, DAY(r.MaxAvailEndDate) AS AvailabilityEndDay," + br +
+            "       CASE WHEN r.MinWeekdayRate < r.MinWeekendRate THEN r.MinWeekdayRate ELSE r.MinWeekendRate END AS PriceMin," + br +
+            "       CASE WHEN r.MaxWeekdayRate > r.MaxWeekendRate THEN r.MaxWeekdayRate ELSE r.MaxWeekendRate END AS PriceMax," + br +
+            "       COALESCE(r.SiteCount, 0) AS TotalReservableSites," + br +
             "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2," + br +
             "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude," + br +
             "       g.ImageID, g.IconURL, g.FullURL," + br +
@@ -54,8 +57,8 @@ namespace KinsailMVC.Models
             "  FROM Items l" + br +
             "  LEFT OUTER JOIN ItemsXOrganizations ixo on l.ItemID = ixo.ItemID" + br +     // organization
             "  LEFT OUTER JOIN Organizations o ON ixo.OrgID = o.OrgID" + br +
-            "  LEFT OUTER JOIN LocationsSitesRates agg ON l.ItemID = agg.LocationID" + br + // child site aggregate info by location
-            "  LEFT OUTER JOIN ItemsXLocations ixl on l.ItemID = ixl.ItemID" + br +         // address
+            "  LEFT OUTER JOIN RatesAtLocations r ON l.ItemID = r.LocationID" + br +        // aggregate site rate/availability info
+            "  LEFT OUTER JOIN ItemsXLocations ixl on l.ItemID = ixl.ItemID" + br +         // location/address
             "  LEFT OUTER JOIN Locations a ON ixl.LocationID = a.LocationID" + br + 
             "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image
             "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
@@ -64,10 +67,13 @@ namespace KinsailMVC.Models
         private static string fromJoinLocationDetail = fromJoinLocationBasic + br +
             "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID" + br +             // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
-            "  LEFT OUTER JOIN ItemsXAvailability ixa ON l.ItemID = ixa.ItemID" + br +     // availability info
+            "  LEFT OUTER JOIN ItemsXAvailRate ixa ON l.ItemID = ixa.ItemID" + br +        // availability info
             "  LEFT OUTER JOIN Availability av ON ixa.AvailID = av.AvailID" + br +
             "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br + // first banner image 
-            "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID";
+            "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID" + br +
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                               // base url
+            "                     FROM ItemsXFeatures" + br +
+            "                    WHERE FeatureID = @0) f1 ON l.ItemID = f1.ItemID";
 
         // SQL WHERE fragment for Locations
         private static string whereLocations =
@@ -181,6 +187,7 @@ namespace KinsailMVC.Models
             locationItemTypeId = db.ExecuteScalar<long>("SELECT ItemTypeID from ItemTypes WHERE Name = 'Recreation Location'");
             galleryImageTypeId = db.ExecuteScalar<long>("SELECT ImageTypeID from ImageTypes WHERE Name = 'Gallery Image'");
             bannerImageTypeId = db.ExecuteScalar<long>("SELECT ImageTypeID from ImageTypes WHERE Name = 'Banner Image'");
+            baseURLFeatureId = db.ExecuteScalar<long>("SELECT FeatureID FROM Features WHERE Name = 'Base URL'");
 
             // load the complete list of all features that are defined in the database
             List<object[]> features = db.Fetch<object[]>(queryAllFeatures);
@@ -233,7 +240,7 @@ namespace KinsailMVC.Models
             // get locations
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationDetail)
-                .Append(fromJoinLocationDetail)
+                .Append(fromJoinLocationDetail, baseURLFeatureId)
                 .Append(whereLocations, locationItemTypeId);
 
             // any URI filter parameters to add to the query?
@@ -283,7 +290,7 @@ namespace KinsailMVC.Models
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectLocationDetail)
-                .Append(fromJoinLocationDetail) 
+                .Append(fromJoinLocationDetail, baseURLFeatureId) 
                 .Append(whereLocationById, locationItemTypeId, locationId)
                 .Append(orderLocations);
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);

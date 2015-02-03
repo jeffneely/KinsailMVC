@@ -17,6 +17,29 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+-----------------------------------------------------
+-- Create Functions Used in Computed Table Columns --
+--------------------------------------------------------------------------------
+
+CREATE FUNCTION dbo.GetAvailableDate(@Year [int], @Month [int], @Day [int], @FromTo [int])
+RETURNS [datetime]
+AS 
+BEGIN
+    DECLARE @Result [datetime]
+    IF (@Year IS NULL)
+        IF (@FromTo = 0)
+            SET @Result = DATEADD(yy, 2000 - 1900, DATEADD(m,  @Month - 1, @Day - 1))
+        ELSE
+            SET @Result = DATEADD(yy, 2099 - 1900, DATEADD(m,  @Month - 1, @Day - 1))
+    ELSE
+        SET @Result = DATEADD(yy, @Year - 1900, DATEADD(m,  @Month - 1, @Day - 1))
+    RETURN(@Result)
+END
+GO
+
+
+
 -----------------------
 -- Create New Tables --
 --------------------------------------------------------------------------------
@@ -173,7 +196,6 @@ ELSE
 GO
 
 
--- Maps
 IF EXISTS (SELECT 1
 		     FROM information_schema.Tables
 		    WHERE table_schema = 'dbo'
@@ -191,8 +213,11 @@ ELSE
 		[CenterY]		[float] NULL,
 		[ZoomMin]		[int] NULL,
 		[ZoomMax]		[int] NULL,
-		[Latitude]		[float] NULL,
-		[Longitude]		[float] NULL,
+		[ZoomDefault]		[int] NULL,
+		[LatitudeNorth]	[float] NULL,
+		[LatitudeSouth]	[float] NULL,
+		[LongitudeEast]	[float] NULL,
+		[LongitudeWest]	[float] NULL,
 		[Active]		[bit] NOT NULL CONSTRAINT [DF_Maps_Active] DEFAULT (1),
 		CONSTRAINT [PK_Maps] PRIMARY KEY CLUSTERED ([MapID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -211,9 +236,34 @@ ELSE
 		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXMaps_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
 		[MapID]			[bigint] NOT NULL CONSTRAINT [FK_ItemsXMaps_MapID] REFERENCES [Maps]([MapID]) NOT FOR REPLICATION,
 		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXMaps_DisplayOrder]  DEFAULT ((0)),
-		[CoordinateX]	[float] NOT NULL CONSTRAINT [DF_ItemsXMaps_CoordinateX]  DEFAULT ((0.0)),
-		[CoordinateY]	[float] NOT NULL CONSTRAINT [DF_ItemsXMaps_CoordinateY]  DEFAULT ((0.0)),
+		[CoordinateX]	[float] NOT NULL,
+		[CoordinateY]	[float] NOT NULL,
+		[LatLongFlag]	[bit] NOT NULL CONSTRAINT [DF_ItemsXMaps_LatLongFlag] DEFAULT ((0)),
 		CONSTRAINT [PK_ItemsXMaps] PRIMARY KEY CLUSTERED ([ID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Association of a Map with a Feature (for showing markers on the map)
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'MapsXFeatures')
+	PRINT 'Table dbo.MapsXFeatures already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[MapsXFeatures](
+		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[MapID]			[bigint] NOT NULL CONSTRAINT [FK_MapsXFeatures_MapID] REFERENCES [Maps]([MapID]) NOT FOR REPLICATION,
+		[FeatureID]		[bigint] NOT NULL CONSTRAINT [FK_MapsXFeatures_FeatureID] REFERENCES [Features]([FeatureID]) NOT FOR REPLICATION,
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_DisplayOrder]  DEFAULT (0),
+		[CustomMarkerFlag]	[bit] NOT NULL CONSTRAINT [DF_MapsXFeatures_CustomMarkerFlag] DEFAULT (0),
+		[MatchValue]	[nvarchar](1000) NULL,
+		[MatchOperator]	[nvarchar](10) NULL,
+		[Marker]		[nvarchar](100) NULL,
+		[Description]	[nvarchar](1000) NULL,
+		[OffsetX]		[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_OffsetX]  DEFAULT (0),
+		[OffsetY]		[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_OffsetY]  DEFAULT (0),
+		CONSTRAINT [PK_MapsXFeatures] PRIMARY KEY CLUSTERED ([ID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -291,7 +341,7 @@ ELSE
 		[AvailID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 		[Name]				[nvarchar](200) NOT NULL,
 		[Description]		[nvarchar](1000) NULL,
-		[Policies]			[nvarchar](1000) NULL,
+		[Policies]			[nvarchar](MAX) NULL,
 		[Available]			[bit] NOT NULL CONSTRAINT [DF_Availability_Available] DEFAULT ((1)),
 		[AvailStartYear]	[int] NULL,
 		[AvailStartMonth]	[int] NULL,
@@ -304,13 +354,18 @@ ELSE
 		[CancelBeforeDays]	[int] NULL,
 		[MinDurationDays]	[int] NULL,
 		[MaxDurationDays]	[int] NULL,
+		[MaxDurationWeekends]	[int] NULL,
+		[BetweenStaysDays]	[int] NULL,
 		[Active]			[bit] NOT NULL CONSTRAINT [DF_Availability_Active] DEFAULT ((1)),
 		CONSTRAINT [PK_Availability] PRIMARY KEY CLUSTERED ([AvailID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
+-- Add computed columns
+ALTER TABLE [dbo].[Availability] ADD [AvailStartDate] AS (dbo.GetAvailableDate(AvailStartYear, AvailStartMonth, AvailStartDay, 0));
+ALTER TABLE [dbo].[Availability] ADD [AvailEndDate] AS (dbo.GetAvailableDate(AvailEndYear, AvailEndMonth, AvailEndDay, 1));
 
--- Association of an Item with Availability info
+-- Association of an Item with Availability info (DEPRECATED)
 IF EXISTS (SELECT 1
 		     FROM information_schema.Tables
 		    WHERE table_schema = 'dbo'
@@ -331,6 +386,51 @@ ELSE
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
+
+-- Rates
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'Rates')
+	PRINT 'Table dbo.Rates already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[Rates](
+		[RateID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[Name]				[nvarchar](200) NOT NULL,
+		[Description]		[nvarchar](1000) NULL,
+		[ValidFrom]			[datetime] NULL,
+		[ValidTo]			[datetime] NULL,
+		[BaseFee]			[numeric](18,5) NULL CONSTRAINT [DF_Rates_BaseFee] DEFAULT (0.00),
+		[DailyFee]			[numeric](18,5) NULL CONSTRAINT [DF_Rates_DailyFee] DEFAULT (0.00),
+		[WeekdayFee]		[numeric](18,5) NULL CONSTRAINT [DF_Rates_WeekdayFee] DEFAULT (0.00),
+		[WeekendFee]		[numeric](18,5) NULL CONSTRAINT [DF_Rates_WeekendFee] DEFAULT (0.00),
+		[DepositBaseFee]	[numeric](18,5) NULL CONSTRAINT [DF_Rates_DepositBaseFee] DEFAULT (0.00),
+		[DepositDailyFee]	[numeric](18,5) NULL CONSTRAINT [DF_Rates_DepositDailyFee] DEFAULT (0.00),
+		[Active]			[bit] NOT NULL CONSTRAINT [DF_Rates_Active] DEFAULT (1),
+		CONSTRAINT [PK_Rates] PRIMARY KEY CLUSTERED ([RateID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+-- Association of an Item with Availability Info & Rates
+IF EXISTS (SELECT 1
+		     FROM information_schema.Tables
+		    WHERE table_schema = 'dbo'
+		      AND TABLE_NAME = 'ItemsXAvailRates')
+	PRINT 'Table dbo.ItemsXAvailRates already exists, skipping CREATE TABLE statement' 
+ELSE
+	CREATE TABLE [dbo].[ItemsXAvailRates](
+		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
+		[AvailID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_AvailID] REFERENCES [Availability]([AvailID]) NOT FOR REPLICATION,
+		[RateID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_RateID] REFERENCES [Rates]([RateID]) NOT FOR REPLICATION,
+		[MaxUnits]		[int] NOT NULL CONSTRAINT [DF_ItemsXAvailRates_MaxUnits] DEFAULT (1),
+		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXAvailRates_DisplayOrder] DEFAULT (0),
+		CONSTRAINT [PK_ItemsXAvailRates] PRIMARY KEY CLUSTERED ([ID] ASC) 
+			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
 
 --
 -- Decision to not use Groups, so the following are now commented out
