@@ -57,12 +57,12 @@ namespace KinsailMVC.Models
 
         // SQL FROM/JOIN fragment for SiteDetail
         private static string fromJoinSiteDetail = fromJoinSiteBasic + br +
-            "  LEFT OUTER JOIN (SELECT ixa.ItemID, MIN(ixa.MaxUnits) AS MaxAccommodatingUnits," + br +  // availability info
+            "  LEFT OUTER JOIN (SELECT ixar.ItemID, MIN(ixar.MaxUnits) AS MaxAccommodatingUnits," + br +  // availability info
             "                          MIN(a.MinDurationDays) AS MinDuration, MAX(MaxDurationDays) AS MaxDuration," + br +
             "                          MIN(a.AvailBeforeDays) AS AdvancedReservationPeriod" + br +
-            "                     FROM ItemsXAvailability ixa" + br +
-            "                     LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
-            "                    GROUP BY ixa.ItemID" + br +
+            "                     FROM ItemsXAvailRates ixar" + br +
+            "                     LEFT OUTER JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
+            "                    GROUP BY ixar.ItemID" + br +
             "                   ) av ON i.ItemID = av.ItemID";
 
 //          "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +      // availability info

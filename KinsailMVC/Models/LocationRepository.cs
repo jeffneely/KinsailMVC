@@ -67,7 +67,7 @@ namespace KinsailMVC.Models
         private static string fromJoinLocationDetail = fromJoinLocationBasic + br +
             "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID" + br +             // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
-            "  LEFT OUTER JOIN ItemsXAvailRate ixa ON l.ItemID = ixa.ItemID" + br +        // availability info
+            "  LEFT OUTER JOIN ItemsXFirstAvailRate ixa ON l.ItemID = ixa.ItemID" + br +   // availability info
             "  LEFT OUTER JOIN Availability av ON ixa.AvailID = av.AvailID" + br +
             "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br + // first banner image 
             "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID" + br +
