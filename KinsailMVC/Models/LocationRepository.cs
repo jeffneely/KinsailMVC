@@ -107,14 +107,34 @@ namespace KinsailMVC.Models
         private static string orderLocations =
             " ORDER BY l.Name";
 
-        // SQL query for list of features (by ID)
+        // SQL query for list of features (by locationID)
         private static string queryFeatures =
             "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
             "  FROM ItemsXFeatures ixf" + br +
             "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
             " WHERE ixf.ItemID = @0";
 
-        // SQL query for list of all features
+        // SQL query for list of location features 
+        private static string queryLocationFeatures =
+            "SELECT i.ItemID AS locationId, ixf.ID AS featureId, f.Abbreviation AS name, f.Description AS description, ixf.Value AS value" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
+            "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            " ORDER BY i.ItemID, ixf.DisplayOrder";
+
+        // SQL query for list of location gallery images, excluding the first for each
+        private static string queryLocationPhotos =
+            "SELECT i.ItemID AS locationId, g.ImageID AS imageId, g.IconURL AS iconUrl, g.FullURL AS fullImageUrl" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXImages ixi ON ixi.ItemID = i.ItemID" + br +
+            "  JOIN Images g ON ixi.ImageID = g.ImageID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.iD = ID)" + br +
+            " ORDER BY i.ItemID, ixi.DisplayOrder";
+
+        // SQL query for list of all available features
         private static string queryAllFeatures =
             "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
             "  FROM Features f" + br +
@@ -250,9 +270,9 @@ namespace KinsailMVC.Models
             }
             
             sql = sql.Append(orderLocations);
-
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
 
+            /* SLOW METHOD - issuing child queries for each row in the result set to retrieve children
             foreach (LocationDetail location in locations)
             {
                 // get features for each location
@@ -266,6 +286,26 @@ namespace KinsailMVC.Models
                 // nested and one-to-many properties in a single automatic mapping
                 List<GalleryImage> photos = db.Fetch<GalleryImage>(queryPhotos, location.locationId);
                 location.photos = photos.ToArray();
+            }
+            return locations;
+            */
+
+            // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
+            // (fewer SQL queries)
+            var features2 = db.FetchOneToMany<LocationDTO, FeatureAttribute<object>>(x => x.locationId, x => x.featureId, queryLocationFeatures);
+            var photos2 = db.FetchOneToMany<LocationDTO, GalleryImage>(x => x.locationId, x => x.imageId, queryLocationPhotos);
+            foreach (LocationDetail location in locations)
+            {
+                var f = features2.Find(x => x.locationId == location.locationId);
+                if (f != null) {
+                    location.features = f.features.ToArray();
+                }
+
+                var p = photos2.Find(x => x.locationId == location.locationId);
+                if (p != null)
+                {
+                    location.photos = p.photos.ToArray();
+                }
             }
             return locations;
         }

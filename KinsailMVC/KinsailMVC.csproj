@@ -166,6 +166,9 @@
     </Compile>
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\SiteDTO.cs" />
+    <Compile Include="Models\LocationDTO.cs" />
+    <Compile Include="Models\MapDetail.cs" />
     <Compile Include="Models\LogoImage.cs" />
     <Compile Include="Models\BannerImage.cs" />
     <Compile Include="Models\BaseRepository.cs" />

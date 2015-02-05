@@ -45,16 +45,6 @@ namespace KinsailMVC.Models
             "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image 
             "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
 
-//          "  LEFT OUTER JOIN ItemsXImages ixg ON i.ItemID = ixg.ItemID" + br +            // images
-//          "  LEFT OUTER JOIN (SELECT i.ImageID, i.IconURL, i.FullURL" + br +              // only gallery images
-//          "                     FROM Images i" + br +
-//          "                     JOIN ImageTypes it ON i.ImageTypeID = it.ImageTypeID" + br +
-//          "                    WHERE it.ImageTypeID = @1) g ON ixg.ImageID = g.ImageID" + br +
-//          "             JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder" + br +    // only the first image
-//          "                     FROM ItemsXImages" + br +
-//          "                    GROUP BY ItemID) g1 ON ixg.ItemID = g1.ItemID" + br +
-//          "                      AND ixg.DisplayOrder = g1.DisplayOrder";
-
         // SQL FROM/JOIN fragment for SiteDetail
         private static string fromJoinSiteDetail = fromJoinSiteBasic + br +
             "  LEFT OUTER JOIN (SELECT ixar.ItemID, MIN(ixar.MaxUnits) AS MaxAccommodatingUnits," + br +  // availability info
@@ -65,10 +55,7 @@ namespace KinsailMVC.Models
             "                    GROUP BY ixar.ItemID" + br +
             "                   ) av ON i.ItemID = av.ItemID";
 
-//          "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +      // availability info
-//          "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID";
-
-        // SQL WHERE fragment for Site Features (prefix)
+        // SQL WHERE fragments for Site Features
         private static string andWhereSiteHasFeatures_pre =
             "   AND i.ItemID IN (SELECT i.ItemID" + br +
             "                      FROM Items i" + br +
@@ -76,25 +63,19 @@ namespace KinsailMVC.Models
             "                      JOIN Features f ON f.FeatureID = ixf.FeatureID" + br +
             "                     WHERE ItemTypeID = {0}" + br +
             "                       AND ( " + br;
-
-        // SQL WHERE fragment for Site Features
         private static string andWhereSiteFeature =
             "                             (ixf.FeatureID = {0} AND ixf.Value {1})" + br;
-
-        // SQL WHERE fragment for Site Features (suffix)
         private static string andWhereSiteHasFeatures_post =
             "                           )" + br +
             "                     GROUP BY i.ItemID" + br +
             "                    HAVING COUNT(f.FeatureID) >= {0})" + br;
 
-        // SQL WHERE fragment for Site Reservations (prefix)
+        // SQL WHERE fragments for Site Reservations (prefix)
         private static string andWhereSiteReserved_pre =
             "   AND i.ItemID NOT IN (SELECT i.ItemID" + br +
             "                          FROM Items i" + br +
             "                          JOIN ReservationResources rr ON i.ItemID = rr.ItemID" + br +
             "                         WHERE i.ItemTypeID = {0}" + br;
-
-        // SQL WHERE fragment for Site Reservations (suffix)
         private static string andWhereSiteReserved_post =
             "                         GROUP BY i.ItemID, i.Name)" + br;
 
@@ -120,12 +101,54 @@ namespace KinsailMVC.Models
             " ORDER BY i.Name";
 
 
-        private static string selectFeatures =
-            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
-            "  FROM ItemsXFeatures ixf" + br +
-            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
-            " WHERE f.FeatureID <> @0" + br +
-            "   AND ixf.ItemID = @1";
+        // SQL query for list of site features (all sites)
+        private static string querySiteFeatures =
+            "SELECT i.ItemID AS siteId, ixf.ID AS featureId, f.Abbreviation AS name, f.Description AS description, ixf.Value AS value" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
+            "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+            " ORDER BY i.ItemID, ixf.DisplayOrder";
+
+        // SQL query for list of site gallery images (all sites), excluding the first for each
+        private static string querySitePhotos =
+            "SELECT i.ItemID AS siteId, g.ImageID AS imageId, g.IconURL AS iconUrl, g.FullURL AS fullImageUrl" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXImages ixi ON ixi.ItemID = i.ItemID" + br +
+            "  JOIN Images g ON ixi.ImageID = g.ImageID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+            "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.iD = ID)" + br +
+            " ORDER BY i.ItemID, ixi.DisplayOrder";
+
+        // SQL query for list of site cost periods (all sites)
+        // Deprecated (Old Availability model)
+        /*
+        private static string querySiteCostPeriods =
+            "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
+            "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay," + br +
+            "       a.MinDurationDays AS minimumDuration, ixa.WeekdayRate, ixa.WeekendRate," + br +
+            "       (1 - a.Available) AS notAvailable" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +
+            "  JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+            " ORDER BY i.ItemID, ixa.DisplayOrder";
+        */
+
+        // SQL query for list of site cost periods (all sites)
+        private static string querySiteCostPeriods =
+        "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
+        "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
+        "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
+        "       (1 - a.Available) AS notAvailable" + br +
+        "  FROM Items i" + br +
+        "  LEFT OUTER JOIN ItemsXAvailRates ixar ON i.ItemID = ixar.ItemID" + br +
+        "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
+        "  JOIN Rates r ON r.RateID = ixar.RateID" + br +
+        " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+        "   AND r.Active = 1" + br +
+        " ORDER BY i.ItemID, ixar.DisplayOrder";
 
         // SQL query for list of all features
         private static string queryAllFeatures =
@@ -133,17 +156,43 @@ namespace KinsailMVC.Models
             "  FROM Features f" + br +
             "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
 
-        private static string selectCostPeriods =
+        // SQL query for list of features for a site (by ID)
+        private static string queryFeaturesById =
+            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
+            "  FROM ItemsXFeatures ixf" + br +
+            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            " WHERE f.FeatureID <> @0" + br +
+            "   AND ixf.ItemID = @1";
+
+        // SQL query for list of cost periods for a site (by ID)
+        // Deprecated (Old Availability model)
+        /*
+        private static string queryCostPeriodsById =
             "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth," + br +
             "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate," + br +
             "       0 AS NotAvailable" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +
-            "  LEFT OUTER JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
+            "  JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
             " WHERE i.ItemID = @0";
+        */
 
-        // return list of gallery images, excluding the first
-        private static string selectPhotos =
+        // SQL query for list of cost periods for a site (by ID)
+        private static string queryCostPeriodsById =
+            "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
+            "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
+            "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
+            "       (1 - a.Available) AS notAvailable" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXAvailRates ixar ON i.ItemID = ixar.ItemID" + br +
+            "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
+            "  JOIN Rates r ON r.RateID = ixar.RateID" + br +
+            " WHERE i.ItemID = @0" + br +
+            "   AND r.Active = 1" + br +
+            " ORDER BY ixar.DisplayOrder";
+        
+        // SQL query for list of gallery images for a site (by ID), excluding the first for each
+        private static string queryPhotosById =
             "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
             "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
             "          FROM Images i" + br +
@@ -154,7 +203,7 @@ namespace KinsailMVC.Models
             " ORDER BY RowNum";
 
         // return list of reserved data ranges for site (> today)
-        private static string selectReservedRanges =
+        private static string queryReservedRanges =
             "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" + br +
             "  FROM ReservationResources rr" + br +
             " WHERE rr.ItemID = @0" + br +
@@ -296,6 +345,7 @@ namespace KinsailMVC.Models
 
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
+            /* SLOW METHOD - issuing child queries for each row in the result set to retrieve children
             foreach (SiteDetail site in sites)
             {
                 // get features for each site
@@ -317,6 +367,35 @@ namespace KinsailMVC.Models
                 site.photos = photos.ToArray();
             }
             return sites;
+            */
+
+            // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
+            // (fewer SQL queries)
+            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.featureId, querySiteFeatures);
+            var costPeriods2 = db.FetchOneToMany<SiteDTO, CostPeriod>(x => x.siteId, querySiteCostPeriods);
+            var photos2 = db.FetchOneToMany<SiteDTO, GalleryImage>(x => x.siteId, x => x.imageId, querySitePhotos);
+            foreach (SiteDetail site in sites)
+            {
+                var f = features2.Find(x => x.siteId == site.siteId);
+                if (f != null)
+                {
+                    site.features = f.features.ToArray();
+                }
+
+                var cp = costPeriods2.Find(x => x.siteId == site.siteId);
+                if (cp != null)
+                {
+                    site.cost = new CostStructure(cp.costs.ToArray());
+                }
+
+                var p = photos2.Find(x => x.siteId == site.siteId);
+                if (p != null)
+                {
+                    site.photos = p.photos.ToArray();
+                }
+            }
+            return sites;
+
         }
 
         public List<SiteDetail> GetAllDetailsForLocation(long locationId, Dictionary<string, string> queryParams = null)
@@ -337,6 +416,8 @@ namespace KinsailMVC.Models
             
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
+            // SLOW METHOD - issuing child queries for each row in the result set to retrieve children
+            /*
             foreach (SiteDetail site in sites)
             {
                 // get features for each site
@@ -356,6 +437,33 @@ namespace KinsailMVC.Models
                 // nested and one-to-many properties in a single automatic mapping
                 List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
                 site.photos = photos.ToArray();
+            }
+            */
+
+            // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
+            // (fewer SQL queries)
+            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.featureId, querySiteFeatures);
+            var costPeriods2 = db.FetchOneToMany<SiteDTO, CostPeriod>(x => x.siteId, querySiteCostPeriods);
+            var photos2 = db.FetchOneToMany<SiteDTO, GalleryImage>(x => x.siteId, x => x.imageId, querySitePhotos);
+            foreach (SiteDetail site in sites)
+            {
+                var f = features2.Find(x => x.siteId == site.siteId);
+                if (f != null)
+                {
+                    site.features = f.features.ToArray();
+                }
+
+                var cp = costPeriods2.Find(x => x.siteId == site.siteId);
+                if (cp != null)
+                {
+                    site.cost = new CostStructure(cp.costs.ToArray());
+                }
+
+                var p = photos2.Find(x => x.siteId == site.siteId);
+                if (p != null)
+                {
+                    site.photos = p.photos.ToArray();
+                }
             }
             return sites;
         }
@@ -386,19 +494,19 @@ namespace KinsailMVC.Models
             // get features for site
             // can't automatically include this in the primary query since NPoco can't do both 
             // nested and one-to-many properties in a single automatic mapping
-            List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(selectFeatures, siteTypeFeatureId, siteId);
+            List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(queryFeaturesById, siteTypeFeatureId, siteId);
             site.features = features.ToArray();
 
             // get cost periods for site
             // can't automatically include this in the primary query since NPoco can't do both 
             // nested and one-to-many properties in a single automatic mapping
-            List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(selectCostPeriods, siteId);
+            List<CostPeriod> costPeriods = db.Fetch<CostPeriod>(queryCostPeriodsById, siteId);
             site.cost = new CostStructure(costPeriods.ToArray());
 
             // get gallery images for each location, excluding the first one
             // can't automatically include this in the primary query since NPoco can't do both 
             // nested and one-to-many properties in a single automatic mapping
-            List<GalleryImage> photos = db.Fetch<GalleryImage>(selectPhotos, site.siteId);
+            List<GalleryImage> photos = db.Fetch<GalleryImage>(queryPhotosById, site.siteId);
             site.photos = photos.ToArray();
 
             return site;
@@ -416,7 +524,7 @@ namespace KinsailMVC.Models
             SiteAvailability site = sites.ElementAtOrDefault(0);
 
             // Get Availability
-            List<DateRange> dates = db.Fetch<DateRange>(selectReservedRanges, site.siteId);
+            List<DateRange> dates = db.Fetch<DateRange>(queryReservedRanges, site.siteId);
             site.bookedRanges = dates.ToArray();
 
             return site;
