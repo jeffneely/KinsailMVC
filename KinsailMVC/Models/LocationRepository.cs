@@ -65,13 +65,13 @@ namespace KinsailMVC.Models
 
         // SQL FROM/JOIN fragment for LocationDetail
         private static string fromJoinLocationDetail = fromJoinLocationBasic + br +
-            "  LEFT OUTER JOIN ItemsXMaps ixm ON l.ItemID = ixm.ItemID" + br +             // maps
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON l.ItemID = ixm.ItemID" + br +          // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
-            "  LEFT OUTER JOIN ItemsXFirstAvailRate ixa ON l.ItemID = ixa.ItemID" + br +   // availability info
+            "  LEFT OUTER JOIN ItemsXFirstAvailRate ixa ON l.ItemID = ixa.ItemID" + br +    // availability info
             "  LEFT OUTER JOIN Availability av ON ixa.AvailID = av.AvailID" + br +
-            "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br + // first banner image 
+            "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br +  // first banner image 
             "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID" + br +
-            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                               // base url
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // base url
             "                     FROM ItemsXFeatures" + br +
             "                    WHERE FeatureID = @0) f1 ON l.ItemID = f1.ItemID";
 
@@ -151,6 +151,27 @@ namespace KinsailMVC.Models
             " WHERE RowNum > 1" + br +
             " ORDER BY RowNum" + br;
 
+        // SQL query for list of location maps
+        private static string queryLocationMaps =
+            "SELECT i.ItemID AS locationId, m.MapID AS mapId, m.Name, m.Description, m.TilesURL, m.Width, m.Height," + br +
+            "       m.CenterX, m.CenterY, m.ZoomMin, m.ZoomMax, m.ZoomDefault," + br +
+            "       m.LatitudeNorth, m.LatitudeSouth, m.LongitudeEast, m.LongitudeWest" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // only Active maps
+            "  JOIN Maps m ON ixm.MapID = m.MapID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            " ORDER BY i.ItemID, ixm.DisplayOrder";
+
+        // SQL query for list of location map features
+        private static string queryLocationMapFeatures =
+            "SELECT i.ItemID AS locationId, ixm.MapID AS mapId, mxf.FeatureID AS featureId, mxf.DisplayOrder, mxf.CustomMarkerFlag," + br +
+            "       f.Abbreviation AS MatchFeature, mxf.MatchOperator, mxf.MatchValue, mxf.Marker, mxf.Description, mxf.OffsetX, mxf.OffsetY" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // only Active maps
+            "  JOIN MapsXFeatures mxf ON mxf.MapID = ixm.MapID" + br +
+            "  JOIN Features f ON mxf.FeatureID = f.FeatureID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            " ORDER BY i.ItemID, mxf.DisplayOrder";
 
         // map the LocationBasic properties to columns and default criteria conditions to be used in filtered queries
         public static Dictionary<string, SqlCriteria> mapLocationBasicProps = new Dictionary<string, SqlCriteria>()
@@ -290,10 +311,13 @@ namespace KinsailMVC.Models
             return locations;
             */
 
-            // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
+            // FASTER METHOD - retrieve children for all locations in separate Lists, then loop through and connect them to the parent
             // (fewer SQL queries)
             var features2 = db.FetchOneToMany<LocationDTO, FeatureAttribute<object>>(x => x.locationId, x => x.featureId, queryLocationFeatures);
             var photos2 = db.FetchOneToMany<LocationDTO, GalleryImage>(x => x.locationId, x => x.imageId, queryLocationPhotos);
+            var maps = db.Fetch<LocationDTO, MapDetail>(queryLocationMaps);
+            var markers = db.FetchOneToMany<LocationDTO, MapFeature>(x => x.locationId, queryLocationMapFeatures);
+
             foreach (LocationDetail location in locations)
             {
                 var f = features2.Find(x => x.locationId == location.locationId);
@@ -305,6 +329,18 @@ namespace KinsailMVC.Models
                 if (p != null)
                 {
                     location.photos = p.photos.ToArray();
+                }
+
+                var m = maps.Find(x => x.locationId == location.locationId);
+                if (m != null)
+                {
+                    location.map = m.map;
+                }
+
+                var r = markers.Find(x => x.locationId == location.locationId);
+                if (r != null)
+                {
+                    location.map.markers = r.markers.ToArray();
                 }
             }
             return locations;

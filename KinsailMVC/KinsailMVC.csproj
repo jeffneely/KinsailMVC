@@ -68,8 +68,9 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NPoco">
-      <HintPath>packages\NPoco.2.5.77\lib\net40\NPoco.dll</HintPath>
+    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NPoco.2.6.88\lib\net40\NPoco.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -151,11 +152,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AttributeRoutingConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <None Include="Controllers\LocationController.cs.old" />
     <Compile Include="Controllers\LocationsController.cs" />
-    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
-    <None Include="Controllers\ValuesController.cs.old" />
     <Compile Include="DataAccess\DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,6 +164,7 @@
     </Compile>
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\MapFeature.cs" />
     <Compile Include="Models\SiteDTO.cs" />
     <Compile Include="Models\LocationDTO.cs" />
     <Compile Include="Models\MapDetail.cs" />
@@ -193,8 +192,6 @@
     <Compile Include="Models\PartnerRepository.cs" />
     <Compile Include="Models\Query.cs" />
     <Compile Include="Models\QueryResults.cs" />
-    <Compile Include="Models\Recreation.cs" />
-    <Compile Include="Models\RecreationTest.cs" />
     <Compile Include="Models\RecUser.cs" />
     <Compile Include="Models\RepositoryFactory.cs" />
     <Compile Include="Models\ReservationResult.cs" />

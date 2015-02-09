@@ -26,16 +26,5 @@ namespace KinsailMVC.Models
             this.periods = periods;
         }
 
-        /**
-         * Calculates the cost of a reservation based on the reservation Start/End dates
-         *   and the defined CostPeriods of the Site.
-         */
-        float calculateCost(DateTime startDate, DateTime endDate)
-        {
-            //TODO: Implement correctly
-            DateTime st = new DateTime(1970, 1, 1);
-
-            return (Utils.GetTime(endDate) - Utils.GetTime(startDate)) * 25;
-        }
     }
 }

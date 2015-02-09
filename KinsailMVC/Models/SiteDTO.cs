@@ -5,6 +5,9 @@ using System.Web;
 
 namespace KinsailMVC.Models
 {
+    /*
+     * Helper object to temporaily contain site child data as it is queried from the database
+     */
     public class SiteDTO
     {
         [NPoco.Column("ItemID")]

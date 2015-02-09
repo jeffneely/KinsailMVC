@@ -63,6 +63,20 @@ SELECT x.ID, x.ItemID, x.AvailID, x.RateID, x.MaxUnits, mina.DisplayOrder
    AND mina.DisplayOrder = x.DisplayOrder;
 GO
 
+-- Returns first active map record for a site/location
+--DROP VIEW ItemsXFirstMap
+CREATE VIEW ItemsXFirstMap
+    AS
+SELECT x.ID, x.ItemID, x.MapID, x.CoordinateX, x.CoordinateY, x.LatLongFlag, minm.DisplayOrder
+  FROM ItemsXMaps x
+  JOIN (SELECT ItemID, MIN(DisplayOrder) AS DisplayOrder
+          FROM ItemsXMaps ixm
+          JOIN Maps AS m ON ixm.MapID = m.MapID
+         WHERE m.Active = 1
+         GROUP BY ItemID) minm ON x.ItemID = minm.ItemID
+   AND minm.DisplayOrder = x.DisplayOrder;
+GO
+
 -- Deprecated (2/3/2015) - availability and rate information are now modeled differently
 CREATE VIEW LocationsSitesRates
     AS
