@@ -21,16 +21,26 @@ namespace KinsailMVC.Models
         private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
         private static string br = Environment.NewLine;
 
+
+        // SQL query for list of all features
+        private static string queryAllFeatures =
+            "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
+            "  FROM Features f" + br +
+            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
+
+        
+        // -- Sites --------------------
+
         // SQL SELECT fragment for SiteBasic
         private static string selectSiteBasic =
-            "SELECT i.ItemID, i.Name, l.ItemID AS LocationID, f0.Value AS Type," + br +
-            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
+            "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type," + br +
+            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL AS thumbUrl, g.FullURL";
 
         // SQL SELECT fragment for SiteDetail
         private static string selectSiteDetail =
             "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type," + br +
             "       av.MaxAccommodatingUnits, av.MinDuration, av.MaxDuration, av.AdvancedReservationPeriod," + br +
-            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL, g.FullURL";
+            "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL AS thumbUrl, g.FullURL";
 
         // SQL FROM/JOIN fragment for SiteBasic
         private static string fromJoinSiteBasic =
@@ -101,27 +111,72 @@ namespace KinsailMVC.Models
             " ORDER BY i.Name";
 
 
-        // SQL query for list of site features (all sites)
+        // -- Site Features --------------------
+
+        // SQL query for list of site features (by siteId)
+        private static string queryFeaturesById =
+            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
+            "  FROM ItemsXFeatures ixf" + br +
+            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            " WHERE f.FeatureID <> @0" + br +  // feature to exclude from results
+            "   AND ixf.ItemID = @1" + br +
+            "   AND f.Active = 1" + br +
+            " ORDER BY ixf.DisplayOrder";
+
+        // SQL query for list of site features (for ALL sites)
         private static string querySiteFeatures =
-            "SELECT i.ItemID AS siteId, ixf.ID AS featureId, f.Abbreviation AS name, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT i.ItemID AS siteId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
             "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+            "   AND f.Active = 1" + br +
             " ORDER BY i.ItemID, ixf.DisplayOrder";
 
-        // SQL query for list of site gallery images (all sites), excluding the first for each
+
+        // -- Site Photos --------------------
+
+        // SQL query for list of site gallery images (by siteId), excluding the first
+        private static string queryPhotosById =
+            "SELECT g.ImageID AS imageId, g.IconURL AS thumbUrl, g.FullURL AS fullImageUrl, g.Caption AS caption, g.Source AS source" + br +
+            "  FROM ItemsXImages ixi" + br +
+            "  LEFT OUTER JOIN Images g ON ixi.ImageID = g.ImageID" + br +
+            " WHERE ixi.ItemID = @0" + br +
+            "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
+            "   AND g.Active = 1" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.ID = ID)" + br +
+            " ORDER BY ixi.DisplayOrder";
+
+
+        // SQL query for list of site gallery images (for ALL sites), excluding the first for each
         private static string querySitePhotos =
-            "SELECT i.ItemID AS siteId, g.ImageID AS imageId, g.IconURL AS iconUrl, g.FullURL AS fullImageUrl" + br +
+            "SELECT i.ItemID AS siteId, g.ImageID AS imageId, g.IconURL AS thumbUrl, g.FullURL AS fullImageUrl, g.Caption AS caption, g.Source AS source" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXImages ixi ON ixi.ItemID = i.ItemID" + br +
             "  JOIN Images g ON ixi.ImageID = g.ImageID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
             "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
-            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.iD = ID)" + br +
+            "   AND g.Active = 1" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.ID = ID)" + br + 
             " ORDER BY i.ItemID, ixi.DisplayOrder";
 
-        // SQL query for list of site cost periods (all sites)
+
+        // -- Site Cost Periods --------------------
+
+        // SQL query for list of site cost periods (by siteId)
+        // Deprecated (Old Availability model)
+        /*
+        private static string queryCostPeriodsById =
+            "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth," + br +
+            "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate," + br +
+            "       0 AS NotAvailable" + br +
+            "  FROM Items i" + br +
+            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +
+            "  JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
+            " WHERE i.ItemID = @0";
+        */
+
+        // SQL query for list of site cost periods (for ALL sites)
         // Deprecated (Old Availability model)
         /*
         private static string querySiteCostPeriods =
@@ -136,49 +191,22 @@ namespace KinsailMVC.Models
             " ORDER BY i.ItemID, ixa.DisplayOrder";
         */
 
-        // SQL query for list of site cost periods (all sites)
+        // SQL query for list of site cost periods (by siteId)
+        private static string queryCostPeriodsById =
+            "SELECT a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
+            "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
+            "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
+            "       (1 - a.Available) AS notAvailable" + br +
+            "  FROM ItemsXAvailRates ixar" + br +
+            "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
+            "  JOIN Rates r ON ixar.RateID = r.RateID" + br +
+            " WHERE ixar.ItemID = @0" + br +
+            "   AND a.Active = 1" + br +
+            "   AND r.Active = 1" + br +
+            " ORDER BY ixar.DisplayOrder";
+
+        // SQL query for list of site cost periods (for ALL sites)
         private static string querySiteCostPeriods =
-        "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
-        "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
-        "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
-        "       (1 - a.Available) AS notAvailable" + br +
-        "  FROM Items i" + br +
-        "  LEFT OUTER JOIN ItemsXAvailRates ixar ON i.ItemID = ixar.ItemID" + br +
-        "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
-        "  JOIN Rates r ON r.RateID = ixar.RateID" + br +
-        " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
-        "   AND r.Active = 1" + br +
-        " ORDER BY i.ItemID, ixar.DisplayOrder";
-
-        // SQL query for list of all features
-        private static string queryAllFeatures =
-            "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
-            "  FROM Features f" + br +
-            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
-
-        // SQL query for list of features for a site (by ID)
-        private static string queryFeaturesById =
-            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
-            "  FROM ItemsXFeatures ixf" + br +
-            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
-            " WHERE f.FeatureID <> @0" + br +
-            "   AND ixf.ItemID = @1";
-
-        // SQL query for list of cost periods for a site (by ID)
-        // Deprecated (Old Availability model)
-        /*
-        private static string queryCostPeriodsById =
-            "SELECT a.AvailStartMonth AS StartMonth, a.AvailStartDay AS StartDay, a.AvailEndMonth AS EndMonth," + br +
-            "       a.AvailEndDay AS EndDay, a.MinDurationDays AS MinimumDuration, ixa.WeekdayRate, ixa.WeekendRate," + br +
-            "       0 AS NotAvailable" + br +
-            "  FROM Items i" + br +
-            "  LEFT OUTER JOIN ItemsXAvailability ixa ON i.ItemID = ixa.ItemID" + br +
-            "  JOIN Availability a ON ixa.AvailID = a.AvailID" + br +
-            " WHERE i.ItemID = @0";
-        */
-
-        // SQL query for list of cost periods for a site (by ID)
-        private static string queryCostPeriodsById =
             "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
             "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
             "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
@@ -186,21 +214,13 @@ namespace KinsailMVC.Models
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXAvailRates ixar ON i.ItemID = ixar.ItemID" + br +
             "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
-            "  JOIN Rates r ON r.RateID = ixar.RateID" + br +
-            " WHERE i.ItemID = @0" + br +
+            "  JOIN Rates r ON ixar.RateID = r.RateID" + br +
+            " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
+            "   AND a.Active = 1" + br +
             "   AND r.Active = 1" + br +
-            " ORDER BY ixar.DisplayOrder";
+            " ORDER BY i.ItemID, ixar.DisplayOrder";
+
         
-        // SQL query for list of gallery images for a site (by ID), excluding the first for each
-        private static string queryPhotosById =
-            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
-            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
-            "          FROM Images i" + br +
-            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID" + br +
-            "         WHERE ixi.ItemID = @0" + br +
-            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img" + br +
-            " WHERE RowNum > 1" + br +
-            " ORDER BY RowNum";
 
         // return list of reserved data ranges for site (> today)
         private static string queryReservedRanges =
@@ -328,6 +348,9 @@ namespace KinsailMVC.Models
 
         public List<SiteDetail> GetAllDetails(Dictionary<string, string> queryParams = null)
         {
+
+            // FIX: .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
+            
             // get sites
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
@@ -371,7 +394,7 @@ namespace KinsailMVC.Models
 
             // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
             // (fewer SQL queries)
-            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.featureId, querySiteFeatures);
+            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.id, querySiteFeatures);
             var costPeriods2 = db.FetchOneToMany<SiteDTO, CostPeriod>(x => x.siteId, querySiteCostPeriods);
             var photos2 = db.FetchOneToMany<SiteDTO, GalleryImage>(x => x.siteId, x => x.imageId, querySitePhotos);
             foreach (SiteDetail site in sites)
@@ -442,7 +465,7 @@ namespace KinsailMVC.Models
 
             // FASTER METHOD - retrieve children in separate Lists, then loop through and connect them to the parent
             // (fewer SQL queries)
-            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.featureId, querySiteFeatures);
+            var features2 = db.FetchOneToMany<SiteDTO, FeatureAttribute<object>>(x => x.siteId, x => x.id, querySiteFeatures);
             var costPeriods2 = db.FetchOneToMany<SiteDTO, CostPeriod>(x => x.siteId, querySiteCostPeriods);
             var photos2 = db.FetchOneToMany<SiteDTO, GalleryImage>(x => x.siteId, x => x.imageId, querySitePhotos);
             foreach (SiteDetail site in sites)

@@ -11,16 +11,22 @@ namespace KinsailMVC.Models
     public class FeatureAttribute<T>
     {
         // identifiers
-        public long featureId { get; set; }     // database identifier, never displayed to the user
+        public long? id { get; set; }           // database identifier, never displayed to the user
 
         // attributes
-        public String name { get; set; }        // example: "Color"
-        public String description { get; set; } // example: "Primary exterior color"
-        public String value { get; set; }       // example: "Red"
+        public string name { get; set; }        // example: "primaryColor"
+        public string label { get; set; }       // example: "Primary Color"
+        public string description { get; set; } // example: "The primary exterior color and shade"
+        public string value { get; set; }       // example: "Red"
         
         // ctors
         public FeatureAttribute()
         {
+            this.id = null;
+            this.name = string.Empty;
+            this.label = string.Empty;
+            this.description = string.Empty;
+            this.value = string.Empty;
         }
 
         public FeatureAttribute(string name, Boolean value)

@@ -26,18 +26,27 @@ namespace KinsailMVC.Models
         private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
         private static string br = Environment.NewLine;
 
+        // SQL query for list of all available features
+        private static string queryAllFeatures =
+            "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
+            "  FROM Features f" + br +
+            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
+
+
+        // -- Locations --------------------
+
         // SQL SELECT fragment for LocationBasic
         private static string selectLocationBasic =
-            "SELECT l.ItemID, l.Name," + br +
+            "SELECT l.ItemID, l.Name, l.Description," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
             "       COALESCE(r.SiteCount, 0) AS TotalReservableSites," + br +
             "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2," + br +
             "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude," + br +
-            "       g.ImageID, g.IconURL, g.FullURL";
+            "       g.ImageID, g.IconURL AS thumbUrl, g.FullURL";
 
         // SQL SELECT fragment for LocationDetail
         private static string selectLocationDetail =
-            "SELECT l.ItemID, l.Name," + br +
+            "SELECT l.ItemID, l.Name, l.Description," + br +
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
             "       m.TilesURL AS MapTilesBaseURL," + br +
             "       f1.Value AS BaseURL," + br +
@@ -49,16 +58,16 @@ namespace KinsailMVC.Models
             "       COALESCE(r.SiteCount, 0) AS TotalReservableSites," + br +
             "       a.LocationID AS AddressId, a.LocationName AS Name, a.StreetAddress AS Street, a.StreetAddress2 AS Street2," + br +
             "       a.City, a.State, a.ZipCode AS Zip, a.Country, a.Longitude, a.Latitude," + br +
-            "       g.ImageID, g.IconURL, g.FullURL," + br +
-            "       b.ImageID, b.IconURL, b.FullURL";
+            "       g.ImageID, g.IconURL AS thumbUrl, g.FullURL," + br +
+            "       b.ImageID, b.IconURL AS thumbUrl, b.FullURL";
 
         // SQL FROM/JOIN fragment for LocationBasic
         private static string fromJoinLocationBasic =
             "  FROM Items l" + br +
-            "  LEFT OUTER JOIN ItemsXOrganizations ixo on l.ItemID = ixo.ItemID" + br +     // organization
+            "  LEFT OUTER JOIN ItemsXOrganizations ixo ON l.ItemID = ixo.ItemID" + br +     // organization
             "  LEFT OUTER JOIN Organizations o ON ixo.OrgID = o.OrgID" + br +
             "  LEFT OUTER JOIN RatesAtLocations r ON l.ItemID = r.LocationID" + br +        // aggregate site rate/availability info
-            "  LEFT OUTER JOIN ItemsXLocations ixl on l.ItemID = ixl.ItemID" + br +         // location/address
+            "  LEFT OUTER JOIN ItemsXLocations ixl ON l.ItemID = ixl.ItemID" + br +         // location/address
             "  LEFT OUTER JOIN Locations a ON ixl.LocationID = a.LocationID" + br + 
             "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image
             "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
@@ -107,72 +116,114 @@ namespace KinsailMVC.Models
         private static string orderLocations =
             " ORDER BY l.Name";
 
-        // SQL query for list of features (by locationID)
+
+        // -- Location Features --------------------
+        
+        // SQL query for list of location features (by locationId)
         private static string queryFeatures =
-            "SELECT ixf.ID AS FeatureID, f.Abbreviation AS Name, f.Description, ixf.Value" + br +
+            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
             "  FROM ItemsXFeatures ixf" + br +
             "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
-            " WHERE ixf.ItemID = @0";
+            " WHERE ixf.ItemID = @0" + br + 
+            "   AND f.Active = 1" + br +
+            " ORDER BY ixf.DisplayOrder";
 
-        // SQL query for list of location features 
+        // SQL query for list of location features (for ALL locations)
         private static string queryLocationFeatures =
-            "SELECT i.ItemID AS locationId, ixf.ID AS featureId, f.Abbreviation AS name, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT i.ItemID AS locationId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
             "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
+            "   AND f.Active = 1" + br +
             " ORDER BY i.ItemID, ixf.DisplayOrder";
 
-        // SQL query for list of location gallery images, excluding the first for each
+
+        // -- Location Photos --------------------
+
+        // SQL query for list of location gallery images, excluding the first for each (by locationId)
+        private static string queryPhotos =
+            "SELECT g.ImageID AS imageId, g.IconURL AS thumbUrl, g.FullURL AS fullImageUrl, g.Caption AS caption, g.Source AS source" + br +
+            "  FROM ItemsXImages ixi" + br +
+            "  LEFT OUTER JOIN Images g ON ixi.ImageID = g.ImageID" + br +
+            " WHERE ixi.ItemID = @0" + br + 
+            "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.ID = ID)" + br +
+            "   AND g.Active = 1" + br +
+            " ORDER BY ixi.DisplayOrder";
+        
+        // SQL query for list of location gallery images, excluding the first for each (for ALL locations)
         private static string queryLocationPhotos =
-            "SELECT i.ItemID AS locationId, g.ImageID AS imageId, g.IconURL AS iconUrl, g.FullURL AS fullImageUrl" + br +
+            "SELECT i.ItemID AS locationId, g.ImageID AS imageId, g.IconURL AS thumbUrl, g.FullURL AS fullImageUrl, g.Caption AS caption, g.Source AS source" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXImages ixi ON ixi.ItemID = i.ItemID" + br +
             "  JOIN Images g ON ixi.ImageID = g.ImageID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
             "   AND g.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')" + br +
-            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.iD = ID)" + br +
+            "   AND NOT EXISTS (SELECT * FROM ItemsXFirstGalleryImage WHERE ixi.ID = ID)" + br +
+            "   AND g.Active = 1" + br +
             " ORDER BY i.ItemID, ixi.DisplayOrder";
 
-        // SQL query for list of all available features
-        private static string queryAllFeatures =
-            "SELECT LOWER(f.Abbreviation) AS Name, f.FeatureID, ft.Category" + br +
-            "  FROM Features f" + br +
-            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID";
-        
         // SQL query for list of gallery images, excluding the first
-        private static string queryPhotos =
-            "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
-            "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
-            "          FROM Images i" + br +
-            "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID" + br +
-            "         WHERE ixi.ItemID = @0" + br +
-            "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img" + br +
-            " WHERE RowNum > 1" + br +
-            " ORDER BY RowNum" + br;
+        //private static string queryPhotos =
+        //    "SELECT ImageID, ImageTypeID, IconURL, FullURL, Caption, Source, Active" + br +
+        //    "  FROM (SELECT i.*, ROW_NUMBER() OVER (ORDER BY ixi.DisplayOrder) AS RowNum" + br +
+        //    "          FROM Images i" + br +
+        //    "          JOIN ItemsXImages ixi ON ixi.ImageID = i.ImageID" + br +
+        //    "         WHERE ixi.ItemID = @0" + br +
+        //    "           AND i.ImageTypeID = (SELECT ImageTypeID FROM ImageTypes WHERE Name = 'Gallery Image')) img" + br +
+        //    " WHERE RowNum > 1" + br +
+        //    " ORDER BY RowNum" + br;
 
-        // SQL query for list of location maps
+
+        // -- Location Maps --------------------
+
+        // SQL query for list of location maps (by locationId)
+        private static string queryMaps =
+            "SELECT m.MapID AS mapId, m.Name, m.Description, m.TilesURL, m.Width, m.Height," + br +
+            "       m.CenterX, m.CenterY, m.ZoomMin, m.ZoomMax, m.ZoomDefault," + br +
+            "       m.LatitudeNorth, m.LatitudeSouth, m.LongitudeEast, m.LongitudeWest" + br +
+            "  FROM ItemsXFirstMap ixm" + br +   // view only returns the first Active map, so no need to include an explicit condition for Active in this query
+            "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
+            " WHERE ixm.ItemID = @0" + br +
+            " ORDER BY ixm.DisplayOrder";  // only returns one row, but leaving this in for the future
+
+        // SQL query for list of location maps (for ALL locations)
         private static string queryLocationMaps =
             "SELECT i.ItemID AS locationId, m.MapID AS mapId, m.Name, m.Description, m.TilesURL, m.Width, m.Height," + br +
             "       m.CenterX, m.CenterY, m.ZoomMin, m.ZoomMax, m.ZoomDefault," + br +
             "       m.LatitudeNorth, m.LatitudeSouth, m.LongitudeEast, m.LongitudeWest" + br +
             "  FROM Items i" + br +
-            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // only Active maps
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // view only returns the first Active map, so no need to include an explicit condition for Active in this query
             "  JOIN Maps m ON ixm.MapID = m.MapID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
             " ORDER BY i.ItemID, ixm.DisplayOrder";
 
-        // SQL query for list of location map features
+
+        // -- Location MapFeatures --------------------
+
+        // SQL query for list of location map features (by locationId)
+        private static string queryMapFeatures =
+            "SELECT ixm.MapID AS mapId, mxf.FeatureID AS featureId, mxf.DisplayOrder, mxf.CustomMarkerFlag," + br +
+            "       f.Abbreviation AS MatchFeature, mxf.MatchOperator, mxf.MatchValue, mxf.Marker, mxf.Description, mxf.OffsetX, mxf.OffsetY" + br +
+            "  FROM ItemsXFirstMap ixm" + br +   // view only returns the first Active map, so no need to include an explicit condition for Active in this query
+            "  LEFT OUTER JOIN MapsXFeatures mxf ON mxf.MapID = ixm.MapID" + br +
+            "  JOIN Features f ON mxf.FeatureID = f.FeatureID" + br +
+            " WHERE ixm.ItemID = @0" + br +
+            " ORDER BY mxf.DisplayOrder";
+
+        // SQL query for list of location map features (for ALL locations)
         private static string queryLocationMapFeatures =
             "SELECT i.ItemID AS locationId, ixm.MapID AS mapId, mxf.FeatureID AS featureId, mxf.DisplayOrder, mxf.CustomMarkerFlag," + br +
             "       f.Abbreviation AS MatchFeature, mxf.MatchOperator, mxf.MatchValue, mxf.Marker, mxf.Description, mxf.OffsetX, mxf.OffsetY" + br +
             "  FROM Items i" + br +
-            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // only Active maps
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON ixm.ItemID = i.ItemID" + br +   // view only returns the first Active map, so no need to include an explicit condition for Active in this query
             "  JOIN MapsXFeatures mxf ON mxf.MapID = ixm.MapID" + br +
             "  JOIN Features f ON mxf.FeatureID = f.FeatureID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
             " ORDER BY i.ItemID, mxf.DisplayOrder";
 
+        
         // map the LocationBasic properties to columns and default criteria conditions to be used in filtered queries
         public static Dictionary<string, SqlCriteria> mapLocationBasicProps = new Dictionary<string, SqlCriteria>()
         { 
@@ -313,7 +364,7 @@ namespace KinsailMVC.Models
 
             // FASTER METHOD - retrieve children for all locations in separate Lists, then loop through and connect them to the parent
             // (fewer SQL queries)
-            var features2 = db.FetchOneToMany<LocationDTO, FeatureAttribute<object>>(x => x.locationId, x => x.featureId, queryLocationFeatures);
+            var features2 = db.FetchOneToMany<LocationDTO, FeatureAttribute<object>>(x => x.locationId, x => x.id, queryLocationFeatures);
             var photos2 = db.FetchOneToMany<LocationDTO, GalleryImage>(x => x.locationId, x => x.imageId, queryLocationPhotos);
             var maps = db.Fetch<LocationDTO, MapDetail>(queryLocationMaps);
             var markers = db.FetchOneToMany<LocationDTO, MapFeature>(x => x.locationId, queryLocationMapFeatures);
@@ -379,11 +430,17 @@ namespace KinsailMVC.Models
             List<FeatureAttribute<object>> features = db.Fetch<FeatureAttribute<object>>(queryFeatures, location.locationId);
             location.features = features.ToArray();
 
-            // get gallery images for each location, excluding the first one
-            // can't automatically include this in the primary query since NPoco can't do both 
-            // nested and one-to-many properties in a single automatic mapping
+            // get gallery images for location, excluding the first one
             List<GalleryImage> photos = db.Fetch<GalleryImage>(queryPhotos, location.locationId);
             location.photos = photos.ToArray();
+
+            // get map for location
+            List<MapDetail> maps = db.Fetch<MapDetail>(queryMaps, location.locationId);
+            location.map = maps.ElementAtOrDefault(0);
+
+            // get map markers for location
+            List<MapFeature> markers = db.Fetch<MapFeature>(queryMapFeatures, location.locationId);
+            location.map.markers = markers.ToArray();
 
             return location;
         }

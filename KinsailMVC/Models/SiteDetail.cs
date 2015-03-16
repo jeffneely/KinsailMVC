@@ -11,7 +11,6 @@ namespace KinsailMVC.Models
     public class SiteDetail : SiteBasic
     {
         // attributes
-        public string description { get; set; }                  // verbose description of the site
         public int maxAccommodatingUnits { get; set; }           // number of tents/rvs/horses/etc supported, depending on site type
         public int minDuration { get; set; }                     // the minimum number of days this site is reservable. Eg 1
         public int maxDuration { get; set; }                     // the maximum number of days this site is reservable. Eg 15

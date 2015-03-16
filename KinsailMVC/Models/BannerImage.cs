@@ -11,8 +11,8 @@ namespace KinsailMVC.Models
     public class BannerImage : GalleryImage
     {
         // ctors
-        public BannerImage(string iconUrl, string fullImageUrl)
-            : base(iconUrl, fullImageUrl)
+        public BannerImage(string thumbUrl, string fullImageUrl)
+            : base(thumbUrl, fullImageUrl)
         {
         }
 

@@ -20,6 +20,7 @@ namespace KinsailMVC.Models
         // attributes
         [NPoco.Column("Name")]
         public string title { get; set; }                          // the name of a camp ground or recreation facility
+        public string description { get; set; }                    // description of a camp ground or recreation facility
         public Address address { get; set; }                       // primary address of the location (see Address class)
         public string operatingOrganization { get; set; }          // example: "Department of Forestry"
         public string operatingOrganizationPhone { get; set; }     // main phone number to the organization which operates the site (example: "(703) 555-1234")

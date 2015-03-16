@@ -22,6 +22,7 @@ namespace KinsailMVC.Models
         //public SiteType type { get; set; }        // couldn't get this to map via NPoco (need support for enum mapping)
         [NPoco.Column("Name")]
         public string siteIdentifier { get; set; }  // short identifier, eg: "A001"
+        public string description { get; set; }     // description of the site
         public MapCoordinates coords { get; set; }  // where this site is located on the map
 
         // non queryable attributes 
