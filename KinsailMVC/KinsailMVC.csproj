@@ -272,6 +272,7 @@
     <Content Include="DB\012_REF_DATA_Features.sql" />
     <Content Include="DB\013_REF_DATA_ImageTypes.sql" />
     <Content Include="DB\014_REF_DATA_ResourceTypes.sql" />
+    <Content Include="DB\030_FIXES.sql" />
     <Content Include="DB\220_SAMPLE_DATA_Sites.sql" />
     <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
     <Content Include="DB\210_SAMPLE_DATA_Locations.sql" />

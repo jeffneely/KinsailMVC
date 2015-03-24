@@ -7,8 +7,8 @@
 --------------------------------------------------------------------------------
 
 -- Change this to the proper DB as appropriate
-USE [Kinsail_JNeely]
---USE [Kinsail]
+--USE [Kinsail_JNeely]
+USE [Kinsail]
 GO
 
 SET ANSI_NULLS ON
@@ -38,6 +38,65 @@ BEGIN
 END
 GO
 
+
+-----------------
+-- Drop Tables --
+-- (if needed) --
+--------------------------------------------------------------------------------
+
+--SELECT * FROM [dbo].[ItemsXItems]
+--DROP TABLE [dbo].[ItemsXItems]
+
+--SELECT * FROM [dbo].[FeatureTypeValues]
+--DROP TABLE [dbo].[FeatureTypeValues]
+
+--SELECT * FROM [dbo].[ItemsXFeatures]
+--DROP TABLE [dbo].[ItemsXFeatures]
+
+--SELECT * FROM [dbo].[MapsXFeatures]
+--DROP TABLE [dbo].[MapsXFeatures]
+
+--SELECT * FROM [dbo].[Features]
+--DROP TABLE [dbo].[Features]
+
+--SELECT * FROM [dbo].[FeatureTypes]
+--DROP TABLE [dbo].[FeatureTypes]
+
+--SELECT * FROM [dbo].[ItemsXMaps]
+--DROP TABLE [dbo].[ItemsXMaps]
+
+--SELECT * FROM [dbo].[Maps]
+--DROP TABLE [dbo].[Maps]
+
+--SELECT * FROM [dbo].[ItemsXImages]
+--DROP TABLE [dbo].[ItemsXImages]
+
+--SELECT * FROM [dbo].[Images]
+--DROP TABLE [dbo].[Images]
+
+--SELECT * FROM [dbo].[ImageTypes]
+--DROP TABLE [dbo].[ImageTypes]
+
+--SELECT * FROM [dbo].[ItemsXLocations]
+--DROP TABLE [dbo].[ItemsXLocations]
+
+--SELECT * FROM [dbo].[ItemsXOrganizations]
+--DROP TABLE [dbo].[ItemsXOrganizations]
+
+--SELECT * FROM [dbo].[Organizations]
+--DROP TABLE [dbo].[Organizations]
+
+--SELECT * FROM [dbo].[ItemsXAvailability]
+--DROP TABLE [dbo].[ItemsXAvailability]
+
+--SELECT * FROM [dbo].[ItemsXAvailRates]
+--DROP TABLE [dbo].[ItemsXAvailRates]
+
+--SELECT * FROM [dbo].[Rates]
+--DROP TABLE [dbo].[Rates]
+
+--SELECT * FROM [dbo].[Availability]
+--DROP TABLE [dbo].[Availability]
 
 
 -----------------------
@@ -76,6 +135,7 @@ ELSE
 		[Name]			[nvarchar](100) NOT NULL,
 		[Abbreviation]	[nvarchar](20) NULL,
 		[Description]	[nvarchar](1000) NULL,
+		[Category]		[nvarchar](12) NULL,
 		[Active]		[bit] NOT NULL CONSTRAINT [DF_FeatureTypes_Active] DEFAULT ((1)),
 		CONSTRAINT [PK_FeatureTypes] PRIMARY KEY CLUSTERED ([FeatureTypeID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -325,7 +385,7 @@ ELSE
 		[OrgID]			[bigint] NOT NULL CONSTRAINT [FK_ItemsXOrganizations_OrgID] REFERENCES [Organizations]([OrgID]) NOT FOR REPLICATION,
 		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXOrganizations_DisplayOrder]  DEFAULT ((0)),
 		[Description]	[nvarchar](200) NULL,
-		CONSTRAINT [PK_ItemsXLocations] PRIMARY KEY CLUSTERED ([ID] ASC) 
+		CONSTRAINT [PK_ItemsXOrganizations] PRIMARY KEY CLUSTERED ([ID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO

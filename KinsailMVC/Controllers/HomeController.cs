@@ -12,7 +12,7 @@ namespace KinsailMVC.Controllers
     {
         public ViewResult Index()
         {
-            IDatabase db = new Database("DB1/Kinsail_JNeely");
+            IDatabase db = new Database("Kinsail");
             List<SiteBasic> sites = db.Fetch<SiteBasic>("SELECT ItemID AS siteId, Name AS siteIdentifier FROM Items WHERE ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')");
 
             string output = "<h2>Testing DB connectivity...</h2>" + String.Join("<br/>", sites.Select(x => x.siteId + " | " + x.siteIdentifier));

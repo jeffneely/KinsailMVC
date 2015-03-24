@@ -115,22 +115,28 @@ namespace KinsailMVC.Models
 
         // SQL query for list of site features (by siteId)
         private static string queryFeaturesById =
-            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value," + br +
+            "       dbo.fGetFeatureBullet(f.Name, f.NameNegative, ft.Name, ixf.Value) AS Bullet" + br +
             "  FROM ItemsXFeatures ixf" + br +
-            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID" + br +
             " WHERE f.FeatureID <> @0" + br +  // feature to exclude from results
             "   AND ixf.ItemID = @1" + br +
             "   AND f.Active = 1" + br +
+            "   AND f.Hidden = 0" + br +
             " ORDER BY ixf.DisplayOrder";
 
         // SQL query for list of site features (for ALL sites)
         private static string querySiteFeatures =
-            "SELECT i.ItemID AS siteId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT i.ItemID AS siteId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value," + br +
+            "       dbo.fGetFeatureBullet(f.Name, f.NameNegative, ft.Name, ixf.Value) AS Bullet" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
             "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Site')" + br +
             "   AND f.Active = 1" + br +
+            "   AND f.Hidden = 0" + br +
             " ORDER BY i.ItemID, ixf.DisplayOrder";
 
 
@@ -264,7 +270,7 @@ namespace KinsailMVC.Models
 
         public SiteRepository()
         {
-            db = new Database("DB1/Kinsail_JNeely");
+            db = new Database("Kinsail");
             setup();
         }
 

@@ -121,21 +121,35 @@ namespace KinsailMVC.Models
         
         // SQL query for list of location features (by locationId)
         private static string queryFeatures =
-            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value, " + br +
+            "       dbo.fGetFeatureBullet(f.Name, f.NameNegative, ft.Name, ixf.Value) AS Bullet" + br +
+        //  "       CASE ft.Name" + br +
+        //  "           WHEN 'Boolean' THEN" + br +
+        //  "               CASE ixf.Value" + br +
+        //  "                   WHEN 1 THEN f.Name" + br +
+        //  "                   ELSE f.NameNegative" + br +
+        //  "               END" + br +
+        //  "           ELSE f.Name + ': ' + ixf.Value" + br +
+        //  "       END AS Bullet" + br +
             "  FROM ItemsXFeatures ixf" + br +
-            "  LEFT OUTER JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN FeatureTypes ft ON ft.FeatureTypeID = f.FeatureTypeID" + br +
             " WHERE ixf.ItemID = @0" + br + 
             "   AND f.Active = 1" + br +
+            "   AND f.Hidden = 0" + br +
             " ORDER BY ixf.DisplayOrder";
 
         // SQL query for list of location features (for ALL locations)
         private static string queryLocationFeatures =
-            "SELECT i.ItemID AS locationId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value" + br +
+            "SELECT i.ItemID AS locationId, ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value," + br +
+            "       dbo.fGetFeatureBullet(f.Name, f.NameNegative, ft.Name, ixf.Value) AS Bullet" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXFeatures ixf ON ixf.ItemID = i.ItemID" + br +
             "  JOIN Features f ON ixf.FeatureID = f.FeatureID" + br +
+            "  JOIN FeatureTypes ft ON ft.FeatureTypeID = f.FeatureTypeID" + br +
             " WHERE i.ItemTypeID = (SELECT ItemTypeID FROM ItemTypes WHERE Name = 'Recreation Location')" + br +
             "   AND f.Active = 1" + br +
+            "   AND f.Hidden = 0" + br +
             " ORDER BY i.ItemID, ixf.DisplayOrder";
 
 
@@ -262,7 +276,7 @@ namespace KinsailMVC.Models
 
         public LocationRepository()
         {
-            db = new Database("DB1/Kinsail_JNeely");
+            db = new Database("Kinsail");
             setup();
         }
 
