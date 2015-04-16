@@ -37,10 +37,17 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("locations/{idLocation}/details")]
-        public LocationBasic GetLocationDetail(long idLocation)
+        public LocationDetail GetLocationDetail(long idLocation)
         {
             var result = repository.GetDetailbyId(idLocation);
             return result;
+        }
+
+        [GET("locations/{idLocation}/sitefeatures")]
+        public List<FeatureAttributeStat<object>> GetLocationSiteFeatures(long idLocation)
+        {
+            var features = repository.GetSiteFeaturesbyId(idLocation);
+            return features;
         }
     }
 }

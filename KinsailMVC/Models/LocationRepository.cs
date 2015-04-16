@@ -50,6 +50,7 @@ namespace KinsailMVC.Models
             "       o.Name AS OperatingOrganization, o.Phone AS OperatingOrganizationPhone, o.Phone2 AS ReservationPhone," + br +
             "       m.TilesURL AS MapTilesBaseURL," + br +
             "       f1.Value AS BaseURL," + br +
+            "       l.GroupID, p.PartnerID, p.PartnerCode, pt.PartnerTypeName AS PartnerType," + br +
             "       av.Policies AS reservationPolicies, av.CancelBeforeDays AS CancellationDaysBeforeReservation," + br +
             "       MONTH(r.MinAvailStartDate) AS AvailabilityStartMonth, DAY(r.MinAvailStartDate) AS AvailabilityStartDay," + br +
             "       MONTH(r.MaxAvailEndDate) AS AvailabilityEndMonth, DAY(r.MaxAvailEndDate) AS AvailabilityEndDay," + br +
@@ -64,23 +65,26 @@ namespace KinsailMVC.Models
         // SQL FROM/JOIN fragment for LocationBasic
         private static string fromJoinLocationBasic =
             "  FROM Items l" + br +
-            "  LEFT OUTER JOIN ItemsXOrganizations ixo ON l.ItemID = ixo.ItemID" + br +     // organization
+            "  LEFT OUTER JOIN ItemsXOrganizations ixo ON l.ItemID = ixo.ItemID" + br +      // organization
             "  LEFT OUTER JOIN Organizations o ON ixo.OrgID = o.OrgID" + br +
-            "  LEFT OUTER JOIN RatesAtLocations r ON l.ItemID = r.LocationID" + br +        // aggregate site rate/availability info
-            "  LEFT OUTER JOIN ItemsXLocations ixl ON l.ItemID = ixl.ItemID" + br +         // location/address
+            "  LEFT OUTER JOIN RatesAtLocations r ON l.ItemID = r.LocationID" + br +         // aggregate site rate/availability info
+            "  LEFT OUTER JOIN ItemsXLocations ixl ON l.ItemID = ixl.ItemID" + br +          // location/address
             "  LEFT OUTER JOIN Locations a ON ixl.LocationID = a.LocationID" + br + 
-            "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br + // first gallery image
+            "  LEFT OUTER JOIN ItemsXFirstGalleryImage ixg ON l.ItemID = ixg.ItemID" + br +  // first gallery image
             "  LEFT OUTER JOIN Images g ON g.ImageID = ixg.ImageID";
 
         // SQL FROM/JOIN fragment for LocationDetail
         private static string fromJoinLocationDetail = fromJoinLocationBasic + br +
-            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON l.ItemID = ixm.ItemID" + br +          // maps
+            "  LEFT OUTER JOIN ItemsXFirstMap ixm ON l.ItemID = ixm.ItemID" + br +           // maps
             "  LEFT OUTER JOIN Maps m ON ixm.MapID = m.MapID" + br +
-            "  LEFT OUTER JOIN ItemsXFirstAvailRate ixa ON l.ItemID = ixa.ItemID" + br +    // availability info
+            "  LEFT OUTER JOIN ItemsXFirstAvailRate ixa ON l.ItemID = ixa.ItemID" + br +     // availability info
             "  LEFT OUTER JOIN Availability av ON ixa.AvailID = av.AvailID" + br +
-            "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br +  // first banner image 
+            "  LEFT OUTER JOIN PartnersXGroups pxg ON pxg.GroupID = l.GroupID" + br +        // partner/group
+            "  LEFT OUTER JOIN Partners p ON pxg.PartnerID = p.PartnerID" + br +
+            "  LEFT OUTER JOIN PartnerTypes pt ON p.PartnerTypeID = pt.PartnerTypeID" + br +
+            "  LEFT OUTER JOIN ItemsXFirstBannerImage ixb ON l.ItemID = ixb.ItemID" + br +   // first banner image 
             "  LEFT OUTER JOIN Images b ON b.ImageID = ixb.ImageID" + br +
-            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // base url
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                 // base url
             "                     FROM ItemsXFeatures" + br +
             "                    WHERE FeatureID = @0) f1 ON l.ItemID = f1.ItemID";
 
@@ -271,6 +275,10 @@ namespace KinsailMVC.Models
             {"pricemax",                   new SqlCriteria("agg.MaxWeekendRate",  CriteriaType.NUMBER, SqlOperator.LESSEQUAL)},  // find PriceMax <= VALUE
             {"cancellationdaysbeforereservation", 
                                            new SqlCriteria("av.CancelBeforeDays", CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"groupid",                    new SqlCriteria("l.GroupID",           CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"partnerid",                  new SqlCriteria("p.PartnerID",         CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"partnercode",                new SqlCriteria("p.PartnerCode",       CriteriaType.TEXT,   SqlOperator.EQUAL)},
+            {"partnertype",                new SqlCriteria("pt.PartnerTypeName",  CriteriaType.TEXT,   SqlOperator.EQUAL)}
         };
 
 
@@ -334,6 +342,7 @@ namespace KinsailMVC.Models
             }
             
             sql = sql.Append(orderLocations);
+            //Debug.Print(sql.SQL);
 
             List<LocationBasic> locations = db.Fetch<LocationBasic, Address, GalleryImage>(sql);
             return locations;
@@ -356,6 +365,8 @@ namespace KinsailMVC.Models
             }
             
             sql = sql.Append(orderLocations);
+            //Debug.Print(sql.SQL);
+
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
 
             /* SLOW METHOD - issuing child queries for each row in the result set to retrieve children
@@ -420,6 +431,8 @@ namespace KinsailMVC.Models
                 .Append(fromJoinLocationBasic) 
                 .Append(whereLocationById, locationItemTypeId, locationId)
                 .Append(orderLocations);
+
+            //Debug.Print(sql.SQL);
             List<LocationBasic> locations = db.Fetch<LocationBasic, Address, GalleryImage>(sql);
             //Debug.Print("Result set (locations) has {0} elements", locations.Count);
             return locations.ElementAtOrDefault(0);
@@ -434,6 +447,8 @@ namespace KinsailMVC.Models
                 .Append(fromJoinLocationDetail, baseURLFeatureId) 
                 .Append(whereLocationById, locationItemTypeId, locationId)
                 .Append(orderLocations);
+            
+            //Debug.Print(sql.SQL);
             List<LocationDetail> locations = db.Fetch<LocationDetail, Address, GalleryImage, BannerImage>(sql);
             //Debug.Print("Result set (locations) has {0} elements", locations.Count);
             LocationDetail location = locations.ElementAtOrDefault(0);
@@ -457,6 +472,47 @@ namespace KinsailMVC.Models
             location.map.markers = markers.ToArray();
 
             return location;
+        }
+
+
+        public List<FeatureAttributeStat<object>> GetSiteFeaturesbyId(long idLocation)
+        {
+
+            /*
+            public long? id { get; set; }           // database identifier, never displayed to the user
+            public string name { get; set; }        // example: "primaryColor"
+            public string label { get; set; }       // example: "Primary Color"
+            public string description { get; set; } // example: "The primary exterior color and shade"
+            public string type { get; set;  }       // example: "String"
+            public int count { get; set;  }         // example: 3
+            public List<T> value { get; set; }      // example: "Red"
+             */
+            //"SELECT ixf.ID AS id, f.Abbreviation AS name, f.Name AS label, f.Description AS description, ixf.Value AS value, " + br +
+
+
+            var sql = NPoco.Sql.Builder
+                .Append("SELECT f.FeatureID AS id, MAX(f.Abbreviation) AS name, MAX(f.Name) AS label, " + br +
+                        "       MAX(f.Description) AS description, MAX(ft.Name) AS type, MAX(c.Count) AS count, " + br +
+                        "       f.featureID AS id, ixf.Value AS [value], COUNT(f.Name) AS [count]" + br)
+                .Append("  FROM Items s" + br +
+                        "  JOIN ItemsXItems ixi ON s.ItemID = ixi.ItemID" + br +
+                        "  JOIN Items l ON ixi.ParentItemID = l.ItemID" + br +
+                        "  JOIN ItemsXFeatures ixf ON s.ItemID = ixf.ItemID" + br +
+                        "  JOIN Features f ON f.FeatureID = ixf.FeatureID" + br +
+                        "  JOIN FeatureTypes ft ON f.FeatureTypeID = ft.FeatureTypeID" + br +
+                        "  JOIN (SELECT _sxf.FeatureID, COUNT(_sxf.ItemID) AS [Count]" + br +
+                        "          FROM Items _s" + br +
+                        "          JOIN ItemsXItems _sxl ON _s.ItemID = _sxl.ItemID" + br +
+                        "          JOIN ItemsXFeatures _sxf ON _s.ItemID = _sxf.ItemID" + br +
+                        "         WHERE _sxl.ParentItemID = @0" + br +
+                        "         GROUP BY _sxf.FeatureID) c ON f.FeatureID = c.FeatureID" + br, idLocation)
+                .Append(" WHERE l.ItemID = @0" + br +
+                        " GROUP BY f.FeatureID, ixf.Value" + br +
+                        " ORDER BY COUNT(ixf.Value) OVER (PARTITION BY f.FeatureID) DESC, MAX(f.Name), COUNT(f.Name) DESC", idLocation);
+            
+            var features = db.FetchOneToMany<FeatureAttributeStat<object>, ValueCount<object>>(x => x.id, sql);
+            
+            return features;
         }
 
 

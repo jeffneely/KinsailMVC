@@ -9,6 +9,7 @@ using AttributeRouting.Web.Http;
 namespace KinsailMVC.Controllers
 {
     using KinsailMVC.Models;
+    using System.Net;
 
     //using System.Web.Http.Cors;
     //[EnableCors("*", "*", "*")]  // EnableCors(OriginDomainAllowed, RequireHeader, AcceptVerbs)
@@ -70,6 +71,14 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
+        [GET("sites/{idSite}/cost")]
+        public ReservationCost GetSiteCost(long idSite)
+        {
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var result = repository.GetCostbyId(idSite, queryParams);
+            return result;
+        }
+
         [GET("sites/{idSite}/details")]
         public SiteDetail GetSiteDetail(long idSite)
         {
@@ -78,15 +87,24 @@ namespace KinsailMVC.Controllers
         }
 
         [GET("locations/{idLocation}/sites/{idSite}/availability")]
-        public SiteAvailability GetSiteAvailabilityForLocation(long idSite)
+        public SiteAvailability GetSiteAvailabilityForLocation(long idLocation, long idSite)
         {
             // TODO: don't ignore locationId
             var result = repository.GetAvailabilitybyId(idSite);
             return result;
         }
 
+        [GET("locations/{idLocation}/sites/{idSite}/cost")]
+        public ReservationCost GetSiteCost(long idLocation, long idSite)
+        {
+            // TODO: don't ignore locationId
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var result = repository.GetCostbyId(idSite, queryParams);
+            return result;
+        }
+
         [GET("locations/{idLocation}/sites/{idSite}/details")]
-        public SiteDetail GetSiteDetailForLocation(long idSite)
+        public SiteDetail GetSiteDetailForLocation(long idLocation, long idSite)
         {
             // TODO: don't ignore locationId
             var result = repository.GetDetailbyId(idSite);

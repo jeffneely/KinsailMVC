@@ -33,8 +33,9 @@ namespace KinsailMVC.Models
         public int endMonth { get; set; }          // calendar month which defines the end of this period
         public int endDay { get; set; }            // day of the calendar month which defines the end of this period
         public int minimumDuration { get; set; }   // miniumum duration stay which is applicable in this cost period
-        public float weekdayRate { get; set; }     // price in USD for spending the night during a weeknight (Sunday - Thursday)
-        public float weekendRate { get; set; }     // price in USD for spending the night during a weekend night (Friday and Saturday)
+        public float weekdayRate { get; set; }     // price in USD for spending the night during a weekday(Sunday - Thursday)
+        public float weekendRate { get; set; }     // price in USD for spending the night during a weekend day (Friday and Saturday)
+        public float dailyDeposit { get; set; }    // amount (in USD) of the daily cost that must be paid in advance
         public Boolean notAvailable { get; set; }  // indicates that the site is not available during this period
     }
 }

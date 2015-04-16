@@ -17,7 +17,7 @@ namespace KinsailMVC.Models
         public string name { get; set; }        // example: "primaryColor"
         public string label { get; set; }       // example: "Primary Color"
         public string description { get; set; } // example: "The primary exterior color and shade"
-        public string value { get; set; }       // example: "Red"
+        public T value { get; set; }            // example: "Red"
         public string type { get; set;  }       // example: "String"
         public string bullet { get; set; }      // example: "Primary Color: Red"
         
@@ -28,10 +28,11 @@ namespace KinsailMVC.Models
             this.name = string.Empty;
             this.label = string.Empty;
             this.description = string.Empty;
-            this.value = string.Empty;
+            this.value = default(T);
             this.type = "Boolean";
         }
 
+        /*
         public FeatureAttribute(string name, Boolean value)
         { 
             this.name = name;
@@ -68,7 +69,7 @@ namespace KinsailMVC.Models
             this.value = value;
             this.description = desc;
         }
-
+        */
 
     }
 

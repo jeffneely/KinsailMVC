@@ -22,11 +22,18 @@ namespace KinsailMVC.Models
         public int availabilityEndDay { get; set; }                // calendar day (within respective calendar month) which defines the last day in which reservations can be made (example: 31 - Last day of December)
         public int priceMin { get; set; }                          // defines the minimum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay
         public int priceMax { get; set; }                          // defines the maximum cost for a stay overnight - denormalized from site's cost structure to facilitate searching for "affordable" location to stay
+
+        public long? groupId { get; set; }                         // kinsail group ID, which defines legacy shared fields and a security domain
+        public long? partnerId { get; set; }                       // kinsail partner ID, which associates legacy styling and theming properties
+        public string partnerCode { get; set; }                    // kinsail partner code, which is an abbreviated version of the name (example: "wichi")
+        public string partnerType { get; set; }                    // kinsail partner type (example: "fws")
+
         public FeatureAttribute<object>[] features { get; set; }   // collection of Feature/Attributes for the location
 
         // non-queryable attributes
         public string baseURL { get; set; }                        // base URL for all resources (example: "http://www.someurl.com/")
-        //public string mapTilesBaseURL { get; set; }                // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
+        //public string mapTilesBaseURL { get; set; }              // base URL to a set of map tiles (example: "http://www.someurl.com/tiles/")
+
         public MapDetail map { get; set; }                         // detailed map information for the location
         public BannerImage banner { get; set; }                    // banner image to use in branding
         public GalleryImage[] photos { get; set; }                 // more photos of the location

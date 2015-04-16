@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
+using System.Web.Http;
 
 namespace KinsailMVC.Models
 {
@@ -17,7 +19,10 @@ namespace KinsailMVC.Models
         private long siteItemTypeId = 0;
         private long locationItemTypeId = 0;
         private long galleryImageTypeId = 0;
+
         private long siteTypeFeatureId = 0;
+        private long reservableFeatureId = 0;
+
         private Dictionary<string, SqlCriteria> allFeatures = new Dictionary<string, SqlCriteria>();
         private static string br = Environment.NewLine;
 
@@ -38,7 +43,7 @@ namespace KinsailMVC.Models
 
         // SQL SELECT fragment for SiteDetail
         private static string selectSiteDetail =
-            "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type," + br +
+            "SELECT i.ItemID, i.Name, i.Description, l.ItemID AS LocationID, f0.Value AS Type, f1.Value AS Reservable," + br +
             "       av.MaxAccommodatingUnits, av.MinDuration, av.MaxDuration, av.AdvancedReservationPeriod," + br +
             "       ixm.CoordinateX AS X, ixm.CoordinateY AS Y, g.ImageID, g.IconURL AS thumbUrl, g.FullURL";
 
@@ -47,7 +52,7 @@ namespace KinsailMVC.Models
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXItems ixi ON i.ItemID = ixi.ItemID" + br +             // location
             "  LEFT OUTER JOIN Items l ON ixi.ParentItemID = l.ItemID" + br +
-            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // site type
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // site type property (stored as a feature)
             "                     FROM ItemsXFeatures" + br +
             "                    WHERE FeatureID = @0) f0 ON i.ItemID = f0.ItemID" + br +
             "  LEFT OUTER JOIN ItemsXMaps ixm ON i.ItemID = ixm.ItemID" + br +              // maps
@@ -57,6 +62,9 @@ namespace KinsailMVC.Models
 
         // SQL FROM/JOIN fragment for SiteDetail
         private static string fromJoinSiteDetail = fromJoinSiteBasic + br +
+            "  LEFT OUTER JOIN (SELECT ItemID, Value" + br +                                // reservable property (stored as a feature)
+            "                     FROM ItemsXFeatures" + br +
+            "                    WHERE FeatureID = @1) f1 ON i.ItemID = f1.ItemID" + br +
             "  LEFT OUTER JOIN (SELECT ixar.ItemID, MIN(ixar.MaxUnits) AS MaxAccommodatingUnits," + br +  // availability info
             "                          MIN(a.MinDurationDays) AS MinDuration, MAX(MaxDurationDays) AS MaxDuration," + br +
             "                          MIN(a.AvailBeforeDays) AS AdvancedReservationPeriod" + br +
@@ -202,6 +210,7 @@ namespace KinsailMVC.Models
             "SELECT a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
             "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
             "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
+            "       r.DepositDailyFee AS dailyDeposit," + br +
             "       (1 - a.Available) AS notAvailable" + br +
             "  FROM ItemsXAvailRates ixar" + br +
             "  JOIN Availability a ON ixar.AvailID = a.AvailID" + br +
@@ -216,6 +225,7 @@ namespace KinsailMVC.Models
             "SELECT i.ItemID AS siteId, a.AvailStartMonth AS startMonth, a.AvailStartDay AS startDay," + br +
             "       a.AvailEndMonth AS endMonth, a.AvailEndDay AS endDay, a.MinDurationDays AS minimumDuration," + br +
             "       (r.DailyFee + r.WeekdayFee) AS weekdayRate, (r.DailyFee + r.WeekendFee) AS weekendRate," + br +
+            "       r.DepositDailyFee AS dailyDeposit," + br +
             "       (1 - a.Available) AS notAvailable" + br +
             "  FROM Items i" + br +
             "  LEFT OUTER JOIN ItemsXAvailRates ixar ON i.ItemID = ixar.ItemID" + br +
@@ -226,7 +236,25 @@ namespace KinsailMVC.Models
             "   AND r.Active = 1" + br +
             " ORDER BY i.ItemID, ixar.DisplayOrder";
 
-        
+
+        // return reservation costs for a site for a range of dates
+        private static string querySiteCosts_pre =
+            "SELECT s.ItemID, MAX(s.Name) AS SiteName, COUNT(d.[Date]) AS Nights," + br +
+            "       SUM(1 * d.IsResvWeekend) AS WeekendNights," + br +
+            "       MAX(r.BaseFee) + SUM(r.DailyFee) + SUM(r.WeekdayFee * (1 - d.IsResvWeekend)) +" + br +
+            "       SUM(r.WeekendFee * d.IsResvWeekend) AS Total," + br +
+            "       MAX(r.DepositBaseFee) + SUM(r.DepositDailyFee) AS Deposit," + br +
+            "       MAX(r.ProcessorBaseFee) + SUM(r.ProcessorDailyFee) AS ProcessorFee" + br +
+            "  FROM DiscreteAvailabilityRanges a" + br +
+            "  JOIN ItemsXAvailRates ixr ON ixr.AvailID = a.AvailID" + br +
+            "  JOIN Items s ON ixr.ItemID = s.ItemID" + br +
+            "  JOIN Rates r ON ixr.RateID = r.RateID" + br +
+            "  JOIN Dates d ON d.[Date] >= a.AvailStartDate AND d.[Date] <= a.AvailEndDate" + br +
+            " WHERE s.ItemID = @0" + br;
+
+        private static string querySiteCosts_post =
+            " GROUP BY s.ItemID";
+
 
         // return list of reserved data ranges for site (> today)
         private static string queryReservedRanges =
@@ -258,6 +286,7 @@ namespace KinsailMVC.Models
             {"minduration",               new SqlCriteria("av.MinDuration",               CriteriaType.NUMBER, SqlOperator.EQUAL)},
             {"maxduration",               new SqlCriteria("av.MaxDuration",               CriteriaType.NUMBER, SqlOperator.EQUAL)},
             {"advancedreservationperiod", new SqlCriteria("av.AdvancedReservationPeriod", CriteriaType.NUMBER, SqlOperator.EQUAL)},
+            {"reservable",                new SqlCriteria("f1.Value",                     CriteriaType.NUMBER, SqlOperator.EQUAL)}
         };
 
         // map Reservation properties to columns and default criteria conditions to be used in filtered queries
@@ -266,6 +295,14 @@ namespace KinsailMVC.Models
           // property                                     column              data type          default operator
             {"availablestartdate",        new SqlCriteria("rr.StartDateTime", CriteriaType.DATE, SqlOperator.GREATER)},  // find start dates greater than VALUE
             {"availableenddate",          new SqlCriteria("rr.EndDateTime",   CriteriaType.DATE, SqlOperator.LESSEQUAL)} // find end dates less than or equal to value
+        };
+
+        // map properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapSiteCostParams = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                      column     data type          default operator
+            {"startdate", new SqlCriteria("d.[Date]", CriteriaType.DATE, SqlOperator.GREATEREQUAL)},  // find dates greater than or equal to the startdate VALUE
+            {"enddate",   new SqlCriteria("d.[Date]", CriteriaType.DATE, SqlOperator.LESS)}           // find dates less than the enddate VALUE
         };
 
         public SiteRepository()
@@ -287,6 +324,7 @@ namespace KinsailMVC.Models
             locationItemTypeId = db.ExecuteScalar<long>("SELECT ItemTypeID from ItemTypes WHERE Name = 'Recreation Location'");
             galleryImageTypeId = db.ExecuteScalar<long>("SELECT ImageTypeID from ImageTypes WHERE Name = 'Gallery Image'");
             siteTypeFeatureId = db.ExecuteScalar<long>("SELECT FeatureID FROM Features WHERE Name = 'Site Type'");
+            reservableFeatureId = db.ExecuteScalar<long>("SELECT FeatureID FROM Features WHERE Name = 'Reservable'");
 
             // load the complete list of all features that are defined in the database
             List<object[]> features = db.Fetch<object[]>(queryAllFeatures);
@@ -327,6 +365,7 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
+            //Debug.Print(sql.SQL);
 
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites;
@@ -347,6 +386,7 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
+            //Debug.Print(sql.SQL);
 
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites;
@@ -360,7 +400,7 @@ namespace KinsailMVC.Models
             // get sites
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
-                .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
+                .Append(fromJoinSiteDetail, siteTypeFeatureId, reservableFeatureId)
                 .Append(whereSites, siteItemTypeId, locationItemTypeId);
 
             // any URI filter parameters to add to the query?
@@ -370,7 +410,7 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
-            Debug.Print(sql.SQL);
+            //Debug.Print(sql.SQL);
 
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
@@ -432,7 +472,7 @@ namespace KinsailMVC.Models
             // get sites
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
-                .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
+                .Append(fromJoinSiteDetail, siteTypeFeatureId, reservableFeatureId)
                 .Append(whereSitesForLocation, siteItemTypeId, locationItemTypeId, locationId);
 
             // any URI filter parameters to add to the query?
@@ -442,7 +482,8 @@ namespace KinsailMVC.Models
             }
 
             sql = sql.Append(orderSites);
-            
+            //Debug.Print(sql.SQL);
+
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
 
             // SLOW METHOD - issuing child queries for each row in the result set to retrieve children
@@ -505,6 +546,8 @@ namespace KinsailMVC.Models
                 .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
                 .Append(orderSites);
 
+            //Debug.Print(sql.SQL);
+
             List<SiteBasic> sites = db.Fetch<SiteBasic, MapCoordinates, GalleryImage>(sql);
             return sites.ElementAtOrDefault(0);
         }
@@ -513,9 +556,11 @@ namespace KinsailMVC.Models
         {
             var sql = NPoco.Sql.Builder
                 .Append(selectSiteDetail)
-                .Append(fromJoinSiteDetail, siteTypeFeatureId, galleryImageTypeId)
+                .Append(fromJoinSiteDetail, siteTypeFeatureId, reservableFeatureId)
                 .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
                 .Append(orderSites);
+
+            //Debug.Print(sql.SQL);
 
             List<SiteDetail> sites = db.Fetch<SiteDetail, MapCoordinates, GalleryImage>(sql);
             SiteDetail site = sites.ElementAtOrDefault(0);
@@ -549,6 +594,8 @@ namespace KinsailMVC.Models
                 .Append(whereSiteById, siteItemTypeId, locationItemTypeId, siteId)
                 .Append(orderSites);
 
+            //Debug.Print(sql.SQL);
+
             List<SiteAvailability> sites = db.Fetch<SiteAvailability, MapCoordinates, GalleryImage>(sql);
             SiteAvailability site = sites.ElementAtOrDefault(0);
 
@@ -558,7 +605,70 @@ namespace KinsailMVC.Models
 
             return site;
         }
+                
+        public ReservationCost GetCostbyId(long siteId, Dictionary<string, string> queryParams = null)
+        {
+            Dictionary<string, SqlCriteria> filterParams = new Dictionary<string, SqlCriteria>();
+            StringBuilder s = new StringBuilder();
 
+            string columnPart;
+            string operatorPart;
+
+            // parse the URI query params
+            foreach (var item in queryParams)
+            {
+                columnPart = SqlCriteria.getColumnPart(item.Key);
+                operatorPart = SqlCriteria.getOperatorPart(item.Key);
+                SqlOperator op;
+
+                // lookup params
+                if (mapSiteCostParams.ContainsKey(columnPart))
+                {
+                    // copy the criteria object from the lookup map
+                    filterParams.Add(columnPart, mapSiteCostParams[columnPart].clone());
+
+                    // override the default operator, if the user has specified one (not recommended here)
+                    op = SqlCriteria.getOperator(operatorPart);
+                    if (op != SqlOperator.NONE)
+                    {
+                        filterParams[columnPart].oper = op;
+                    }
+
+                    // inject the user-supplied data value(s) into the copied criteria
+                    filterParams[columnPart].value = item.Value;
+
+                    //Debug.Print("Find site costs WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);  // invalid query parameter
+                }
+            }
+
+            // user must supply both a start and end date as parameters
+            if (filterParams.Count != 2) {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+
+            // get costs
+            var sql = NPoco.Sql.Builder
+                .Append(querySiteCosts_pre, siteId);
+
+            // append filter conditions for the start and end date
+            foreach (var criteria in filterParams)
+            {
+                sql = sql.Append("   AND " + criteria.Value.getSql());
+            }
+            sql = sql.Append(querySiteCosts_post);
+
+            // retrieve cost info
+            ReservationCost cost = db.First<ReservationCost>(sql);
+
+            //return new Cost(10.0F, 5.0F);
+            return cost;
+        }
+        
         // generate additional WHERE clauses based on the passed in URI querystring parameters
         // handles:
         // - unknown params (skip them in the SQL, for now)
