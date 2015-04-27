@@ -79,6 +79,14 @@ namespace KinsailMVC.Controllers
             return result;
         }
 
+        [GET("sites/{idSite}/validate")]
+        public SPResult GetSiteValidation(long idSite)
+        {
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var result = repository.GetValidationbyId(idSite, queryParams);
+            return result;
+        }
+
         [GET("sites/{idSite}/details")]
         public SiteDetail GetSiteDetail(long idSite)
         {
@@ -100,6 +108,15 @@ namespace KinsailMVC.Controllers
             // TODO: don't ignore locationId
             Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
             var result = repository.GetCostbyId(idSite, queryParams);
+            return result;
+        }
+
+        [GET("locations/{idLocation}/sites/{idSite}/validate")]
+        public SPResult GetSiteValidation(long idLocation, long idSite)
+        {
+            // TODO: don't ignore locationId
+            Dictionary<string, string> queryParams = System.Web.Http.HttpRequestMessageExtensions.GetQueryStrings(this.Request);
+            var result = repository.GetValidationbyId(idSite, queryParams);
             return result;
         }
 

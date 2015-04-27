@@ -256,6 +256,16 @@ namespace KinsailMVC.Models
             " GROUP BY s.ItemID";
 
 
+        // return reservation costs for a site for a range of dates
+        private static string execSiteValidation_pre =
+            "EXECUTE dbo.ReserveSite2" + br +
+            "  @@SiteID = @0,";
+
+        private static string execSiteValidation_post =
+            "  @@UniqueID = 123123123," + br +  // dummy value
+            "  @@ValidateOnly = 1";
+
+
         // return list of reserved data ranges for site (> today)
         private static string queryReservedRanges =
             "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" + br +
@@ -303,6 +313,14 @@ namespace KinsailMVC.Models
           // property                      column     data type          default operator
             {"startdate", new SqlCriteria("d.[Date]", CriteriaType.DATE, SqlOperator.GREATEREQUAL)},  // find dates greater than or equal to the startdate VALUE
             {"enddate",   new SqlCriteria("d.[Date]", CriteriaType.DATE, SqlOperator.LESS)}           // find dates less than the enddate VALUE
+        };
+
+        // map properties to columns and default criteria conditions to be used in filtered queries
+        public static Dictionary<string, SqlCriteria> mapSiteValidateParams = new Dictionary<string, SqlCriteria>()
+        { 
+          // property                      column       data type          default operator
+            {"startdate", new SqlCriteria("@StartDate", CriteriaType.DATE, SqlOperator.EQUAL)},
+            {"enddate",   new SqlCriteria("@EndDate",   CriteriaType.DATE, SqlOperator.EQUAL)}
         };
 
         public SiteRepository()
@@ -667,6 +685,73 @@ namespace KinsailMVC.Models
 
             //return new Cost(10.0F, 5.0F);
             return cost;
+        }
+
+
+        public SPResult GetValidationbyId(long siteId, Dictionary<string, string> queryParams = null)
+        {
+            Dictionary<string, SqlCriteria> filterParams = new Dictionary<string, SqlCriteria>();
+            StringBuilder s = new StringBuilder();
+
+            string columnPart;
+            string operatorPart;
+
+            // parse the URI query params
+            foreach (var item in queryParams)
+            {
+                columnPart = SqlCriteria.getColumnPart(item.Key);
+                operatorPart = SqlCriteria.getOperatorPart(item.Key);
+                SqlOperator op;
+
+                // lookup params
+                if (mapSiteValidateParams.ContainsKey(columnPart))
+                {
+                    // copy the criteria object from the lookup map
+                    filterParams.Add(columnPart, mapSiteValidateParams[columnPart].clone());
+
+                    // override the default operator, if the user has specified one (not recommended here)
+                    op = SqlCriteria.getOperator(operatorPart);
+                    if (op != SqlOperator.NONE)
+                    {
+                        filterParams[columnPart].oper = op;
+                    }
+
+                    // inject the user-supplied data value(s) into the copied criteria
+                    filterParams[columnPart].value = item.Value;
+
+                    //Debug.Print("Find site costs WHERE: " + columnPart + " " + Enum.GetName(op.GetType(), op) + " " + item.Value);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);  // invalid query parameter
+                }
+            }
+
+            // user must supply both a start and end date as parameters
+            if (filterParams.Count != 2)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+
+            // validate reservation request
+            var sql = NPoco.Sql.Builder
+                .Append(execSiteValidation_pre, siteId);
+
+            // append parameters for the start and end date
+            foreach (var criteria in filterParams)
+            {
+                sql = sql.Append("  @" + criteria.Value.getSql() + ", ");  //add prepended @ to escape column names for NPoco
+            }
+            sql = sql.Append(execSiteValidation_post);
+            //Debug.Print("SQL=" + sql.SQL);
+            
+
+            // retrieve validation result
+            SPResult result = db.First<SPResult>(sql);
+
+            //return 0
+            return result;
         }
         
         // generate additional WHERE clauses based on the passed in URI querystring parameters

@@ -165,6 +165,7 @@
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\ReservationCost.cs" />
+    <Compile Include="Models\SPResult.cs" />
     <Compile Include="Models\ValueCount.cs" />
     <Compile Include="Models\FeatureAttributeStat.cs" />
     <Compile Include="Models\MapFeature.cs" />
