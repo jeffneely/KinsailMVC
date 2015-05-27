@@ -18,8 +18,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
------------------------------------------------------
--- Create Functions Used in Computed Table Columns --
+--------------------------------------------------------------------
+-- PRE-REQUISITE: Create Functions Used in Computed Table Columns --
 --------------------------------------------------------------------------------
 
 CREATE FUNCTION dbo.GetAvailableDate(@Year [int], @Month [int], @Day [int], @FromTo [int])
@@ -112,12 +112,12 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXItems')
 	PRINT 'Table dbo.ItemsXItems already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXItems](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXItems_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[ParentItemID]	[bigint] NOT NULL CONSTRAINT [FK_ItemsXItems_ParentItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[RelationDesc]	[nvarchar](100) NULL,
-		CONSTRAINT [PK_ItemsXItems] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXItems(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXItems_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		ParentItemID	bigint NOT NULL CONSTRAINT FK_ItemsXItems_ParentItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		RelationDesc	nvarchar(100) NULL,
+		CONSTRAINT PK_ItemsXItems PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -130,14 +130,14 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'FeatureTypes')
 	PRINT 'Table dbo.FeatureTypes already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[FeatureTypes] (
-		[FeatureTypeID]	[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]			[nvarchar](100) NOT NULL,
-		[Abbreviation]	[nvarchar](20) NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[Category]		[nvarchar](12) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_FeatureTypes_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_FeatureTypes] PRIMARY KEY CLUSTERED ([FeatureTypeID] ASC) 
+	CREATE TABLE dbo.FeatureTypes (
+		FeatureTypeID	bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name			nvarchar(100) NOT NULL,
+		Abbreviation	nvarchar(20) NULL,
+		[Description]	nvarchar(1000) NULL,
+		Category		nvarchar(12) NULL,
+		Active			bit NOT NULL CONSTRAINT DF_FeatureTypes_Active DEFAULT (1),
+		CONSTRAINT PK_FeatureTypes PRIMARY KEY CLUSTERED (FeatureTypeID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -149,17 +149,22 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'Features')
 	PRINT 'Table dbo.Features already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Features](
-		[FeatureID]		[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[FeatureTypeID]	[bigint] NOT NULL CONSTRAINT [FK_Features_FeatureTypeID] REFERENCES [FeatureTypes]([FeatureTypeID]) NOT FOR REPLICATION,
-		[Name]			[nvarchar](1000) NOT NULL,
-		[Abbreviation]	[nvarchar](200) NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_Features_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_Features] PRIMARY KEY CLUSTERED ([FeatureID] ASC) 
+	CREATE TABLE dbo.Features(
+		FeatureID		bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		FeatureTypeID	bigint NOT NULL CONSTRAINT FK_Features_FeatureTypeID REFERENCES FeatureTypes(FeatureTypeID) NOT FOR REPLICATION,
+		Name			nvarchar(1000) NOT NULL,
+		NameNegative    nvarchar(1000) NULL,
+		Abbreviation	nvarchar(200) NULL,
+		[Description]	nvarchar(1000) NULL,
+		SiteFlag		bit NOT NULL CONSTRAINT DF_Features_SiteFlag DEFAULT (0),
+		LocationFlag	bit NOT NULL CONSTRAINT DF_Features_LocationFlag DEFAULT (0),
+		Hidden			bit NOT NULL CONSTRAINT DF_Features_Hidden DEFAULT (0),
+		Active			bit NOT NULL CONSTRAINT DF_Features_Active DEFAULT (1),
+		CONSTRAINT PK_Features PRIMARY KEY CLUSTERED (FeatureID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
+
 
 -- Lookup values for multi-valued Feature Types
 IF EXISTS (SELECT 1
@@ -168,15 +173,15 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'FeatureTypeValues')
 	PRINT 'Table dbo.FeatureTypeValues already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[FeatureTypeValues](
-		[FeatureTypeValueID]  [bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[FeatureTypeID]	[bigint] NOT NULL CONSTRAINT [FK_FeatureTypeValues_FeatureTypeID] REFERENCES [FeatureTypes]([FeatureTypeID]) NOT FOR REPLICATION,
-		[Name]			[nvarchar](100) NULL,
-		[Value]			[nvarchar](40) NOT NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_FeatureTypeValues_DisplayOrder]  DEFAULT ((0)),
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_FeatureTypeValues_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_FeatureTypeValues] PRIMARY KEY CLUSTERED ([FeatureTypeValueID] ASC) 
+	CREATE TABLE dbo.FeatureTypeValues(
+		FeatureTypeValueID  bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		FeatureTypeID		bigint NOT NULL CONSTRAINT FK_FeatureTypeValues_FeatureTypeID REFERENCES FeatureTypes(FeatureTypeID) NOT FOR REPLICATION,
+		Name				nvarchar(100) NULL,
+		Value				nvarchar(40) NOT NULL,
+		[Description]		nvarchar(1000) NULL,
+		DisplayOrder		int NOT NULL CONSTRAINT DF_FeatureTypeValues_DisplayOrder  DEFAULT (0),
+		Active				bit NOT NULL CONSTRAINT DF_FeatureTypeValues_Active DEFAULT (1),
+		CONSTRAINT PK_FeatureTypeValues PRIMARY KEY CLUSTERED (FeatureTypeValueID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -188,13 +193,13 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXFeatures')
 	PRINT 'Table dbo.ItemsXFeatures already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXFeatures](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXFeatures_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[FeatureID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXFeatures_FeatureID] REFERENCES [Features]([FeatureID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXFeatures_DisplayOrder]  DEFAULT ((0)),
-		[Value]			[nvarchar](1000) NULL,
-		CONSTRAINT [PK_ItemsXFeatures] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXFeatures(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXFeatures_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		FeatureID		bigint NOT NULL CONSTRAINT FK_ItemsXFeatures_FeatureID REFERENCES Features(FeatureID) NOT FOR REPLICATION,
+		DisplayOrder	int NOT NULL CONSTRAINT DF_ItemsXFeatures_DisplayOrder DEFAULT (0),
+		Value			nvarchar(1000) NULL,
+		CONSTRAINT PK_ItemsXFeatures PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -207,13 +212,13 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ImageTypes')
 	PRINT 'Table dbo.ImageTypes already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ImageTypes] (
-		[ImageTypeID]	[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]			[nvarchar](100) NOT NULL,
-		[Abbreviation]	[nvarchar](20) NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_ImageTypes_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_ImageTypes] PRIMARY KEY CLUSTERED ([ImageTypeID] ASC) 
+	CREATE TABLE dbo.ImageTypes (
+		ImageTypeID		bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name			nvarchar(100) NOT NULL,
+		Abbreviation	nvarchar(20) NULL,
+		[Description]	nvarchar(1000) NULL,
+		Active			bit NOT NULL CONSTRAINT DF_ImageTypes_Active DEFAULT (1),
+		CONSTRAINT PK_ImageTypes PRIMARY KEY CLUSTERED (ImageTypeID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -225,15 +230,15 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'Images')
 	PRINT 'Table dbo.Images already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Images](
-		[ImageID]		[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ImageTypeID]	[bigint] NOT NULL CONSTRAINT [FK_Images_ImageTypeID] REFERENCES [ImageTypes]([ImageTypeID]) NOT FOR REPLICATION,
-		[IconURL]		[nvarchar](1000) NULL,
-		[FullURL]		[nvarchar](1000) NOT NULL,
-		[Caption]		[nvarchar](1000) NULL,
-		[Source]		[nvarchar](200) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_Images_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_Images] PRIMARY KEY CLUSTERED ([ImageID] ASC) 
+	CREATE TABLE dbo.Images(
+		ImageID		bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ImageTypeID	bigint NOT NULL CONSTRAINT FK_Images_ImageTypeID REFERENCES ImageTypes(ImageTypeID) NOT FOR REPLICATION,
+		IconURL		nvarchar(1000) NULL,
+		FullURL		nvarchar(1000) NOT NULL,
+		Caption		nvarchar(1000) NULL,
+		Source		nvarchar(200) NULL,
+		Active		bit NOT NULL CONSTRAINT DF_Images_Active DEFAULT (1),
+		CONSTRAINT PK_Images PRIMARY KEY CLUSTERED (ImageID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -245,41 +250,41 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXImages')
 	PRINT 'Table dbo.ItemsXImages already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXImages](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXImages_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[ImageID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXImages_ImageID] REFERENCES [Images]([ImageID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXImages_DisplayOrder]  DEFAULT ((0)),
-		CONSTRAINT [PK_ItemsXImages] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXImages(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXImages_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		ImageID			bigint NOT NULL CONSTRAINT FK_ItemsXImages_ImageID REFERENCES Images(ImageID) NOT FOR REPLICATION,
+		DisplayOrder	int NOT NULL CONSTRAINT DF_ItemsXImages_DisplayOrder  DEFAULT (0),
+		CONSTRAINT PK_ItemsXImages PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
 
-
+-- Maps
 IF EXISTS (SELECT 1
 		     FROM information_schema.Tables
 		    WHERE table_schema = 'dbo'
 		      AND TABLE_NAME = 'Maps')
 	PRINT 'Table dbo.Maps already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Maps](
-		[MapID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]			[nvarchar](1000) NOT NULL,
-		[Description]	[nvarchar](1000) NOT NULL,
-		[TilesURL]		[nvarchar](1000) NULL,
-		[Width]			[float] NULL,
-		[Height]		[float] NULL,
-		[CenterX]		[float] NULL,
-		[CenterY]		[float] NULL,
-		[ZoomMin]		[int] NULL,
-		[ZoomMax]		[int] NULL,
-		[ZoomDefault]		[int] NULL,
-		[LatitudeNorth]	[float] NULL,
-		[LatitudeSouth]	[float] NULL,
-		[LongitudeEast]	[float] NULL,
-		[LongitudeWest]	[float] NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_Maps_Active] DEFAULT (1),
-		CONSTRAINT [PK_Maps] PRIMARY KEY CLUSTERED ([MapID] ASC) 
+	CREATE TABLE dbo.Maps(
+		MapID			bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name			nvarchar(1000) NOT NULL,
+		[Description]	nvarchar(1000) NOT NULL,
+		TilesURL		nvarchar(1000) NULL,
+		Width			float NULL,
+		Height			float NULL,
+		CenterX			float NULL,
+		CenterY			float NULL,
+		ZoomMin			int NULL,
+		ZoomMax			int NULL,
+		ZoomDefault		int NULL,
+		LatitudeNorth	float NULL,
+		LatitudeSouth	float NULL,
+		LongitudeEast	float NULL,
+		LongitudeWest	float NULL,
+		Active			bit NOT NULL CONSTRAINT DF_Maps_Active DEFAULT (1),
+		CONSTRAINT PK_Maps PRIMARY KEY CLUSTERED (MapID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -291,15 +296,15 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXMaps')
 	PRINT 'Table dbo.ItemsXMaps already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXMaps](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXMaps_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[MapID]			[bigint] NOT NULL CONSTRAINT [FK_ItemsXMaps_MapID] REFERENCES [Maps]([MapID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXMaps_DisplayOrder]  DEFAULT ((0)),
-		[CoordinateX]	[float] NOT NULL,
-		[CoordinateY]	[float] NOT NULL,
-		[LatLongFlag]	[bit] NOT NULL CONSTRAINT [DF_ItemsXMaps_LatLongFlag] DEFAULT ((0)),
-		CONSTRAINT [PK_ItemsXMaps] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXMaps(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXMaps_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		MapID			bigint NOT NULL CONSTRAINT FK_ItemsXMaps_MapID REFERENCES Maps(MapID) NOT FOR REPLICATION,
+		DisplayOrder	int NOT NULL CONSTRAINT DF_ItemsXMaps_DisplayOrder DEFAULT (0),
+		CoordinateX		float NOT NULL,
+		CoordinateY		float NOT NULL,
+		LatLongFlag		bit NOT NULL CONSTRAINT DF_ItemsXMaps_LatLongFlag DEFAULT (0),
+		CONSTRAINT PK_ItemsXMaps PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -311,19 +316,19 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'MapsXFeatures')
 	PRINT 'Table dbo.MapsXFeatures already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[MapsXFeatures](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[MapID]			[bigint] NOT NULL CONSTRAINT [FK_MapsXFeatures_MapID] REFERENCES [Maps]([MapID]) NOT FOR REPLICATION,
-		[FeatureID]		[bigint] NOT NULL CONSTRAINT [FK_MapsXFeatures_FeatureID] REFERENCES [Features]([FeatureID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_DisplayOrder]  DEFAULT (0),
-		[CustomMarkerFlag]	[bit] NOT NULL CONSTRAINT [DF_MapsXFeatures_CustomMarkerFlag] DEFAULT (0),
-		[MatchValue]	[nvarchar](1000) NULL,
-		[MatchOperator]	[nvarchar](10) NULL,
-		[Marker]		[nvarchar](100) NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[OffsetX]		[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_OffsetX]  DEFAULT (0),
-		[OffsetY]		[int] NOT NULL CONSTRAINT [DF_MapsXFeatures_OffsetY]  DEFAULT (0),
-		CONSTRAINT [PK_MapsXFeatures] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.MapsXFeatures(
+		ID					bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		MapID				bigint NOT NULL CONSTRAINT FK_MapsXFeatures_MapID REFERENCES Maps(MapID) NOT FOR REPLICATION,
+		FeatureID			bigint NOT NULL CONSTRAINT FK_MapsXFeatures_FeatureID REFERENCES Features(FeatureID) NOT FOR REPLICATION,
+		DisplayOrder		int NOT NULL CONSTRAINT DF_MapsXFeatures_DisplayOrder DEFAULT (0),
+		CustomMarkerFlag	bit NOT NULL CONSTRAINT DF_MapsXFeatures_CustomMarkerFlag DEFAULT (0),
+		MatchValue			nvarchar(1000) NULL,
+		MatchOperator		nvarchar(10) NULL,
+		Marker				nvarchar(100) NULL,
+		[Description]		nvarchar(1000) NULL,
+		OffsetX				int NOT NULL CONSTRAINT DF_MapsXFeatures_OffsetX DEFAULT (0),
+		OffsetY				int NOT NULL CONSTRAINT DF_MapsXFeatures_OffsetY DEFAULT (0),
+		CONSTRAINT PK_MapsXFeatures PRIMARY KEY CLUSTERED ([ID] ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -335,13 +340,13 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXLocations')
 	PRINT 'Table dbo.ItemsXLocations already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXLocations](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXLocations_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[LocationID]	[bigint] NOT NULL CONSTRAINT [FK_ItemsXLocations_LocationID] REFERENCES [Locations]([LocationID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXLocations_DisplayOrder]  DEFAULT ((0)),
-		[Description]	[nvarchar](200) NULL,
-		CONSTRAINT [PK_ItemsXLocations] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXLocations(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXLocations_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		LocationID		bigint NOT NULL CONSTRAINT FK_ItemsXLocations_LocationID REFERENCES Locations(LocationID) NOT FOR REPLICATION,
+		DisplayOrder	int NOT NULL CONSTRAINT [DF_ItemsXLocations_DisplayOrder]  DEFAULT (0),
+		[Description]	nvarchar(200) NULL,
+		CONSTRAINT PK_ItemsXLocations PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -353,21 +358,21 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'Organizations')
 	PRINT 'Table dbo.Organizations already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Organizations](
-		[OrgID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]			[nvarchar](200) NOT NULL,
-		[Abbreviation]	[nvarchar](40) NULL,
-		[Description]	[nvarchar](1000) NULL,
-		[Phone]			[nvarchar](100) NULL,
-		[PhoneLabel]	[nvarchar](20) NULL,
-		[Phone2]		[nvarchar](100) NULL,
-		[Phone2Label]	[nvarchar](20) NULL,
-		[Email]			[nvarchar](100) NULL,
-		[EmailLabel]	[nvarchar](20) NULL,
-		[URL]			[nvarchar](1000) NULL,
-		[URLLabel]		[nvarchar](20) NULL,
-		[Active]		[bit] NOT NULL CONSTRAINT [DF_Organizations_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_Organizations] PRIMARY KEY CLUSTERED ([OrgID] ASC) 
+	CREATE TABLE dbo.Organizations(
+		OrgID			bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name			nvarchar(200) NOT NULL,
+		Abbreviation	nvarchar(40) NULL,
+		[Description]	nvarchar(1000) NULL,
+		Phone			nvarchar(100) NULL,
+		PhoneLabel		nvarchar(20) NULL,
+		Phone2			nvarchar(100) NULL,
+		Phone2Label		nvarchar(20) NULL,
+		Email			nvarchar(100) NULL,
+		EmailLabel		nvarchar(20) NULL,
+		URL				nvarchar(1000) NULL,
+		URLLabel		nvarchar(20) NULL,
+		Active			bit NOT NULL CONSTRAINT DF_Organizations_Active DEFAULT (1),
+		CONSTRAINT PK_Organizations PRIMARY KEY CLUSTERED (OrgID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -379,13 +384,13 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXOrganizations')
 	PRINT 'Table dbo.ItemsXOrganizations already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXOrganizations](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXOrganizations_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[OrgID]			[bigint] NOT NULL CONSTRAINT [FK_ItemsXOrganizations_OrgID] REFERENCES [Organizations]([OrgID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXOrganizations_DisplayOrder]  DEFAULT ((0)),
-		[Description]	[nvarchar](200) NULL,
-		CONSTRAINT [PK_ItemsXOrganizations] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXOrganizations(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXOrganizations_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		OrgID			bigint NOT NULL CONSTRAINT FK_ItemsXOrganizations_OrgID REFERENCES Organizations(OrgID) NOT FOR REPLICATION,
+		DisplayOrder	int NOT NULL CONSTRAINT DF_ItemsXOrganizations_DisplayOrder DEFAULT (0),
+		[Description]	nvarchar(200) NULL,
+		CONSTRAINT PK_ItemsXOrganizations PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -397,42 +402,42 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'Availability')
 	PRINT 'Table dbo.Availability already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Availability](
-		[AvailID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]				[nvarchar](200) NOT NULL,
-		[Description]		[nvarchar](1000) NULL,
-		[Policies]			[nvarchar](MAX) NULL,
-		[Available]			[bit] NOT NULL CONSTRAINT [DF_Availability_Available] DEFAULT ((1)),
-		[AvailStartYear]	[int] NULL,
-		[AvailStartMonth]	[int] NULL,
-		[AvailStartDay]		[int] NULL,
-		[AvailEndYear]		[int] NULL,
-		[AvailEndMonth]		[int] NULL,
-		[AvailEndDay]		[int] NULL,
-		[AvailBeforeDays]	[int] NULL,
-		[ReserveBeforeDays]	[int] NULL,
-		[CancelBeforeDays]	[int] NULL,
-		[MinDurationDays]	[int] NULL,
-		[MaxDurationDays]	[int] NULL,
-		[MaxDurationWeekends]	[int] NULL,
-		[BetweenStaysDays]	[int] NULL,
-		[Active]			[bit] NOT NULL CONSTRAINT [DF_Availability_Active] DEFAULT ((1)),
-		CONSTRAINT [PK_Availability] PRIMARY KEY CLUSTERED ([AvailID] ASC) 
+	CREATE TABLE dbo.[Availability](
+		AvailID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name				nvarchar(200) NOT NULL,
+		[Description]		nvarchar(1000) NULL,
+		Policies			nvarchar(MAX) NULL,
+		Available			bit NOT NULL CONSTRAINT DF_Availability_Available DEFAULT (1),
+		AvailStartYear		int NULL,
+		AvailStartMonth		int NULL,
+		AvailStartDay		int NULL,
+		AvailStartDate		AS (dbo.GetAvailableDate(AvailStartYear, AvailStartMonth, AvailStartDay, 0)),
+		AvailEndYear		int NULL,
+		AvailEndMonth		int NULL,
+		AvailEndDay			int NULL,
+		AvailEndDate		AS (dbo.GetAvailableDate(AvailEndYear, AvailEndMonth, AvailEndDay, 1)),
+		AvailBeforeDays		int NULL,
+		ReserveBeforeDays	int NULL,
+		CancelBeforeDays	int NULL,
+		MinDurationDays		int NULL,
+		MaxDurationDays		int NULL,
+		MaxDurationWeekends	int NULL,
+		BetweenStaysDays	int NULL,
+		Active				bit NOT NULL CONSTRAINT DF_Availability_Active DEFAULT (1),
+		CONSTRAINT PK_Availability PRIMARY KEY CLUSTERED (AvailID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
--- Add computed columns
-ALTER TABLE [dbo].[Availability] ADD [AvailStartDate] AS (dbo.GetAvailableDate(AvailStartYear, AvailStartMonth, AvailStartDay, 0));
-ALTER TABLE [dbo].[Availability] ADD [AvailEndDate] AS (dbo.GetAvailableDate(AvailEndYear, AvailEndMonth, AvailEndDay, 1));
 
 -- Association of an Item with Availability info (DEPRECATED)
+/*
 IF EXISTS (SELECT 1
 		     FROM information_schema.Tables
 		    WHERE table_schema = 'dbo'
 		      AND TABLE_NAME = 'ItemsXAvailability')
 	PRINT 'Table dbo.ItemsXAvailability already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXAvailability](
+	CREATE TABLE dbo.ItemsXAvailability(
 		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
 		[AvailID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailability_AvailID] REFERENCES [Availability]([AvailID]) NOT FOR REPLICATION,
@@ -446,6 +451,7 @@ ELSE
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
+*/
 
 -- Rates
 IF EXISTS (SELECT 1
@@ -454,20 +460,24 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'Rates')
 	PRINT 'Table dbo.Rates already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[Rates](
-		[RateID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[Name]				[nvarchar](200) NOT NULL,
-		[Description]		[nvarchar](1000) NULL,
-		[ValidFrom]			[datetime] NULL,
-		[ValidTo]			[datetime] NULL,
-		[BaseFee]			[numeric](18,5) NULL CONSTRAINT [DF_Rates_BaseFee] DEFAULT (0.00),
-		[DailyFee]			[numeric](18,5) NULL CONSTRAINT [DF_Rates_DailyFee] DEFAULT (0.00),
-		[WeekdayFee]		[numeric](18,5) NULL CONSTRAINT [DF_Rates_WeekdayFee] DEFAULT (0.00),
-		[WeekendFee]		[numeric](18,5) NULL CONSTRAINT [DF_Rates_WeekendFee] DEFAULT (0.00),
-		[DepositBaseFee]	[numeric](18,5) NULL CONSTRAINT [DF_Rates_DepositBaseFee] DEFAULT (0.00),
-		[DepositDailyFee]	[numeric](18,5) NULL CONSTRAINT [DF_Rates_DepositDailyFee] DEFAULT (0.00),
-		[Active]			[bit] NOT NULL CONSTRAINT [DF_Rates_Active] DEFAULT (1),
-		CONSTRAINT [PK_Rates] PRIMARY KEY CLUSTERED ([RateID] ASC) 
+	CREATE TABLE dbo.Rates(
+		RateID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		Name				nvarchar(200) NOT NULL,
+		[Description]		nvarchar(1000) NULL,
+		ValidFrom			datetime NULL,
+		ValidTo				datetime NULL,
+		BaseFee				numeric(18, 5) NULL CONSTRAINT DF_Rates_BaseFee DEFAULT (0.00),
+		DailyFee			numeric(18, 5) NULL CONSTRAINT DF_Rates_DailyFee DEFAULT (0.00),
+		WeekdayFee			numeric(18, 5) NULL CONSTRAINT DF_Rates_WeekdayFee DEFAULT (0.00),
+		WeekendFee			numeric(18, 5) NULL CONSTRAINT DF_Rates_WeekendFee DEFAULT (0.00),
+		DepositBaseFee		numeric(18, 5) NULL CONSTRAINT DF_Rates_DepositBaseFee DEFAULT (0.00),
+		DepositDailyFee		numeric(18, 5) NULL CONSTRAINT DF_Rates_DepositDailyFee DEFAULT (0.00),
+		ProcessorBaseFee	numeric(18, 5) NULL CONSTRAINT DF_Rates_ProcessorBaseFee DEFAULT (0.00),
+		ProcessorDailyFee	numeric(18, 5) NULL CONSTRAINT DF_Rates_ProcessorDailyFee DEFAULT (0.00),
+		DepositPercent		bit NOT NULL CONSTRAINT DF_Rates_DepositPercent DEFAULT (0),
+		ProcessorPercent	bit NOT NULL CONSTRAINT DF_Rates_ProcessorPercent DEFAULT (0),
+		Active				bit NOT NULL CONSTRAINT DF_Rates_Active DEFAULT (1),
+		CONSTRAINT PK_Rates PRIMARY KEY CLUSTERED (RateID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
@@ -479,90 +489,82 @@ IF EXISTS (SELECT 1
 		      AND TABLE_NAME = 'ItemsXAvailRates')
 	PRINT 'Table dbo.ItemsXAvailRates already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[ItemsXAvailRates](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[ItemID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_ItemID] REFERENCES [Items]([ItemID]) NOT FOR REPLICATION,
-		[AvailID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_AvailID] REFERENCES [Availability]([AvailID]) NOT FOR REPLICATION,
-		[RateID]		[bigint] NOT NULL CONSTRAINT [FK_ItemsXAvailRates_RateID] REFERENCES [Rates]([RateID]) NOT FOR REPLICATION,
-		[MaxUnits]		[int] NOT NULL CONSTRAINT [DF_ItemsXAvailRates_MaxUnits] DEFAULT (1),
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_ItemsXAvailRates_DisplayOrder] DEFAULT (0),
-		CONSTRAINT [PK_ItemsXAvailRates] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.ItemsXAvailRates(
+		ID				bigint IDENTITY(1, 1) NOT FOR REPLICATION NOT NULL,
+		ItemID			bigint NOT NULL CONSTRAINT FK_ItemsXAvailRates_ItemID REFERENCES Items(ItemID) NOT FOR REPLICATION,
+		AvailID			bigint NOT NULL CONSTRAINT FK_ItemsXAvailRates_AvailID REFERENCES [Availability](AvailID) NOT FOR REPLICATION,
+		RateID			bigint NOT NULL CONSTRAINT FK_ItemsXAvailRates_RateID REFERENCES Rates(RateID) NOT FOR REPLICATION,
+		MaxUnits		int NOT NULL CONSTRAINT DF_ItemsXAvailRates_MaxUnits DEFAULT (1),
+		DisplayOrder	int NOT NULL CONSTRAINT DF_ItemsXAvailRates_DisplayOrder DEFAULT (0),
+		CONSTRAINT PK_ItemsXAvailRates PRIMARY KEY CLUSTERED (ID ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
 
-
---
--- Decision to not use Groups, so the following are now commented out
---
-
--- Add GroupType for "Recreation Location"
-/*
-INSERT INTO [dbo].[GroupTypes]
-           ([TypeName]
-           ,[ShowInSearchTool]
-           ,[ResultsEntryAllowed]
-           ,[Active]
-           ,[Audit_ContactID])
-     VALUES
-           ('Recreation Location',
-            1,
-            1,
-            1,
-            NULL)
-GO
-
--- Association of a Feature with a Group, including the value and display order
-IF EXISTS (SELECT 1
-		     FROM information_schema.Tables
-		    WHERE table_schema = 'dbo'
-		      AND TABLE_NAME = 'GroupsXFeatures')
-	PRINT 'Table dbo.GroupsXFeatures already exists, skipping CREATE TABLE statement' 
+-- Table Integers
+-- fact table that contains whole numbers
+IF OBJECT_ID('dbo.Integers', 'U') IS NOT NULL
+	PRINT 'Table dbo.Integers already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[GroupsXFeatures](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[GroupID]		[bigint] NOT NULL CONSTRAINT [FK_GroupsXFeatures_GroupID] REFERENCES [Groups]([GroupID]) NOT FOR REPLICATION,
-		[FeatureID]		[bigint] NOT NULL CONSTRAINT [FK_GroupsXFeatures_FeatureID] REFERENCES [Features]([FeatureID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_GroupsXFeatures_DisplayOrder]  DEFAULT ((0)),
-		[Value]			[nvarchar](1000) NULL,
-		CONSTRAINT [PK_GroupsXFeatures] PRIMARY KEY CLUSTERED ([ID] ASC) 
+	CREATE TABLE dbo.Integers(
+		Value		int NOT NULL
+		CONSTRAINT PK_Integers PRIMARY KEY CLUSTERED (Value ASC) 
 			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 GO
 
--- Association of an Image with a Group
-IF EXISTS (SELECT 1
-		     FROM information_schema.Tables
-		    WHERE table_schema = 'dbo'
-		      AND TABLE_NAME = 'GroupsXImages')
-	PRINT 'Table dbo.GroupsXImages already exists, skipping CREATE TABLE statement' 
+-- Table Dates
+-- fact table containing dates and pre-generated info about each date (contains entries for each day of the year)
+-- computed columns handle most of the column values; persisted (storage is cheap, computation is expensive)
+IF OBJECT_ID('dbo.Dates', 'U') IS NOT NULL
+	PRINT 'Table dbo.Dates already exists, skipping CREATE TABLE statement' 
 ELSE
-	CREATE TABLE [dbo].[GroupsXImages](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[GroupID]		[bigint] NOT NULL CONSTRAINT [FK_GroupsXImages_GroupID] REFERENCES [Groups]([GroupID]) NOT FOR REPLICATION,
-		[ImageID]		[bigint] NOT NULL CONSTRAINT [FK_GroupsXImages_ImageID] REFERENCES [Images]([ImageID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_GroupsXImages_DisplayOrder]  DEFAULT ((0)),
-		CONSTRAINT [PK_GroupsXImages] PRIMARY KEY CLUSTERED ([ID] ASC) 
-			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	CREATE TABLE dbo.Dates(
+		[Date]			date PRIMARY KEY NOT NULL,
+		[DayOfWeek]		AS DATEDIFF(DAY, -1, [Date]) % 7 + 1 PERSISTED, --deterministic DayOfWeek
+		DayOfWeekName	AS CASE DATEDIFF(DAY, -1, [Date]) % 7 + 1 --deterministic DayOfWeekName
+							WHEN 1 THEN 'Sunday'
+							WHEN 2 THEN 'Monday'
+							WHEN 3 THEN 'Tuesday'
+							WHEN 4 THEN 'Wednesday'
+							WHEN 5 THEN 'Thursday'
+							WHEN 6 THEN 'Friday'
+							ELSE 'Saturday'
+						END PERSISTED,
+		[Day]			AS DATEPART(DAY, [Date]) PERSISTED,
+		[DayOfYear]		AS DATEPART(DAYOFYEAR, [Date]) PERSISTED,
+		WeekOfMonth		AS CASE
+							WHEN DATEPART(DAY, [Date]) between 1 and 7 THEN 1
+							WHEN DATEPART(DAY, [Date]) between 8 and 14 THEN 2
+							WHEN DATEPART(DAY, [Date]) between 15 and 21 THEN 3
+							WHEN DATEPART(DAY, [Date]) between 22 and 28 THEN 4
+							WHEN DATEPART(DAY, [Date]) > 28 THEN 5
+						END PERSISTED,
+--		[Week]			AS DATEPART(WEEK, [Date]) PERSISTED, --deterministic solution is complicated, so skipping for now
+		[Month]			AS DATEPART(MONTH, [Date]) PERSISTED,
+		[MonthName]		AS CASE DATEPART(MONTH, [Date]) --deterministic MonthName
+							WHEN 1 THEN 'January'
+							WHEN 2 THEN 'February'
+							WHEN 3 THEN 'March'
+							WHEN 4 THEN 'April'
+							WHEN 5 THEN 'May'
+							WHEN 6 THEN 'June'
+							WHEN 7 THEN 'July'
+							WHEN 8 THEN 'August'
+							WHEN 9 THEN 'September'
+							WHEN 10 THEN 'October'
+							WHEN 11 THEN 'November'
+							ELSE 'December'
+						END PERSISTED,
+		[Year]			AS DATEPART(YEAR, [Date]) PERSISTED,
+		[Quarter]		AS DATEPART(QUARTER, [Date]) PERSISTED,
+		IsWeekend		AS CONVERT(BIT, CASE 
+							WHEN DATEDIFF(DAY, -1, [Date]) % 7 + 1 IN (1, 7) THEN 1
+							ELSE 0
+						END) PERSISTED,
+		isResvWeekend	AS CONVERT(BIT, CASE 
+							WHEN DATEDIFF(DAY, -1, [Date]) % 7 + 1 IN (6, 7) THEN 1
+							ELSE 0
+						END) PERSISTED
 	) ON [PRIMARY]
 GO
-
--- Association of a Group with a Map
-IF EXISTS (SELECT 1
-		     FROM information_schema.Tables
-		    WHERE table_schema = 'dbo'
-		      AND TABLE_NAME = 'GroupsXMaps')
-	PRINT 'Table dbo.GroupsXMaps already exists, skipping CREATE TABLE statement' 
-ELSE
-	CREATE TABLE [dbo].[GroupsXMaps](
-		[ID]			[bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-		[GroupID]		[bigint] NOT NULL CONSTRAINT [FK_GroupsXMaps_GroupID] REFERENCES [Groups]([GroupID]) NOT FOR REPLICATION,
-		[MapID]			[bigint] NOT NULL CONSTRAINT [FK_GroupsXMaps_MapID] REFERENCES [Maps]([MapID]) NOT FOR REPLICATION,
-		[DisplayOrder]	[int] NOT NULL CONSTRAINT [DF_GroupsXMaps_DisplayOrder]  DEFAULT ((0)),
-		[CoordinateX]	[float] NOT NULL CONSTRAINT [DF_GroupsXMaps_CoordinateX]  DEFAULT ((0.0)),
-		[CoordinateY]	[float] NOT NULL CONSTRAINT [DF_GroupsXMaps_CoordinateY]  DEFAULT ((0.0)),
-		CONSTRAINT [PK_GroupsXMaps] PRIMARY KEY CLUSTERED ([ID] ASC) 
-			WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-GO
-*/

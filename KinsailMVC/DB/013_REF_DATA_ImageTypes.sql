@@ -8,8 +8,8 @@
 --------------------------------------------------------------------------------
 
 -- Change this to the proper DB as appropriate
-USE [Kinsail_JNeely]
---USE [Kinsail]
+--USE [Kinsail_JNeely]
+USE [Kinsail]
 GO
 
 SET ANSI_NULLS ON

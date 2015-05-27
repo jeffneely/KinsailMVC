@@ -271,12 +271,16 @@
     <Content Include="DB\002_CONSTRAINTS.sql" />
     <Content Include="DB\003_VIEWS.sql" />
     <Content Include="DB\004_FUNCTIONS_PROCS.sql" />
+    <Content Include="DB\005_SEEDS.sql" />
+    <Content Include="DB\009_REF_DATA_Misc.sql" />
     <Content Include="DB\010_REF_DATA_ItemTypes.sql" />
     <Content Include="DB\011_REF_DATA_FeatureTypes.sql" />
     <Content Include="DB\012_REF_DATA_Features.sql" />
     <Content Include="DB\013_REF_DATA_ImageTypes.sql" />
     <Content Include="DB\014_REF_DATA_ResourceTypes.sql" />
-    <Content Include="DB\030_FIXES.sql" />
+    <Content Include="DB\100_WICHITA_LOAD_Doris.sql" />
+    <Content Include="DB\101_WICHITA_LOAD_FawnCreek.sql" />
+    <Content Include="DB\105_WICHITA_FIXES.sql" />
     <Content Include="DB\220_SAMPLE_DATA_Sites.sql" />
     <Content Include="DB\200_SAMPLE_DATA_Groups.sql" />
     <Content Include="DB\210_SAMPLE_DATA_Locations.sql" />
@@ -287,6 +291,7 @@
     <Content Include="DB\260_SAMPLE_DATA_Addresses.sql" />
     <Content Include="DB\270_SAMPLE_DATA_Organizations.sql" />
     <Content Include="DB\280_SAMPLE_DATA_Reservations.sql" />
+    <Content Include="DB\999_QUERIES.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="DataAccess\DataClasses.dbml">

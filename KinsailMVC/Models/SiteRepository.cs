@@ -267,12 +267,41 @@ namespace KinsailMVC.Models
 
 
         // return list of reserved data ranges for site (> today)
+        // also includes days as "unavailable" if not on an active availability schedule
         private static string queryReservedRanges =
-            "SELECT rr.ResourceID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate" + br +
-            "  FROM ReservationResources rr" + br +
-            " WHERE rr.ItemID = @0" + br +
-            "   AND rr.EndDateTime > getDate()" + br +
-            " ORDER BY StartDateTime";
+            // first, find those date ranges that are not included on an active availability schedule
+            // we'll return these dates as unavailable (in addition to those that are reserved)
+            "SELECT * FROM (" + br +
+            "SELECT NULL AS ResourceID, ixr.ItemID, 'UNAVAILABLE' AS ResourceName, 'Date range not on an availability schedule' AS ResourceDescription," + br +
+            "       DATEADD(DAY, 1, a.AvailEndDate) AS StartDate," + br +
+            "       DATEADD(DAY, -1, b.AvailStartDate) AS EndDate," + br +
+            "       NULL AS ReservationID, NULL AS UniqueID, NULL AS IsReserved, NULL AS Cancelled, NULL AS CartRefreshDateTime," + br +
+            "       NULL AS Now, NULL AS Temp, NULL AS ExpiresMins" + br +
+            "  FROM dbo.ItemsXAvailRates ixr" + br +
+            "  JOIN dbo.DiscreteAvailabilityRanges a ON ixr.AvailID = a.AvailID" + br +
+            " CROSS APPLY (" + br +
+            "             SELECT TOP (1) t.AvailStartDate" + br +
+            "               FROM dbo.ItemsXAvailRates ti" + br +
+            "               JOIN dbo.DiscreteAvailabilityRanges t ON ti.AvailID = t.AvailID" + br +
+            "              WHERE ti.ItemID = @0" + br +        // @0 = SiteID
+            "                AND t.AvailStartDate > a.AvailEndDate" + br +
+            "              ORDER BY t.AvailStartDate) b" + br +
+            " WHERE ixr.ItemID = @0" + br +                    // @0 = SiteID
+            "   AND DATEDIFF(DAY, a.AvailEndDate, b.AvailStartDate) > 1" + br +
+            "   AND b.AvailStartDate >= GETDATE()" + br +      // only consider those that end in the future
+            " UNION ALL" + br +
+
+            // now find those date ranges that have already been reserved for the site in question
+            "SELECT rr.ResourceID, rr.ItemID, rr.ResourceName, rr.ResourceDescription, rr.StartDateTime AS StartDate, rr.EndDateTime AS EndDate, r.ReservationID, r.UniqueID, r.IsReserved, r.Cancelled," + br +
+            "       r.CartRefreshDateTime, GETDATE() AS Now, " + br +
+            "       1 - r.IsReserved AS Temp, CASE IsReserved WHEN 0 THEN DATEDIFF(MINUTE, GETDATE(), DATEADD(SECOND, rr.CartTimeoutSeconds, r.CartRefreshDateTime)) WHEN 1 THEN NULL END AS ExpiresInMins" + br +
+            "  FROM dbo.Reservations r" + br +
+            "  JOIN dbo.ReservationResources rr ON rr.ResourceID = r.ResourceID" + br +
+            " WHERE rr.ItemID = @0" + br +               // SiteID
+            "   AND r.Cancelled = 0" + br +              // disregard those marked cancelled
+            "   AND rr.EndDateTime > GETDATE()" + br +   // only consider those that end in the future
+            "   AND (r.IsReserved = 1 OR (r.CartRefreshDateTime > DATEADD(SECOND, -1 * rr.CartTimeoutSeconds, GETDATE())))" + br +  // only those fully reserved or those temporarily reserved and within the timerout period
+            ") u ORDER BY StartDate";  // sort the entire resultset by date
 
 
         // map the SiteBasic properties to columns and default criteria conditions to be used in filtered queries
